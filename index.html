@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>演示文档</title>
     <style>
       html,
       body {
@@ -30,7 +30,12 @@
         }
       }
     </script>
-    <script src="./index.js" type="module"></script>
+    <script type="module">
+      // import * as module from "./src/index.js";
+      import * as module from "./dist/index.js";
+
+      console.dir(module);
+    </script>
   </head>
 
   <body>
