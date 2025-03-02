@@ -16,7 +16,7 @@ class Type extends Enum {
     }
 }
 
-const STYLES = /* css */`
+const STYLES = `
 :host {
     position: relative;
     vertical-align: middle;
@@ -28,7 +28,6 @@ const STYLES = /* css */`
     min-width: 32px;
     min-height: 32px;
     outline-style: none;
-    background-color: var(--colorNeutralBackground1);
     background-color: var(--mix-colorNeutralBackground1);
     color: var(--colorNeutralForeground1);
     border: var(--strokeWidthThin) solid var(--mix-colorNeutralStroke1);
@@ -76,7 +75,7 @@ const STYLES = /* css */`
 }
 `;
 
-const HTML = /* html */`
+const HTML = `
 <slot>Button</slot>
 `;
 

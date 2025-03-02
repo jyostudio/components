@@ -74,15 +74,6 @@ const STYLES = `
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
 }
 
-.window .background {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: var(--colorNeutralBackground2);
-}
-
 .window .titleBar {
     position: relative;
     width: 100%;
@@ -388,7 +379,6 @@ const HTML = `
 <div class="window">
     <slot name="background" aria-hidden="true">
         <jyo-acrylic></jyo-acrylic>
-        <!--<div class="background"></div>-->
     </slot>
     <div class="titleBar">
         <div class="moveArea"></div>
