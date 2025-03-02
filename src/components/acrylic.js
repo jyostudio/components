@@ -20,7 +20,6 @@ const STYLES = `
 
 :host {
     --just-show-fallback: 0;
-    --deactive: 0;
     --background: var(--colorNeutralBackground5);
     position: absolute;
     left: 0;
