@@ -43,38 +43,35 @@ const STYLES = `
     right: 0;
     bottom: 0;
     z-index: -1;
-    background-color: var(--colorNeutralBackground1);
+    background-color: var(--mix-colorNeutralBackground1);
 }
 
 :host([severity="success"]) .background {
-    background-color: var(--colorStatusSuccessBackground2);
-    filter: brightness(1.5);
+    background-color: var(--mix-colorStatusSuccessBackground2);
 }
 
 :host([severity="warning"]) .background {
-    background-color: var(--colorStatusWarningBackground2);
-    filter: brightness(1.2);
+    background-color: var(--mix-colorStatusWarningBackground2);
 }
 
 :host([severity="error"]) .background {
-    background-color: var(--colorStatusDangerBackground2);
-    filter: brightness(1.3);
+    background-color: var(--mix-colorStatusDangerBackground2);
 }
 
 @container (style(--theme: dark) or style(--theme: highContrast)) {
     :host([severity="success"]) .background {
         filter: contrast(0.5) brightness(0.8);
-        background-color: var(--colorStatusSuccessForeground2);
+        background-color: var(--mix-colorStatusSuccessForeground3);
     }
 
     :host([severity="warning"]) .background {
         filter: contrast(0.5) brightness(0.8);
-        background-color: var(--colorStatusWarningForeground2);
+        background-color: var(--mix-colorStatusWarningForeground3);
     }
 
     :host([severity="error"]) .background {
         filter: contrast(0.5) brightness(0.8);
-        background-color: var(--colorStatusDangerForeground2);
+        background-color: var(--mix-colorStatusDangerForeground3);
     }
 }
 

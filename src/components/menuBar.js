@@ -14,8 +14,8 @@ const STYLES = `
 }
 
 :host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
 }
 `;

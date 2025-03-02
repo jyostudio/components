@@ -387,7 +387,8 @@ const STYLES = `
 const HTML = `
 <div class="window">
     <slot name="background" aria-hidden="true">
-        <div class="background"></div>
+        <jyo-acrylic></jyo-acrylic>
+        <!--<div class="background"></div>-->
     </slot>
     <div class="titleBar">
         <div class="moveArea"></div>
@@ -1214,7 +1215,7 @@ export default class Window extends Component {
      */
     active(...params) {
         Window.prototype.active = overload(["..."], function () {
-            Window.#activeWindow?.blur();
+            Window.#activeWindow?.deactive();
             Window.#activeWindow = this;
             this.setAttribute("active", "");
             Window.#resort();
@@ -1227,15 +1228,15 @@ export default class Window extends Component {
     /**
      * 失去焦点
      */
-    blur(...params) {
-        Window.prototype.blur = overload(["..."], function () {
+    deactive(...params) {
+        Window.prototype.deactive = overload(["..."], function () {
             if (this !== Window.#activeWindow) return;
             Window.#activeWindow = null;
             this.removeAttribute("active");
-            this.dispatchCustomEvent("blur");
+            this.dispatchCustomEvent("deactive");
         });
 
-        Window.prototype.blur.call(this, ...params);
+        Window.prototype.deactive.call(this, ...params);
     }
 
     static {

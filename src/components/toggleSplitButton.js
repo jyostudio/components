@@ -18,9 +18,10 @@ const STYLES = `
     min-width: 32px;
     min-height: 32px;
     outline-style: none;
-    background-color: var(--colorNeutralBackground1);
+    background-color: var(--mix-colorNeutralBackground1);
     color: var(--colorNeutralForeground1);
-    border: var(--strokeWidthThin) solid var(--colorNeutralStroke1);
+    border: var(--strokeWidthThin) solid var(--mix-colorNeutralStroke1);
+    border-bottom-color: var(--mix-colorNeutralStroke1Hover);
     border-radius: var(--borderRadiusMedium);
     font-size: var(--fontSizeBase300);
     font-family: var(--fontFamilyBase);
@@ -46,7 +47,7 @@ const STYLES = `
 .divider {
     width: var(--strokeWidthThin);
     height: 100%;
-    background-color: var(--colorNeutralStroke1);
+    background-color: var(--mix-colorNeutralStroke1);
 }
 
 .end {
@@ -64,69 +65,69 @@ const STYLES = `
 }
 
 .fnArea:hover {
-    background-color: var(--colorNeutralBackground1Hover);
+    background-color: var(--mix-colorNeutralBackground1Hover);
     color: var(--colorNeutralForeground1Hover);
-    border-color: var(--colorNeutralStroke1Hover);
+    border-color: var(--mix-colorNeutralStroke1Hover);
 }
 
 .fnArea:hover:active,
 :host([flyout-visible]) .fnArea.end {
-    background-color: var(--colorNeutralBackground1Pressed);
-    border-color: var(--colorNeutralStroke1Pressed);
+    background-color: var(--mix-colorNeutralBackground1Pressed);
+    border-color: var(--mix-colorNeutralStroke1Pressed);
     color: var(--colorNeutralForeground1Pressed);
     outline-style: none;
 }
 
 .fnArea:hover:active,
 :host([checked][flyout-visible]) .fnArea.end {
-    background-color: var(--colorNeutralBackground1Pressed);
-    border-color: var(--colorNeutralStroke1Pressed);
+    background-color: var(--mix-colorNeutralBackground1Pressed);
+    border-color: var(--mix-colorNeutralStroke1Pressed);
     color: var(--colorNeutralForeground1Pressed);
     outline-style: none;
 }
 
 .fnArea:focus-visible {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
 }
 
 :host([checked]) {
-    border-color: var(--colorCompoundBrandBackgroundPressed);
+    border-color: var(--mix-colorCompoundBrandBackgroundPressed);
 }
 
 :host([checked]) .fnArea {
     background-color: var(--colorCompoundBrandBackgroundPressed);
     color: var(--colorNeutralForegroundInvertedPressed);
-    border-color: var(--colorCompoundBrandBackgroundPressed);
+    border-color: var(--mix-colorCompoundBrandBackgroundPressed);
 }
 
 :host([checked]) .fnArea:hover {
-    border-color: var(--colorCompoundBrandBackgroundHover);
+    border-color: var(--mix-colorCompoundBrandBackgroundHover);
     background-color: var(--colorCompoundBrandBackgroundHover);
 }
 
 :host([checked]) .fnArea:hover:active,
 :host([checked][flyout-visible]) .fnArea.end {
-    border-color: var(--colorCompoundBrandBackgroundPressed);
+    border-color: var(--mix-colorCompoundBrandBackgroundPressed);
     background-color: var(--colorCompoundBrandBackgroundPressed);
     color: var(--colorNeutralForeground1Pressed);
     outline-style: none;
 }
 
 :host([checked]) .divider {
-    background-color: var(--colorNeutralForegroundInvertedPressed);
+    background-color: var(--mix-colorNeutralForegroundInvertedPressed);
 }
 
 :host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
 }
 
 :host(:disabled), :host([disabled]) {
-    background-color: var(--colorNeutralBackgroundDisabled) !important;
-    border-color: var(--colorNeutralStrokeDisabled) !important;
+    background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
+    border-color: var(--mix-colorNeutralStrokeDisabled) !important;
     color: var(--colorNeutralForegroundDisabled) !important;
     box-shadow: none !important;
     outline: none !important;

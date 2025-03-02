@@ -17,9 +17,10 @@ const STYLES = `
     min-width: 32px;
     min-height: 32px;
     outline-style: none;
-    background-color: var(--colorNeutralBackground1);
+    background-color: var(--mix-colorNeutralBackground1);
     color: var(--colorNeutralForeground1);
-    border: var(--strokeWidthThin) solid var(--colorNeutralStroke1);
+    border: var(--strokeWidthThin) solid var(--mix-colorNeutralStroke1);
+    border-bottom-color: var(--mix-colorNeutralStroke1Hover);
     border-radius: var(--borderRadiusMedium);
     font-size: var(--fontSizeBase300);
     font-family: var(--fontFamilyBase);
@@ -48,7 +49,7 @@ const STYLES = `
 .divider {
     width: var(--strokeWidthThin);
     height: 100%;
-    background-color: var(--colorNeutralStroke1);
+    background-color: var(--mix-colorNeutralStroke1);
 }
 
 .end {
@@ -60,34 +61,34 @@ const STYLES = `
 }
 
 .fnArea:hover {
-    background-color: var(--colorNeutralBackground1Hover);
+    background-color: var(--mix-colorNeutralBackground1Hover);
     color: var(--colorNeutralForeground1Hover);
-    border-color: var(--colorNeutralStroke1Hover);
+    border-color: var(--mix-colorNeutralStroke1Hover);
 }
 
 :host([flyout-visible]) .fnArea.end,
 .fnArea:hover:active {
-    background-color: var(--colorNeutralBackground1Pressed);
-    border-color: var(--colorNeutralStroke1Pressed);
+    background-color: var(--mix-colorNeutralBackground1Pressed);
+    border-color: var(--mix-colorNeutralStroke1Pressed);
     color: var(--colorNeutralForeground1Pressed);
     outline-style: none;
 }
 
 .fnArea:focus-visible {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
 }
 
 :host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
 }
 
 :host(:disabled), :host([disabled]), :host(:disabled) .fnArea, :host([disabled]) .fnArea {
-    background-color: var(--colorNeutralBackgroundDisabled) !important;
-    border-color: var(--colorNeutralStrokeDisabled) !important;
+    background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
+    border-color: var(--mix-colorNeutralStrokeDisabled) !important;
     color: var(--colorNeutralForegroundDisabled) !important;
     box-shadow: none !important;
     outline: none !important;
@@ -95,7 +96,7 @@ const STYLES = `
 }
 
 :host(:disabled) .divider, :host([disabled]) .divider {
-    background-color: var(--colorNeutralStrokeDisabled) !important;
+    background-color: var(--mix-colorNeutralStrokeDisabled) !important;
 }
 `;
 

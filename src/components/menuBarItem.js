@@ -18,29 +18,29 @@ const STYLES = `
 }
 
 :host(:hover) {
-    background: var(--colorNeutralBackground1Hover);
+    background-color: var(--mix-colorNeutralBackground1Hover);
     color: var(--colorNeutralForeground2Hover);
 }
 
 :host(:active) {
-    background-color: var(--colorNeutralBackground1Selected);
+    background-color: var(--mix-colorNeutralBackground1Selected);
     color: var(--colorNeutralForeground2Pressed);
 }
 
 :host([flyout-visible]) {
-    background-color: var(--colorNeutralBackground1Selected) !important;
+    background-color: var(--mix-colorNeutralBackground1Selected) !important;
     color: var(--colorNeutralForeground2Pressed) !important;
 }
 
 :host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
 }
 
 :host(:disabled), :host([disabled]) {
     pointer-events: none;
-    background-color: var(--colorNeutralBackgroundDisabled);
+    background-color: var(--mix-colorNeutralBackgroundDisabled);
     color: var(--colorNeutralForegroundDisabled);
 }
 `;

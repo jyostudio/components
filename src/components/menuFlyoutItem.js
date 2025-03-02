@@ -31,7 +31,6 @@ const STYLES = `
     padding: 0px 8px;
     height: 32px;
     flex-shrink: 0;
-    background: var(--colorNeutralBackground1);
     border-radius: var(--borderRadiusMedium);
     color: var(--colorNeutralForeground2);
     contain: layout;
@@ -43,23 +42,23 @@ const STYLES = `
 }
 
 :host(:hover) {
-    background: var(--colorNeutralBackground1Hover);
+    background: var(--mix-colorNeutralBackground1Hover);
     color: var(--colorNeutralForeground2Hover);
 }
 
 :host(:active) {
-    background-color: var(--colorNeutralBackground1Selected);
+    background-color: var(--mix-colorNeutralBackground1Selected);
     color: var(--colorNeutralForeground2Pressed);
 }
 
 :host([flyout-visible]) {
-    background-color: var(--colorNeutralBackground1Selected) !important;
+    background-color: var(--mix-colorNeutralBackground1Selected) !important;
     color: var(--colorNeutralForeground2Pressed) !important;
 }
 
 :host(:disabled), :host([disabled]) {
     pointer-events: none;
-    background-color: var(--colorNeutralBackgroundDisabled);
+    background-color: var(--mix-colorNeutralBackgroundDisabled);
     color: var(--colorNeutralForegroundDisabled);
 }
 
@@ -70,7 +69,7 @@ const STYLES = `
 
 :host(:focus-visible) {
     border-radius: var(--borderRadiusMedium);
-    outline: 2px solid var(--colorStrokeFocus2);
+    outline: 2px solid var(--mix-colorStrokeFocus2);
 }
 
 :host([data-indent="1"]) {

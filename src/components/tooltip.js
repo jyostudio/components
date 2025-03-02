@@ -25,6 +25,7 @@ const STYLES = `${FlyoutStyle}
     transform: translate(var(--horizontal-offset), var(--vertical-offset));
     box-sizing: border-box;
     display: inline-flex;
+    color: var(--colorNeutralForeground1);
     filter: drop-shadow(0 0 2px var(--colorNeutralShadowAmbient)) drop-shadow(0 4px 8px var(--colorNeutralShadowKey));
     font-family: var(--fontFamilyBase);
     font-size: var(--fontSizeBase200);
@@ -37,10 +38,17 @@ const STYLES = `${FlyoutStyle}
     width: auto;
     pointer-events: none;
 }
+
+.content {
+    position: relative;
+}
 `;
 
 const HTML = `
-<slot></slot>
+<jyo-acrylic></jyo-acrylic>
+<div id="content">
+    <slot></slot>
+</div>
 `;
 
 export default class Tooltip extends Flyout {

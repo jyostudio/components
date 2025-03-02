@@ -58,7 +58,7 @@ const STYLES = `
     width: 100%;
     height: 2px;
     transform: translateY(-50%);
-    background-color: var(--colorNeutralBackground6);
+    background-color: var(--mix-colorNeutralBackground6);
 }
 
 :host([is-indeterminate])::before,
@@ -68,11 +68,14 @@ const STYLES = `
 }
 
 .fill {
-    position: relative;
+    position: absolute;
+    left: 0;
+    top: 50%;
     background-color: var(--colorCompoundBrandBackground);
     border-radius: inherit;
     width: var(--width, 0%);
     height: 4px;
+    transform: translateY(-50%);
     transition-duration: var(--durationNormal) !important;
     transition-property: width !important;
     transition-timing-function: var(--curveEasyEase) !important;

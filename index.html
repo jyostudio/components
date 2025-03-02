@@ -17,6 +17,11 @@
         overflow: hidden;
       }
 
+      body {
+        background: url(./background.jpg) no-repeat center center;
+        background-size: cover;
+      }
+
       :not(:defined) {
         display: none;
       }
@@ -31,8 +36,8 @@
       }
     </script>
     <script type="module">
-      // import * as module from "./src/index.js";
-      import * as module from "./dist/index.js";
+      import * as module from "./src/index.js";
+      // import * as module from "./dist/index.js";
 
       console.dir(module);
     </script>
@@ -86,7 +91,7 @@
       ></jyo-toggle-switch>
       <jyo-check-box content="两态勾选框"></jyo-check-box>
       <jyo-check-box is-three-state content="三态勾选框"></jyo-check-box>
-      <jyo-progress-bar is-indeterminate value="50"></jyo-progress-bar>
+      <jyo-progress-bar value="80"></jyo-progress-bar>
       <jyo-radio-buttons header="选项：" selected-index="1">
         <jyo-radio-button content="单选框1"></jyo-radio-button>
         <jyo-radio-button content="单选框2"></jyo-radio-button>

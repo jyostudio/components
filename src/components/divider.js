@@ -54,7 +54,7 @@ const STYLES = `
 
 :host::after, :host::before {
     align-self: center;
-    background: var(--colorNeutralStroke2);
+    background-color: var(--mix-colorNeutralStroke2);
     box-sizing: border-box;
     content: '';
     display: flex;

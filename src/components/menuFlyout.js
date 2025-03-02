@@ -36,10 +36,13 @@ const STYLES = `${FlyoutStyle}
     height: fit-content;
     opacity: 0;
     row-gap: 2px;
+    border-radius: var(--borderRadiusMedium);
+    contain: paint;
 }
 `;
 
 const HTML = `
+<jyo-acrylic></jyo-acrylic>
 <slot></slot>
 `;
 

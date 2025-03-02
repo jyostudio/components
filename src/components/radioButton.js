@@ -31,7 +31,7 @@ span {
     width: var(--size);
     height: var(--size);
     border-radius: var(--borderRadiusCircular);
-    border: var(--strokeWidthThin) solid var(--colorNeutralStrokeAccessible);
+    border: var(--strokeWidthThin) solid var(--mix-colorNeutralStrokeAccessible);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -53,12 +53,12 @@ span::before {
 }
 
 :host(:hover) span {
-    border-color: var(--colorNeutralStrokeAccessibleHover);
+    border-color: var(--mix-colorNeutralStrokeAccessibleHover);
 }
 
 :host([is-checked]) span {
     background-color: var(--colorCompoundBrandBackground);
-    border-color: var(--colorCompoundBrandBackground);
+    border-color: var(--mix-colorCompoundBrandBackground);
 }
 
 :host([is-checked]) span::before {
@@ -80,29 +80,29 @@ label {
 }
 
 :host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
 }
 
 :host(:disabled), :host([disabled]) {
-    color: var(--colorNeutralForegroundDisabled) !important;
+    color: var(--mix-colorNeutralForegroundDisabled) !important;
     pointer-events: none !important;
 }
 
 :host(:not([is-checked]):disabled) span, :host(:not([is-checked])[disabled]) span {
     background-color: unset !important;
-    border-color: var(--colorNeutralForegroundDisabled) !important;
+    border-color: var(--mix-colorNeutralForegroundDisabled) !important;
 }
 
 :host([is-checked]:disabled) span, :host([is-checked][disabled]) span {
-    background-color: var(--colorNeutralForegroundDisabled) !important;
-    border-color: var(--colorNeutralForegroundDisabled) !important;
+    background-color: var(--mix-colorNeutralForegroundDisabled) !important;
+    border-color: var(--mix-colorNeutralForegroundDisabled) !important;
 }
 
 :host([is-checked]:disabled) span::before, :host([is-checked][disabled]) span::before {
-    background-color: var(--colorNeutralBackgroundDisabled) !important;
-    border-color: var(--colorNeutralBackgroundDisabled) !important;
+    background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
+    border-color: var(--mix-colorNeutralBackgroundDisabled) !important;
 }
 `;
 

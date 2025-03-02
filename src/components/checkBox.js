@@ -27,9 +27,9 @@ const STYLES = `
 span {
     --size: 18px;
     display: inline-block;
-    background-color: var(--colorNeutralBackground1);
+    background-color: var(--mix-colorNeutralBackground1);
     border-radius: var(--borderRadiusSmall);
-    border: var(--strokeWidthThin) solid var(--colorNeutralStrokeAccessible);
+    border: var(--strokeWidthThin) solid var(--mix-colorNeutralStrokeAccessible);
     color: var(--colorNeutralForegroundInverted);
     font-family: "FluentSystemIcons-Resizable";
     font-size: var(--fontSizeBase200);
@@ -85,14 +85,14 @@ label {
 }
 
 :host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
 }
 
 :host(:disabled) span, :host([disabled]) span {
-    background-color: var(--colorNeutralBackgroundDisabled);
-    border-color: var(--colorNeutralStrokeDisabled);
+    background-color: var(--mix-colorNeutralBackgroundDisabled);
+    border-color: var(--mix-colorNeutralStrokeDisabled);
     color: var(--colorNeutralStrokeDisabled);
 }
 `;

@@ -2,6 +2,7 @@ import "./libs/globalFonts.js";
 export { default as themeManager } from "./libs/themeManager/themeManager.js";
 
 export { default as Component } from "./components/component.js";
+export { default as Acrylic } from "./components/acrylic.js";
 export { default as Window } from "./components/window.js";
 export { default as Flyout } from "./components/flyout.js";
 export { default as Tooltip } from "./components/tooltip.js";

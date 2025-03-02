@@ -40,26 +40,26 @@ const STYLES = `
 }
 
 :host(:hover) {
-    background-color: var(--colorSubtleBackgroundHover);
+    background-color: var(--mix-colorSubtleBackgroundHover);
     color: var(--colorBrandForegroundLinkHover);
     border-color: transparent;
 }
 
 :host(:hover:active) {
-    background-color: var(--colorSubtleBackgroundPressed);
+    background-color: var(--mix-colorSubtleBackgroundPressed);
     color: var(--colorBrandForegroundLinkPressed);
     border-color: transparent;
 }
 
 :host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
+    border-color: var(--mix-colorTransparentStroke);
+    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
 }
 
 :host(:disabled), :host([disabled]) {
-    background-color: var(--colorNeutralBackgroundDisabled);
-    border-color: var(--colorNeutralStrokeDisabled);
+    background-color: var(--mix-colorNeutralBackgroundDisabled);
+    border-color: var(--mix-colorNeutralStrokeDisabled);
     color: var(--colorNeutralForegroundDisabled);
     box-shadow: none !important;
     outline: none !important;

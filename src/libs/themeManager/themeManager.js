@@ -480,18 +480,38 @@ export default new class ThemeManager extends EventTarget {
     }
 
     #convertColorsToCSS(colors) {
-        return Object.entries(colors).reduce((acc, [key, value]) => {
-            acc += `--${key}: ${value};\n`;
-            return acc;
-        }, "");
+        const enableAlpha = this.#enableAlpha;
+        return Object.entries(colors).map(([key, value]) =>
+            `--${key}: ${value};
+        --mix-${key}: ${enableAlpha ? `color-mix(in srgb, ${value} 50%, var(--mixColor))` : value};`
+        ).join("\n");
+    }
+
+    #genMixColorsCSS() {
+        const enableAlpha = this.#enableAlpha;
+        const colorRegex = /--([^:]+):\s*(#[0-9a-fA-F]+);/g;
+        const cssLines = [];
+        let match;
+
+        while ((match = colorRegex.exec(BASIC_STYLES)) !== null) {
+            const [, key, value] = match;
+            cssLines.push(`--mix-${key}: ${enableAlpha ? `color-mix(in srgb, ${value} 50%, var(--mixColor))` : value
+                };`);
+        }
+
+        return cssLines.join("\n");
     }
 
     #generateStyleSheet() {
         this.#styleSheet = this.#styleSheet ?? new CSSStyleSheet();
+        const themeName = this.#currentTheme.valString;
         const styles = this.supportToHDR(`
             :host {
-              --theme: ${this.#currentTheme.valString};
+              --theme: ${themeName};
+              --disableAlpha: ${this.#enableAlpha ? "1" : "0"};
+              --mixColor: rgba(${themeName === "light" ? "255, 255, 255" : "0, 0, 0"}, ${this.#enableAlpha ? "0.1" : "1"});
               ${BASIC_STYLES}
+              ${this.#genMixColorsCSS()}
               ${this.#convertColorsToCSS(this.#getColors())}
             }
 
@@ -510,6 +530,7 @@ export default new class ThemeManager extends EventTarget {
         `);
         this.#styles = styles;
         this.#styleSheet.replaceSync(styles);
+        this.dispatchEvent(new CustomEvent("update"));
     }
 
     rgbaToP3(...params) {

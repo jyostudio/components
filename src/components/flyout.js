@@ -61,9 +61,10 @@ const STYLES = `
     --position-try-options: flip-block;
     position: absolute;
     position-area: var(--position-area);
-    background: var(--colorNeutralBackground1);
+    /*background: var(--colorNeutralBackground1);*/
+    background-color: transparent;
     border-radius: var(--borderRadiusMedium);
-    border: 1px solid var(--colorTransparentStroke);
+    border: 1px solid var(--mix-colorTransparentStroke);
     color: var(--colorNeutralForeground1);
     opacity: 0;
     display: none;
@@ -135,6 +136,7 @@ const STYLES = `
 `;
 
 const HTML = `
+<jyo-acrylic></jyo-acrylic>
 <slot></slot>
 `;
 
