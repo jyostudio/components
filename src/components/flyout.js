@@ -61,7 +61,6 @@ const STYLES = `
     --position-try-options: flip-block;
     position: absolute;
     position-area: var(--position-area);
-    /*background: var(--colorNeutralBackground1);*/
     background-color: transparent;
     border-radius: var(--borderRadiusMedium);
     border: 1px solid var(--mix-colorTransparentStroke);

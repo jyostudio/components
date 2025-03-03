@@ -78,6 +78,13 @@ const STYLES = `
     background-color: var(--colorNeutralForeground3Pressed);
 }
 
+@container (style(--theme: highContrast)) {
+    #switch:hover::after,
+    #switch:active::after {
+        background-color: var(--colorNeutralForeground3);
+    }
+}
+
 #switch:checked {
     background: var(--colorCompoundBrandBackground);
     border-color: var(--colorCompoundBrandBackground);

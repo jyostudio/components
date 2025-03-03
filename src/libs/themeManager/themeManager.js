@@ -395,7 +395,7 @@ export default new class ThemeManager extends EventTarget {
                 })
             },
             enableAlpha: {
-                get: () => this.#enableAlpha,
+                get: () => this.#enableAlpha && this.#currentTheme !== Themes.highContrast,
                 set: overload([Boolean], value => {
                     this.#enableAlpha = value;
                     this.#generateStyleSheet();
@@ -480,7 +480,7 @@ export default new class ThemeManager extends EventTarget {
     }
 
     #convertColorsToCSS(colors) {
-        const enableAlpha = this.#enableAlpha;
+        const enableAlpha = this.enableAlpha;
         return Object.entries(colors).map(([key, value]) =>
             `--${key}: ${value};
         --mix-${key}: ${enableAlpha ? `color-mix(in srgb, ${value} 50%, var(--mixColor))` : value};`
@@ -488,7 +488,7 @@ export default new class ThemeManager extends EventTarget {
     }
 
     #genMixColorsCSS() {
-        const enableAlpha = this.#enableAlpha;
+        const enableAlpha = this.enableAlpha;
         const colorRegex = /--([^:]+):\s*(#[0-9a-fA-F]+);/g;
         const cssLines = [];
         let match;
@@ -508,8 +508,8 @@ export default new class ThemeManager extends EventTarget {
         const styles = this.supportToHDR(`
             :host {
               --theme: ${themeName};
-              --disableAlpha: ${this.#enableAlpha ? "1" : "0"};
-              --mixColor: rgba(${themeName === "light" ? "255, 255, 255" : "0, 0, 0"}, ${this.#enableAlpha ? "0.1" : "1"});
+              --disableAlpha: ${this.enableAlpha ? "1" : "0"};
+              --mixColor: rgba(${themeName === "light" ? "255, 255, 255" : "0, 0, 0"}, ${this.enableAlpha ? "0.1" : "1"});
               ${BASIC_STYLES}
               ${this.#genMixColorsCSS()}
               ${this.#convertColorsToCSS(this.#getColors())}
