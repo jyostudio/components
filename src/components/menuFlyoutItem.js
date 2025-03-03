@@ -347,7 +347,7 @@ export default class MenuFlyoutItem extends Component {
         let indent = 0;
         if (this.shadow.querySelector("slot[name='start']")?.assignedElements()?.[0]) indent++;
         if (this.type.valNumber !== 0) indent++;
-        this.parentElement.querySelectorAll("jyo-menu-flyout-item").forEach(item => {
+        this.parentElement?.querySelectorAll("jyo-menu-flyout-item").forEach(item => {
             if (this.parentElement !== item.parentElement) return;
             let elIndent = parseInt(item.getAttribute("data-indent"));
             if (isNaN(elIndent) || elIndent > 2) elIndent = 0;

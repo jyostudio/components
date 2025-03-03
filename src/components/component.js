@@ -208,7 +208,7 @@ export default class Component extends HTMLElement {
             this.#shadow.host.tabIndex = 0;
         }
 
-        this.#abortController ??= new AbortController();
+        this.#abortController ||= new AbortController();
 
         this.#initEvents();
 
@@ -242,13 +242,10 @@ export default class Component extends HTMLElement {
      * DOM 元素从文档中断开时调用
      */
     disconnectedCallback() {
-        this.#abortController.abort();
+        this.#abortController?.abort?.();
         this.#abortController = null;
 
         themeManager.unlink(this.#shadow);
-
-        this.#shadow.host?.remove?.();
-        this.#shadow = null;
 
         this.dispatchCustomEvent("disconnected");
     }
