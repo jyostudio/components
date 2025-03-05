@@ -1,6 +1,7 @@
 import overload from "@jyostudio/overload";
 import Component from "./component.js";
 import themeManager from "../libs/themeManager/themeManager.js";
+import { genBooleanGetterAndSetter } from "../libs/utils.js";
 
 const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 
@@ -147,23 +148,35 @@ export default class TextBox extends Component {
                     });
                 }).any(() => this.placeholder = "")
             },
-            readonly: {
-                get: () => this.hasAttribute("readonly"),
-                set: overload([Boolean], value => {
-                    this.lock("readonly", () => {
-                        value ? this.setAttribute("readonly", "") : this.removeAttribute("readonly");
-                        this.#inputEl.readOnly = value;
-                    });
-                }).any(() => this.readonly = false)
-            },
+            readonly: genBooleanGetterAndSetter(this, {
+                attrName: "readonly", defaultValue: false, fn: (attrName, value) => {
+                    if (value) {
+                        this.#inputEl.setAttribute("readonly", "");
+                    } else {
+                        this.#inputEl.removeAttribute("readonly");
+                    }
+                }
+            }),
             maxlength: {
                 get: () => this.#inputEl.maxLength,
-                set: overload([Number], value => {
-                    this.lock("maxlength", () => {
-                        this.#inputEl.maxLength = value;
-                        this.setAttribute("maxlength", value);
-                    });
-                }).any(() => this.maxlength = -1)
+                set: overload()
+                    .add([Number], value => {
+                        this.lock("maxlength", () => {
+                            if (value < 0) {
+                                this.#inputEl.removeAttribute("maxlength");
+                                this.removeAttribute("maxlength");
+                            } else {
+                                this.#inputEl.maxLength = value;
+                                this.setAttribute("maxlength", value);
+                            }
+                        });
+                    })
+                    .add([String], value => {
+                        value = parseInt(value);
+                        if (isNaN(value)) value = -1;
+                        this.maxlength = value;
+                    })
+                    .any(() => this.maxlength = -1)
             }
         });
 
