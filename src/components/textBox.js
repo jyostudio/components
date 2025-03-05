@@ -11,7 +11,6 @@ const STYLES = `
     display: inline-block;
     vertical-align: middle;
     min-width: 120px;
-    height: 32px;
     font-family: var(--fontFamilyBase);
     font-size: var(--fontSizeBase300);
     color: var(--colorNeutralForeground1);
@@ -24,12 +23,13 @@ const STYLES = `
     display: flex;
     align-items: center;
     height: 100%;
+    min-height: 32px;
     background-color: var(--mix-colorNeutralBackground1);
     border: 1px solid var(--mix-colorNeutralStroke2);
     border-bottom: 2px solid var(--mix-colorNeutralStroke1);
     border-radius: var(--borderRadiusMedium);
     transition: all var(--durationFaster) var(--curveEasyEase);
-    padding: 0 var(--spacingHorizontalSNudge);
+    padding: var(--spacingVerticalXS) var(--spacingHorizontalSNudge);
 }
 
 .input-wrapper:hover {
