@@ -6,13 +6,6 @@ import { genBooleanGetterAndSetter } from "../libs/utils.js";
 const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 
 const STYLES = `
-@keyframes deactive {
-    to {
-        opacity: 0;
-        visibility: hidden;
-    }
-}
-
 :host {
     --just-show-fallback: 0;
     --background: var(--colorNeutralBackground5);
@@ -58,41 +51,18 @@ const STYLES = `
     transition: opacity var(--durationFaster) var(--curveEasyEase), background-color var(--durationFaster) var(--curveEasyEase);
 }
 
-@container (style(--theme: highContrast)) {
-    --just-show-fallback: 1;
-}
-
-:host([deactive]),
-:host([just-show-fallback]) {
-    --just-show-fallback: 1;
-}
-
-@container (style(--theme: dark)) {
-    .luminosityBlend {
-        filter: saturate(0.4);
-    }
-}
-
-@container (style(--just-show-fallback: 1)) {
-    .fallback {
-        opacity: 1;
-    }
-
-    .luminosityBlend,
-    .mixColor,
-    .gaussianBlur,
-    .noiseTexture {
-        animation: deactive var(--durationFaster) var(--curveEasyEase) forwards;
-    }
+.hideColors {
+    transition: opacity var(--durationFaster) var(--durationFaster) var(--curveEasyEase);
+    opacity: 0;
 }
 `;
 
 const HTML = `
+<div class="fallback"></div>
 <div class="luminosityBlend"></div>
 <div class="mixColor"></div>
 <div class="gaussianBlur"></div>
 <div class="noiseTexture"></div>
-<div class="fallback"></div>
 `;
 
 export default class Acrylic extends Component {
@@ -111,6 +81,24 @@ export default class Acrylic extends Component {
     #mixColorEl = null;
 
     /**
+     * 亮度混合层元素
+     * @type {HTMLElement}
+     */
+    #luminosityBlendEl = null;
+
+    /**
+     * 高斯模糊层元素
+     * @type {HTMLElement}
+     */
+    #gaussianBlurEl = null;
+
+    /**
+     * 噪点纹理层元素
+     * @type {HTMLElement}
+     */
+    #noiseTextureEl = null;
+
+    /**
      * 回退元素
      * @type {HTMLElement}
      */
@@ -124,8 +112,11 @@ export default class Acrylic extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         Acrylic[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#mixColorEl = this.querySelector(".mixColor");
-            this.#fallbackEl = this.querySelector(".fallback");
+            this.#mixColorEl = this.shadow.querySelector(".mixColor");
+            this.#luminosityBlendEl = this.shadow.querySelector(".luminosityBlend");
+            this.#gaussianBlurEl = this.shadow.querySelector(".gaussianBlur");
+            this.#noiseTextureEl = this.shadow.querySelector(".noiseTexture");
+            this.#fallbackEl = this.shadow.querySelector(".fallback");
         });
 
         return Acrylic[CONSTRUCTOR_SYMBOL].apply(this, params);
@@ -180,10 +171,17 @@ export default class Acrylic extends Component {
      * 检查主题配置
      */
     #checkThemeConfig() {
-        if (themeManager.enableAlpha) {
-            this.removeAttribute("just-show-fallback");
+        const colorEls = [this.#luminosityBlendEl, this.#mixColorEl, this.#gaussianBlurEl, this.#noiseTextureEl];
+        if (themeManager.enableAlpha && !this.deactive && themeManager.currentTheme !== themeManager.Themes.highContrast) {
+            if (themeManager.currentTheme === themeManager.Themes.dark) {
+                this.#luminosityBlendEl.style.filter = "saturate(0.4)";
+            }
+            this.#fallbackEl.style.opacity = 0;
+            colorEls.forEach(el => el.classList.remove("hideColors"));
         } else {
-            this.setAttribute("just-show-fallback", "");
+            this.#luminosityBlendEl.style.filter = "";
+            this.#fallbackEl.style.opacity = 1;
+            colorEls.forEach(el => el.classList.add("hideColors"));
         }
     }
 
@@ -193,8 +191,14 @@ export default class Acrylic extends Component {
     #bindEvents() {
         const signal = this.abortController.signal;
 
-        this.#parentWindow?.addEventListener("active", () => this.deactive = false, { signal });
-        this.#parentWindow?.addEventListener("deactive", () => this.deactive = true, { signal });
+        this.#parentWindow?.addEventListener("active", () => {
+            this.deactive = false;
+            this.#checkThemeConfig();
+        }, { signal });
+        this.#parentWindow?.addEventListener("deactive", () => {
+            this.deactive = true;
+            this.#checkThemeConfig();
+        }, { signal });
 
         themeManager.addEventListener("update", () => this.#checkThemeConfig(), { signal });
     }

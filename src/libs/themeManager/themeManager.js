@@ -341,6 +341,14 @@ export default new class ThemeManager extends EventTarget {
         return Themes;
     }
 
+    /**
+     * 获取当前主题
+     * @returns {Theme}
+     */
+    get currentTheme() {
+        return this.#currentTheme;
+    }
+
     static [CONSTRUCTOR_SYMBOL](...params) {
         ThemeManager[CONSTRUCTOR_SYMBOL] = overload([], function () {
             if (globalThis?.matchMedia?.("(dynamic-range: high)").matches) {

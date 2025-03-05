@@ -3,6 +3,7 @@ import Enum from "@jyostudio/enum";
 import Component from "./component.js";
 import { genBooleanGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils.js";
 import "./hyperlinkButton.js";
+import themeManager from "../libs/themeManager/themeManager.js";
 
 const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 
@@ -55,21 +56,19 @@ const STYLES = `
     background-color: var(--mix-colorStatusDangerBackground2);
 }
 
-@container (style(--theme: dark) or style(--theme: highContrast)) {
-    :host([severity="success"]) .background {
-        filter: contrast(0.5) brightness(0.8);
-        background-color: var(--mix-colorStatusSuccessForeground3);
-    }
+:host([theme="dark"][severity="success"]) .background {
+    filter: contrast(0.5) brightness(0.8);
+    background-color: var(--mix-colorStatusSuccessForeground3);
+}
 
-    :host([severity="warning"]) .background {
-        filter: contrast(0.5) brightness(0.8);
-        background-color: var(--mix-colorStatusWarningForeground3);
-    }
+:host([theme="dark"][severity="warning"]) .background {
+    filter: contrast(0.5) brightness(0.8);
+    background-color: var(--mix-colorStatusWarningForeground3);
+}
 
-    :host([severity="error"]) .background {
-        filter: contrast(0.5) brightness(0.8);
-        background-color: var(--mix-colorStatusDangerForeground3);
-    }
+:host([theme="dark"][severity="error"]) .background {
+    filter: contrast(0.5) brightness(0.8);
+    background-color: var(--mix-colorStatusDangerForeground3);
 }
 
 :host([is-open="false"]) {
@@ -103,26 +102,26 @@ const STYLES = `
 
 :host([severity="success"]) .contentArea .icon .iconInternal {
     color: var(--colorStatusSuccessForeground1);
+}
 
-    @container (style(--theme: dark) or style(--theme: highContrast)) {
-        color: var(--colorPaletteGreenBackground2);    
-    }
+:host([theme="dark"][severity="success"]) .contentArea .icon .iconInternal {
+    color: var(--colorPaletteGreenBackground2);
 }
 
 :host([severity="warning"]) .contentArea .icon .iconInternal {
     color: var(--colorStatusWarningForeground1);
+}
 
-    @container (style(--theme: dark) or style(--theme: highContrast)) {
-        color: var(--colorPaletteYellowBackground3);    
-    }
+:host([theme="dark"][severity="warning"]) .contentArea .icon .iconInternal {
+    color: var(--colorPaletteYellowBackground3);
 }
 
 :host([severity="error"]) .contentArea .icon .iconInternal {
     color: var(--colorStatusDangerForeground1);
+}
 
-    @container (style(--theme: dark) or style(--theme: highContrast)) {
-        color: var(--colorPaletteBerryBackground2);    
-    }
+:host([theme="dark"][severity="error"]) .contentArea .icon .iconInternal {
+    color: var(--colorPaletteBerryBackground2);
 }
 
 :host([icon-source]) .contentArea .icon .iconInternal {
@@ -252,14 +251,33 @@ export default class InfoBar extends Component {
     }
 
     /**
+     * 检查主题配置
+     */
+    #checkThemeConfig() {
+        switch (themeManager.currentTheme) {
+            case themeManager.Themes.dark:
+            case themeManager.Themes.highContrast:
+                this.setAttribute("theme", "dark");
+                break;
+            default:
+                this.removeAttribute("theme");
+                break;
+        }
+    }
+
+    /**
      * 初始化事件
      */
     #initEvents() {
+        const signal = this.abortController.signal;
+
         this.#closeEl.addEventListener("click", () => {
             if (!this.dispatchCustomEvent("closing")) return;
             this.dispatchCustomEvent("closed", { cancelable: false });
             this.isOpen = false;
-        });
+        }, { signal });
+
+        themeManager.addEventListener("update", () => this.#checkThemeConfig(), { signal });
     }
 
     /**
@@ -269,6 +287,8 @@ export default class InfoBar extends Component {
         super.connectedCallback?.call(this, ...params);
 
         this.#initEvents();
+
+        this.#checkThemeConfig();
     }
 
     static {

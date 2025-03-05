@@ -1,6 +1,7 @@
 import overload from "@jyostudio/overload";
 import Component from "./component.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
+import themeManager from "../libs/themeManager/themeManager.js";
 
 const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 
@@ -78,10 +79,14 @@ const STYLES = `
     background-color: var(--colorNeutralForeground3Pressed);
 }
 
-@container (style(--theme: highContrast)) {
+:host([theme="highContrast"]) {
     #switch:hover::after,
     #switch:active::after {
         background-color: var(--colorNeutralForeground3);
+    }
+
+    #switch:checked::after {
+        background-color: var(--colorNeutralForegroundInverted);
     }
 }
 
@@ -280,14 +285,38 @@ export default class ToggleSwitch extends Component {
     }
 
     /**
+     * 检查主题配置
+     */
+    #checkThemeConfig() {
+        if (themeManager.currentTheme === themeManager.Themes.highContrast) {
+            this.setAttribute("theme", "highContrast");
+        } else {
+            this.removeAttribute("theme");
+        }
+    }
+
+    /**
+     * 初始化事件
+     */
+    #initEvents() {
+        const signal = this.abortController.signal;
+
+        this.#switchEl.addEventListener("change", () => {
+            this.isOn = this.#switchEl.checked;
+        }, { signal });
+
+        themeManager.addEventListener("update", () => this.#checkThemeConfig(), { signal });
+    }
+
+    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
         super.connectedCallback?.call(this, ...params);
 
-        this.#switchEl.addEventListener("change", () => {
-            this.isOn = this.#switchEl.checked;
-        }, { signal: this.abortController.signal });
+        this.#initEvents();
+
+        this.#checkThemeConfig();
     }
 
     static {
