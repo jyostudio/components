@@ -1,7 +1,25 @@
 import overload from "@jyostudio/overload";
+import Enum from "@jyostudio/enum";
 import Component from "./component.js";
 import themeManager from "../libs/themeManager/themeManager.js";
-import { genBooleanGetterAndSetter } from "../libs/utils.js";
+import "./hyperlinkButton.js";
+import { genBooleanGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils.js";
+
+/**
+ * 输入框模式
+ * @extends {Enum}
+ */
+class Mode extends Enum {
+    static {
+        this.set({
+            text: 0,
+            email: 1,
+            url: 2,
+            tel: 3,
+            search: 4
+        });
+    }
+}
 
 const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 
@@ -41,15 +59,13 @@ const STYLES = `
     border-bottom-color: var(--colorCompoundBrandBackground);
 }
 
-:host([theme="light"]) {
-    .input-wrapper:has(input:focus) {
-        background-color: var(--mix-colorNeutralBackground1);
-    }
+.input-wrapper[theme="light"]:has(input:focus) {
+    background-color: var(--mix-colorNeutralBackground1);
 }
 
 input {
     flex: 1;
-    width: 100%;
+    max-width: 100%;
     height: 100%;
     border: none;
     outline: none;
@@ -64,6 +80,25 @@ input {
 input::placeholder {
     color: var(--colorNeutralForeground3);
     opacity: 1;
+}
+
+.end {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.end .search,
+.end .close {
+    position: relative;
+    display: none;
+    width: 16px;
+    height: 20px;
+    min-width: auto;
+    min-height: auto;
+    font-family: "FluentSystemIcons-Resizable";
+    margin-inline-start: var(--spacingHorizontalXS);
+    color: var(--colorNeutralForeground2);
 }
 
 :host([disabled]) .input-wrapper {
@@ -89,10 +124,22 @@ input::placeholder {
 const HTML = `
 <div class="input-wrapper">
     <input type="text" autocomplete="off" />
+    <div class="end">
+        <jyo-hyperlink-button class="search">\uee11</jyo-hyperlink-button>
+        <jyo-hyperlink-button class="close">\ue5fd</jyo-hyperlink-button>
+    </div>
 </div>
 `;
 
 export default class TextBox extends Component {
+    /**
+     * 输入框模式
+     * @returns {Mode}
+     */
+    static get Mode() {
+        return Mode;
+    }
+
     /**
      * 是否支持 form 关联
      * @returns {Boolean}
@@ -106,9 +153,13 @@ export default class TextBox extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "value", "placeholder", "disabled", "readonly", "maxlength"];
+        return [...super.observedAttributes, "value", "placeholder", "disabled", "readonly", "maxlength", "mode"];
     }
 
+    /**
+     * 输入框包装元素
+     * @type {HTMLElement}
+     */
     #inputWrapper;
 
     /**
@@ -117,10 +168,24 @@ export default class TextBox extends Component {
      */
     #inputEl;
 
+    /**
+     * 搜索元素
+     * @type {HTMLElement}
+     */
+    #searchEl;
+
+    /**
+     * 关闭元素
+     * @type {HTMLElement}
+     */
+    #closeEl;
+
     static [CONSTRUCTOR_SYMBOL](...params) {
         TextBox[CONSTRUCTOR_SYMBOL] = overload([], function () {
             this.#inputWrapper = this.shadow.querySelector(".input-wrapper");
             this.#inputEl = this.shadow.querySelector("input");
+            this.#searchEl = this.shadow.querySelector(".search");
+            this.#closeEl = this.shadow.querySelector(".close");
         });
 
         return TextBox[CONSTRUCTOR_SYMBOL].apply(this, params);
@@ -136,6 +201,7 @@ export default class TextBox extends Component {
                     this.lock("value", () => {
                         this.#inputEl.value = value;
                         this.setAttribute("value", value);
+                        this.#checkShowSearch();
                     });
                 }).any(() => this.value = "")
             },
@@ -177,17 +243,34 @@ export default class TextBox extends Component {
                         this.maxlength = value;
                     })
                     .any(() => this.maxlength = -1)
-            }
+            },
+            mode: genEnumGetterAndSetter(this, {
+                attrName: "mode",
+                enumClass: Mode,
+                defaultValue: "text",
+                fn: () => {
+                    this.#inputEl.type = this.mode.valString;
+                    this.#inputEl.inputMode = this.mode.valString;
+                    this.#checkShowSearch();
+                }
+            })
         });
 
         return TextBox[CONSTRUCTOR_SYMBOL].apply(this, params);
     }
 
     /**
+     * 检查是否显示搜索按钮
+     */
+    #checkShowSearch() {
+        this.#searchEl.style.display = this.mode === Mode.search && this.value.length ? "inline-flex" : "none";
+    }
+
+    /**
      * 检查主题配置
      */
     #checkThemeConfig() {
-        this.setAttribute("theme", themeManager.currentTheme.valString);
+        this.#inputWrapper.setAttribute("theme", themeManager.currentTheme.valString);
     }
 
     /**
@@ -196,19 +279,45 @@ export default class TextBox extends Component {
     #initEvents() {
         const signal = this.abortController.signal;
 
+        // 输入框包装元素点击事件处理
         this.#inputWrapper.addEventListener("click", () => this.#inputEl.focus(), { signal });
 
         // 输入事件处理
         this.#inputEl.addEventListener("input", () => {
             this.value = this.#inputEl.value;
+            if (this.#inputEl.offsetWidth < this.#inputEl.scrollWidth) {
+                this.#closeEl.style.display = "inline-flex";
+            } else {
+                this.#closeEl.style.display = "none";
+            }
             this.dispatchCustomEvent("input");
         }, { signal });
 
-        // 失焦事件处理
-        this.#inputEl.addEventListener("change", () => {
-            this.dispatchCustomEvent("change");
+        // 关闭按钮按下事件处理
+        this.#closeEl.addEventListener("pointerdown", e => {
+            e.preventDefault();
+            this.#inputEl.focus();
         }, { signal });
 
+        // 搜索按钮按下事件处理
+        this.#searchEl.addEventListener("pointerdown", e => {
+            e.preventDefault();
+            this.#inputEl.focus();
+        }, { signal });
+
+        // 搜索按钮点击事件处理
+        this.#searchEl.addEventListener("click", () => {
+            this.dispatchCustomEvent("search", { detail: this.value });
+        }, { signal });
+
+        // 关闭按钮点击事件处理
+        this.#closeEl.addEventListener("click", () => {
+            this.value = "";
+            this.#closeEl.style.display = "none";
+            this.dispatchCustomEvent("clear");
+        }, { signal });
+
+        // 主题变更事件处理
         themeManager.addEventListener("update", () => this.#checkThemeConfig(), { signal });
     }
 

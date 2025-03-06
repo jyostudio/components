@@ -79,15 +79,13 @@ const STYLES = `
     background-color: var(--colorNeutralForeground3Pressed);
 }
 
-:host([theme="highContrast"]) {
-    #switch:hover::after,
-    #switch:active::after {
-        background-color: var(--colorNeutralForeground3);
-    }
+#switch[theme="highContrast"]:hover::after,
+#switch[theme="highContrast"]:active::after {
+    background-color: var(--colorNeutralForeground3);
+}
 
-    #switch:checked::after {
-        background-color: var(--colorNeutralForegroundInverted);
-    }
+#switch[theme="highContrast"]:checked::after {
+    background-color: var(--colorNeutralForegroundInverted);
 }
 
 #switch:checked {
@@ -288,11 +286,7 @@ export default class ToggleSwitch extends Component {
      * 检查主题配置
      */
     #checkThemeConfig() {
-        if (themeManager.currentTheme === themeManager.Themes.highContrast) {
-            this.setAttribute("theme", "highContrast");
-        } else {
-            this.removeAttribute("theme");
-        }
+        this.#switchEl.setAttribute("theme", themeManager.currentTheme.valString);
     }
 
     /**

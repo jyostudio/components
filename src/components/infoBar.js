@@ -56,17 +56,17 @@ const STYLES = `
     background-color: var(--mix-colorStatusDangerBackground2);
 }
 
-:host([theme="dark"][severity="success"]) .background {
+:host([severity="success"]) .background[is-dark-or-high-contrast="true"] {
     filter: contrast(0.5) brightness(0.8);
     background-color: var(--mix-colorStatusSuccessForeground3);
 }
 
-:host([theme="dark"][severity="warning"]) .background {
+:host([severity="warning"]) .background[is-dark-or-high-contrast="true"] {
     filter: contrast(0.5) brightness(0.8);
     background-color: var(--mix-colorStatusWarningForeground3);
 }
 
-:host([theme="dark"][severity="error"]) .background {
+:host([severity="error"]) .background[is-dark-or-high-contrast="true"] {
     filter: contrast(0.5) brightness(0.8);
     background-color: var(--mix-colorStatusDangerForeground3);
 }
@@ -104,7 +104,7 @@ const STYLES = `
     color: var(--colorStatusSuccessForeground1);
 }
 
-:host([theme="dark"][severity="success"]) .contentArea .icon .iconInternal {
+:host([severity="success"]) .contentArea[is-dark-or-high-contrast="true"] .icon .iconInternal {
     color: var(--colorPaletteGreenBackground2);
 }
 
@@ -112,7 +112,7 @@ const STYLES = `
     color: var(--colorStatusWarningForeground1);
 }
 
-:host([theme="dark"][severity="warning"]) .contentArea .icon .iconInternal {
+:host([severity="warning"]) .contentArea[is-dark-or-high-contrast="true"] .icon .iconInternal {
     color: var(--colorPaletteYellowBackground3);
 }
 
@@ -120,7 +120,7 @@ const STYLES = `
     color: var(--colorStatusDangerForeground1);
 }
 
-:host([theme="dark"][severity="error"]) .contentArea .icon .iconInternal {
+:host([severity="error"]) .contentArea[is-dark-or-high-contrast="true"] .icon .iconInternal {
     color: var(--colorPaletteBerryBackground2);
 }
 
@@ -146,8 +146,8 @@ const STYLES = `
 
 .functionArea .close {
     position: relative;
-    width: 20px;
-    height: 20px;
+    width: 32px;
+    height: 32px;
     font-family: "FluentSystemIcons-Resizable";
     margin-inline-start: var(--spacingHorizontalXS);
     color: var(--colorNeutralForeground2);
@@ -192,6 +192,18 @@ export default class InfoBar extends Component {
     }
 
     /**
+     * 背景元素
+     * @type {HTMLElement}
+     */
+    #backgroundEl;
+
+    /**
+     * 内容区域元素
+     * @type {HTMLElement}
+     */
+    #contentAreaEl;
+
+    /**
      * 内置图标元素
      * @type {HTMLElement}
      */
@@ -205,6 +217,8 @@ export default class InfoBar extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         InfoBar[CONSTRUCTOR_SYMBOL] = overload([], function () {
+            this.#backgroundEl = this.shadow.querySelector(".background");
+            this.#contentAreaEl = this.shadow.querySelector(".contentArea");
             this.#iconInternalEl = this.shadow.querySelector(".iconInternal");
             this.#closeEl = this.shadow.querySelector(".close");
         });
@@ -254,15 +268,8 @@ export default class InfoBar extends Component {
      * 检查主题配置
      */
     #checkThemeConfig() {
-        switch (themeManager.currentTheme) {
-            case themeManager.Themes.dark:
-            case themeManager.Themes.highContrast:
-                this.setAttribute("theme", "dark");
-                break;
-            default:
-                this.removeAttribute("theme");
-                break;
-        }
+        const isDarkOrHighContrast = themeManager.currentTheme === themeManager.Themes.dark || themeManager.currentTheme === themeManager.Themes.highContrast;
+        [this.#backgroundEl, this.#contentAreaEl].forEach(el => el.setAttribute("is-dark-or-high-contrast", isDarkOrHighContrast ? "true" : "false"));
     }
 
     /**
