@@ -3,8 +3,6 @@ import Component from "./component.js";
 import themeManager from "../libs/themeManager/themeManager.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
 const STYLES = `
 :host {
     --just-show-fallback: 0;
@@ -110,20 +108,14 @@ export default class Acrylic extends Component {
      */
     #parentWindow = null;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        Acrylic[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#mixColorEl = this.shadowRoot.querySelector(".mixColor");
-            this.#luminosityBlendEl = this.shadowRoot.querySelector(".luminosityBlend");
-            this.#gaussianBlurEl = this.shadowRoot.querySelector(".gaussianBlur");
-            this.#noiseTextureEl = this.shadowRoot.querySelector(".noiseTexture");
-            this.#fallbackEl = this.shadowRoot.querySelector(".fallback");
-        });
-
-        return Acrylic[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#mixColorEl = this.shadowRoot.querySelector(".mixColor");
+        this.#luminosityBlendEl = this.shadowRoot.querySelector(".luminosityBlend");
+        this.#gaussianBlurEl = this.shadowRoot.querySelector(".gaussianBlur");
+        this.#noiseTextureEl = this.shadowRoot.querySelector(".noiseTexture");
+        this.#fallbackEl = this.shadowRoot.querySelector(".fallback");
 
         Object.defineProperties(this, {
             tintColor: {
@@ -163,8 +155,25 @@ export default class Acrylic extends Component {
             },
             deactive: genBooleanGetterAndSetter(this, { attrName: "deactive", defaultValue: false }),
         });
+    }
 
-        return Acrylic[CONSTRUCTOR_SYMBOL].apply(this, params);
+    /**
+     * 绑定事件
+     */
+    #initEvents() {
+        const signal = this.abortController.signal;
+
+        this.#parentWindow?.addEventListener("active", () => {
+            this.deactive = false;
+            this.#checkThemeConfig();
+        }, { signal });
+
+        this.#parentWindow?.addEventListener("deactive", () => {
+            this.deactive = true;
+            this.#checkThemeConfig();
+        }, { signal });
+
+        themeManager.addEventListener("update", () => this.#checkThemeConfig(), { signal });
     }
 
     /**
@@ -186,29 +195,9 @@ export default class Acrylic extends Component {
     }
 
     /**
-     * 绑定事件
-     */
-    #bindEvents() {
-        const signal = this.abortController.signal;
-
-        this.#parentWindow?.addEventListener("active", () => {
-            this.deactive = false;
-            this.#checkThemeConfig();
-        }, { signal });
-        this.#parentWindow?.addEventListener("deactive", () => {
-            this.deactive = true;
-            this.#checkThemeConfig();
-        }, { signal });
-
-        themeManager.addEventListener("update", () => this.#checkThemeConfig(), { signal });
-    }
-
-    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         let parentWin = null;
         let parent = null;
         do {
@@ -220,9 +209,20 @@ export default class Acrylic extends Component {
 
         this.#parentWindow = parentWin;
 
-        this.#bindEvents();
+        this.#initEvents();
 
         this.#checkThemeConfig();
+
+        super.connectedCallback?.call(this, ...params);
+    }
+
+    /**
+     * 元素从 DOM 中移除时调用
+     */
+    disconnectedCallback(...params) {
+        this.#parentWindow = null;
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     static {

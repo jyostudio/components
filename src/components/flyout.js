@@ -141,6 +141,12 @@ const HTML = `
 
 export default class Flyout extends Component {
     /**
+     * 计数器
+     * @type {Number}
+     */
+    static #counter = 0;
+
+    /**
      * 定位
      * @type {Positioning}
      */
@@ -203,6 +209,22 @@ export default class Flyout extends Component {
 
                     bindingeds.set(targetEl, fn);
                 }
+            )
+            .add([HTMLElement, null],
+                /**
+                 * 解绑元素
+                 * @param {HTMLElement} targetEl - 目标元素
+                 * @param {null} nullVal - 空值 
+                 */
+                function (targetEl, nullVal) {
+                    const slotEl = targetEl.querySelector("slot[name='flyout']");
+
+                    // 如果已经绑定，则移除监听
+                    if (bindingeds.has(targetEl)) {
+                        slotEl?.removeEventListener("slotchange", bindingeds.get(targetEl));
+                        bindingeds.delete(targetEl);
+                    }
+                }
             );
 
         return Flyout.slotBinding(...params);
@@ -215,10 +237,10 @@ export default class Flyout extends Component {
     #bindEl = null;
 
     /**
-     * 随机 ID
+     * 飞出菜单 ID
      * @type {String}
      */
-    #randomId = `jyo-flyout-${Date.now()}-${globalThis.crypto?.randomUUID?.() ?? Math.random().toString(36).slice(2)}`;
+    #flyoutId = `jyo-flyout-${++Flyout.#counter}`;
 
     /**
      * 是否可见
@@ -293,7 +315,7 @@ export default class Flyout extends Component {
         this.#bindEl = el ?? this.#bindEl ?? (this.anchor.startsWith("#")
             ? document.querySelector(this.anchor)
             : document.getElementById(this.anchor));
-        this.#bindEl?.style?.setProperty?.("anchor-name", `--${this.#randomId}`);
+        this.#bindEl?.style?.setProperty?.("anchor-name", `--${this.#flyoutId}`);
 
         this.dispatchCustomEvent("rebind", { detail: { oldBindEl, newBindEl: this.#bindEl } });
     }
@@ -302,12 +324,10 @@ export default class Flyout extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
 
         this.setAttribute("popover", "auto");
-        this.style.setProperty("position-anchor", `--${this.#randomId}`);
+        this.style.setProperty("position-anchor", `--${this.#flyoutId}`);
 
         const parentEl = this.parentElement;
 
@@ -327,16 +347,18 @@ export default class Flyout extends Component {
                 this.positioning = parentEl.flyoutPositioning;
             }
         });
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     /**
      * DOM 元素从文档中断开时调用
      */
     disconnectedCallback(...params) {
-        super.disconnectedCallback?.call(this, ...params);
-
         this.#bindEl?.style?.removeProperty?.("anchor-name");
         this.#bindEl = null;
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     /**

@@ -2,8 +2,6 @@ import overload from "@jyostudio/overload";
 import Component from "./component.js";
 import Flyout from "./flyout.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
 const STYLES = `
 :host {
     position: relative;
@@ -134,19 +132,11 @@ export default class SplitButton extends Component {
         return Flyout.Positioning.belowStart;
     }
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        SplitButton[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#startEl = this.shadowRoot.querySelector(".start");
-            this.#endEl = this.shadowRoot.querySelector(".end");
-        });
-
-        return SplitButton[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
 
-        return SplitButton[CONSTRUCTOR_SYMBOL].apply(this, params);
+        this.#startEl = this.shadowRoot.querySelector(".start");
+        this.#endEl = this.shadowRoot.querySelector(".end");
     }
 
     /**
@@ -172,11 +162,20 @@ export default class SplitButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
 
         Flyout.slotBinding(this, this.#endEl);
+
+        super.connectedCallback?.call(this, ...params);
+    }
+
+    /**
+     * 元素从 DOM 中删除时调用
+     */
+    disconnectedCallback(...params) {
+        Flyout.slotBinding(this, null);
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     static {

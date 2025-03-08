@@ -2,7 +2,6 @@ import Component from "./component.js";
 import Flyout from "./flyout.js";
 import "./button.js";
 
-
 const STYLES = `
 :host {
     position: relative;
@@ -88,9 +87,18 @@ export default class DropDownButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         Flyout.slotBinding(this);
+
+        super.connectedCallback?.call(this, ...params);
+    }
+
+    /**
+     * 元素从 DOM 中删除时调用
+     */
+    disconnectedCallback(...params) {
+        Flyout.slotBinding(this, null);
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     static {

@@ -5,8 +5,10 @@ import { genBooleanGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils
 import "./hyperlinkButton.js";
 import themeManager from "../libs/themeManager/themeManager.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
+/**
+ * 信息栏严重性
+ * @extends {Enum}
+ */
 class InfoBarSeverity extends Enum {
     static {
         this.set({
@@ -215,19 +217,13 @@ export default class InfoBar extends Component {
      */
     #closeEl;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        InfoBar[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#backgroundEl = this.shadowRoot.querySelector(".background");
-            this.#contentAreaEl = this.shadowRoot.querySelector(".contentArea");
-            this.#iconInternalEl = this.shadowRoot.querySelector(".iconInternal");
-            this.#closeEl = this.shadowRoot.querySelector(".close");
-        });
-
-        return InfoBar[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#backgroundEl = this.shadowRoot.querySelector(".background");
+        this.#contentAreaEl = this.shadowRoot.querySelector(".contentArea");
+        this.#iconInternalEl = this.shadowRoot.querySelector(".iconInternal");
+        this.#closeEl = this.shadowRoot.querySelector(".close");
 
         Object.defineProperties(this, {
             severity: genEnumGetterAndSetter(this, {
@@ -260,16 +256,6 @@ export default class InfoBar extends Component {
             isIconVisible: genBooleanGetterAndSetter(this, { attrName: "is-icon-visible", defaultValue: true, setValueDontRemove: true }),
             isClosable: genBooleanGetterAndSetter(this, { attrName: "is-closable", defaultValue: true, setValueDontRemove: true })
         });
-
-        return InfoBar[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    /**
-     * 检查主题配置
-     */
-    #checkThemeConfig() {
-        const isDarkOrHighContrast = themeManager.currentTheme === themeManager.Themes.dark || themeManager.currentTheme === themeManager.Themes.highContrast;
-        [this.#backgroundEl, this.#contentAreaEl].forEach(el => el.setAttribute("is-dark-or-high-contrast", isDarkOrHighContrast ? "true" : "false"));
     }
 
     /**
@@ -288,14 +274,22 @@ export default class InfoBar extends Component {
     }
 
     /**
+     * 检查主题配置
+     */
+    #checkThemeConfig() {
+        const isDarkOrHighContrast = themeManager.currentTheme === themeManager.Themes.dark || themeManager.currentTheme === themeManager.Themes.highContrast;
+        [this.#backgroundEl, this.#contentAreaEl].forEach(el => el.setAttribute("is-dark-or-high-contrast", isDarkOrHighContrast ? "true" : "false"));
+    }
+
+    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
 
         this.#checkThemeConfig();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

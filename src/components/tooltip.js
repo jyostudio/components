@@ -143,26 +143,35 @@ export default class Tooltip extends Flyout {
     }
 
     /**
-     * 元素被添加到 DOM 树中时调用
+     * 初始化事件
      */
-    connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
+    #initEvents() {
+        const signal = this.abortController.signal;
 
         this.addEventListener("rebind", e => {
             this.#rebind(e.detail.newBindEl);
-        }, { signal: this.abortController.signal });
+        }, { signal });
+    }
 
+    /**
+     * 元素被添加到 DOM 树中时调用
+     */
+    connectedCallback(...params) {
         // 添加无障碍属性
         this.setAttribute("role", "tooltip");
+
+        this.#initEvents();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     /**
      * DOM 元素从文档中断开时调用
      */
     disconnectedCallback(...params) {
-        super.disconnectedCallback?.call(this, ...params);
-
         this.#eventAbortController.abort();
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     static {

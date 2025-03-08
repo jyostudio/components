@@ -2,8 +2,6 @@ import overload from "@jyostudio/overload";
 import Component from "./component.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
 const STYLES = `
 :host {
     position: relative;
@@ -131,17 +129,11 @@ export default class CheckBox extends Component {
      */
     #labelEl;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        CheckBox[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#spanEl = this.shadowRoot.querySelector("span");
-            this.#labelEl = this.shadowRoot.querySelector("label");
-        });
-
-        return CheckBox[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#spanEl = this.shadowRoot.querySelector("span");
+        this.#labelEl = this.shadowRoot.querySelector("label");
 
         Object.defineProperties(this, {
             content: {
@@ -193,15 +185,13 @@ export default class CheckBox extends Component {
                     .any(() => this.isChecked = false)
             }
         });
-
-        return CheckBox[CONSTRUCTOR_SYMBOL].apply(this, params);
     }
 
     /**
-     * 元素被添加到 DOM 树中时调用
+     * 初始化事件
      */
-    connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
+    #initEvents() {
+        const signal = this.abortController.signal;
 
         this.addEventListener("click", () => {
             if (this.isThreeState) {
@@ -209,7 +199,16 @@ export default class CheckBox extends Component {
             } else {
                 this.isChecked = !this.isChecked;
             }
-        }, { signal: this.abortController.signal });
+        }, { signal });
+    }
+
+    /**
+     * 元素被添加到 DOM 树中时调用
+     */
+    connectedCallback(...params) {
+        this.#initEvents();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

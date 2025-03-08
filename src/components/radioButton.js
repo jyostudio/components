@@ -1,8 +1,6 @@
 import overload from "@jyostudio/overload";
 import Component from "./component.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
 const STYLES = `
 :host {
     position: relative;
@@ -140,16 +138,10 @@ export default class RadioButton extends Component {
      */
     #value = null;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        RadioButton[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#labelEl = this.shadowRoot.querySelector("label");
-        });
-
-        return RadioButton[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#labelEl = this.shadowRoot.querySelector("label");
 
         Object.defineProperties(this, {
             value: {
@@ -191,19 +183,24 @@ export default class RadioButton extends Component {
                     .any(() => this.isChecked = false)
             }
         });
+    }
 
-        return RadioButton[CONSTRUCTOR_SYMBOL].apply(this, params);
+    /**
+     * 初始化事件
+     */
+    #initEvents() {
+        const signal = this.abortController.signal;
+
+        this.addEventListener("click", () => this.isChecked = true, { signal });
     }
 
     /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
+        this.#initEvents();
 
-        this.addEventListener("click", () => {
-            this.isChecked = true;
-        }, { signal: this.abortController.signal });
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

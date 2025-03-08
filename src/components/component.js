@@ -122,6 +122,15 @@ export default class Component extends HTMLElement {
             this.#internals = this.attachInternals?.();
             if (!this.#internals?.shadowRoot) {
                 this.attachShadow({ mode: "open" });
+                if (html) {
+                    const template = document.createElement("template");
+                    template.innerHTML = html;
+                    const fragment = template.content.cloneNode(true);
+                    while (this.shadowRoot.firstChild) {
+                        this.shadowRoot.removeChild(this.shadowRoot.firstChild);
+                    }
+                    this.shadowRoot.appendChild(fragment);
+                }
             }
 
             const styleSheets = new Set([...this.shadowRoot.adoptedStyleSheets, SHARED_STYLE]);
@@ -133,16 +142,6 @@ export default class Component extends HTMLElement {
                 styleSheets.add(normalizedCSS);
             }
             this.shadowRoot.adoptedStyleSheets = Array.from(styleSheets);
-
-            if (html) {
-                const template = document.createElement("template");
-                template.innerHTML = html;
-                const fragment = template.content.cloneNode(true);
-                while (this.shadowRoot.firstChild) {
-                    this.shadowRoot.removeChild(this.shadowRoot.firstChild);
-                }
-                this.shadowRoot.appendChild(fragment);
-            }
         });
 
         return Component[CONSTRUCTOR_SYMBOL].apply(this, params);

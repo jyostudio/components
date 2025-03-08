@@ -3,8 +3,6 @@ import Component from "./component.js";
 import Flyout from "./flyout.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
 const STYLES = `
 :host {
     position: relative;
@@ -189,23 +187,15 @@ export default class ToggleSplitButton extends Component {
         return Flyout.Positioning.belowStart;
     }
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        ToggleSplitButton[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#startEl = this.shadowRoot.querySelector(".start");
-            this.#endEl = this.shadowRoot.querySelector(".end");
-        });
-
-        return ToggleSplitButton[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#startEl = this.shadowRoot.querySelector(".start");
+        this.#endEl = this.shadowRoot.querySelector(".end");
 
         Object.defineProperties(this, {
             checked: genBooleanGetterAndSetter(this, { attrName: "checked" })
         });
-
-        return ToggleSplitButton[CONSTRUCTOR_SYMBOL].apply(this, params);
     }
 
     /**
@@ -235,11 +225,20 @@ export default class ToggleSplitButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
 
         Flyout.slotBinding(this, this.#endEl);
+
+        super.connectedCallback?.call(this, ...params);
+    }
+
+    /**
+     * 元素从 DOM 中删除时调用
+     */
+    disconnectedCallback(...params) {
+        Flyout.slotBinding(this, null);
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     static {

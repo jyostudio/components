@@ -1,10 +1,8 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
+import overload from "@jyostudio/overload";
+import { genEnumGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 import "./menuFlyout.js";
-import { genEnumGetterAndSetter } from "../libs/utils.js";
-
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 
 /**
  * 类型
@@ -210,16 +208,10 @@ export default class MenuFlyoutItem extends Component {
      */
     #indicatorEl;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        MenuFlyoutItem[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#indicatorEl = this.shadowRoot.querySelector(".indicator");
-        });
-
-        return MenuFlyoutItem[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#indicatorEl = this.shadowRoot.querySelector(".indicator");
 
         Object.defineProperties(this, {
             checked: {
@@ -265,8 +257,6 @@ export default class MenuFlyoutItem extends Component {
                 }
             })
         });
-
-        return MenuFlyoutItem[CONSTRUCTOR_SYMBOL].apply(this, params);
     }
 
     /**
@@ -275,9 +265,7 @@ export default class MenuFlyoutItem extends Component {
     #initEvents() {
         const signal = this.abortController.signal;
 
-        /**
-         * 子菜单变化时调用
-         */
+        // 子菜单变化时调用
         const flyoutSlot = this.shadowRoot.querySelector("slot[name='flyout']");
         flyoutSlot.addEventListener("slotchange", () => {
             const flyout = flyoutSlot.assignedElements()?.[0];
@@ -290,9 +278,7 @@ export default class MenuFlyoutItem extends Component {
             }
         }, { signal });
 
-        /**
-         * 点击时调用
-         */
+        // 点击时调用
         this.addEventListener("click", e => {
             if (e.target !== this) return e.stopPropagation();
             if (this.type !== Type.default) {
@@ -309,9 +295,7 @@ export default class MenuFlyoutItem extends Component {
             }
         }, { signal });
 
-        /**
-         * 鼠标进入时调用
-         */
+        // 鼠标进入时调用
         this.addEventListener("pointerenter", () => {
             this.parentElement.querySelectorAll("jyo-menu-flyout-item").forEach(
                 /**
@@ -359,11 +343,11 @@ export default class MenuFlyoutItem extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
 
         this.#calcIndent();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

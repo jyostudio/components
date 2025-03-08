@@ -21,8 +21,6 @@ class Mode extends Enum {
     }
 }
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
 const STYLES = `
 :host {
     position: relative;
@@ -180,19 +178,13 @@ export default class TextBox extends Component {
      */
     #closeEl;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        TextBox[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#inputWrapper = this.shadowRoot.querySelector(".input-wrapper");
-            this.#inputEl = this.shadowRoot.querySelector("input");
-            this.#searchEl = this.shadowRoot.querySelector(".search");
-            this.#closeEl = this.shadowRoot.querySelector(".close");
-        });
-
-        return TextBox[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#inputWrapper = this.shadowRoot.querySelector(".input-wrapper");
+        this.#inputEl = this.shadowRoot.querySelector("input");
+        this.#searchEl = this.shadowRoot.querySelector(".search");
+        this.#closeEl = this.shadowRoot.querySelector(".close");
 
         Object.defineProperties(this, {
             value: {
@@ -255,22 +247,6 @@ export default class TextBox extends Component {
                 }
             })
         });
-
-        return TextBox[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    /**
-     * 检查是否显示搜索按钮
-     */
-    #checkShowSearch() {
-        this.#searchEl.style.display = this.mode === Mode.search && this.value.length ? "inline-flex" : "none";
-    }
-
-    /**
-     * 检查主题配置
-     */
-    #checkThemeConfig() {
-        this.#inputWrapper.setAttribute("theme", themeManager.currentTheme.valString);
     }
 
     /**
@@ -322,14 +298,28 @@ export default class TextBox extends Component {
     }
 
     /**
+     * 检查是否显示搜索按钮
+     */
+    #checkShowSearch() {
+        this.#searchEl.style.display = this.mode === Mode.search && this.value.length ? "inline-flex" : "none";
+    }
+
+    /**
+     * 检查主题配置
+     */
+    #checkThemeConfig() {
+        this.#inputWrapper.setAttribute("theme", themeManager.currentTheme.valString);
+    }
+
+    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
 
         this.#checkThemeConfig();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {
