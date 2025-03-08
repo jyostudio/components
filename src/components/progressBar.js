@@ -141,7 +141,7 @@ export default class ProgressBar extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         ProgressBar[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#fillEl = this.shadow.querySelector(".fill");
+            this.#fillEl = this.shadowRoot.querySelector(".fill");
         });
 
         return ProgressBar[CONSTRUCTOR_SYMBOL].apply(this, params);

@@ -112,11 +112,11 @@ export default class Acrylic extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         Acrylic[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#mixColorEl = this.shadow.querySelector(".mixColor");
-            this.#luminosityBlendEl = this.shadow.querySelector(".luminosityBlend");
-            this.#gaussianBlurEl = this.shadow.querySelector(".gaussianBlur");
-            this.#noiseTextureEl = this.shadow.querySelector(".noiseTexture");
-            this.#fallbackEl = this.shadow.querySelector(".fallback");
+            this.#mixColorEl = this.shadowRoot.querySelector(".mixColor");
+            this.#luminosityBlendEl = this.shadowRoot.querySelector(".luminosityBlend");
+            this.#gaussianBlurEl = this.shadowRoot.querySelector(".gaussianBlur");
+            this.#noiseTextureEl = this.shadowRoot.querySelector(".noiseTexture");
+            this.#fallbackEl = this.shadowRoot.querySelector(".fallback");
         });
 
         return Acrylic[CONSTRUCTOR_SYMBOL].apply(this, params);

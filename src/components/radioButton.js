@@ -142,7 +142,7 @@ export default class RadioButton extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         RadioButton[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#labelEl = this.shadow.querySelector("label");
+            this.#labelEl = this.shadowRoot.querySelector("label");
         });
 
         return RadioButton[CONSTRUCTOR_SYMBOL].apply(this, params);

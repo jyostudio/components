@@ -182,10 +182,10 @@ export default class TextBox extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         TextBox[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#inputWrapper = this.shadow.querySelector(".input-wrapper");
-            this.#inputEl = this.shadow.querySelector("input");
-            this.#searchEl = this.shadow.querySelector(".search");
-            this.#closeEl = this.shadow.querySelector(".close");
+            this.#inputWrapper = this.shadowRoot.querySelector(".input-wrapper");
+            this.#inputEl = this.shadowRoot.querySelector("input");
+            this.#searchEl = this.shadowRoot.querySelector(".search");
+            this.#closeEl = this.shadowRoot.querySelector(".close");
         });
 
         return TextBox[CONSTRUCTOR_SYMBOL].apply(this, params);

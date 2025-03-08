@@ -115,8 +115,8 @@ export default class ToggleButton extends Component {
     connectedCallback(...params) {
         super.connectedCallback?.call(this, ...params);
 
-        this.shadow.host.addEventListener("click", () => {
-            this.shadow.host.toggleAttribute("checked");
+        this.shadowRoot.host.addEventListener("click", () => {
+            this.shadowRoot.host.toggleAttribute("checked");
         }, { signal: this.abortController.signal });
     }
 

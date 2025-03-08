@@ -191,8 +191,8 @@ export default class ToggleSplitButton extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         ToggleSplitButton[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#startEl = this.shadow.querySelector(".start");
-            this.#endEl = this.shadow.querySelector(".end");
+            this.#startEl = this.shadowRoot.querySelector(".start");
+            this.#endEl = this.shadowRoot.querySelector(".end");
         });
 
         return ToggleSplitButton[CONSTRUCTOR_SYMBOL].apply(this, params);
@@ -215,7 +215,7 @@ export default class ToggleSplitButton extends Component {
         const signal = this.abortController.signal;
 
         this.#startEl.addEventListener("click", () => {
-            this.shadow.host.toggleAttribute("checked");
+            this.shadowRoot.host.toggleAttribute("checked");
         }, { signal });
 
         this.#endEl.addEventListener("click", (e) => {

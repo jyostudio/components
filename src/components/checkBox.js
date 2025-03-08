@@ -133,8 +133,8 @@ export default class CheckBox extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         CheckBox[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#spanEl = this.shadow.querySelector("span");
-            this.#labelEl = this.shadow.querySelector("label");
+            this.#spanEl = this.shadowRoot.querySelector("span");
+            this.#labelEl = this.shadowRoot.querySelector("label");
         });
 
         return CheckBox[CONSTRUCTOR_SYMBOL].apply(this, params);

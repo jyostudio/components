@@ -231,10 +231,10 @@ export default class ToggleSwitch extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         ToggleSwitch[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#headerEl = this.shadow.querySelector("header");
-            this.#lblOnEl = this.shadow.querySelector(".lblOn");
-            this.#lblOffEl = this.shadow.querySelector(".lblOff");
-            this.#switchEl = this.shadow.querySelector("#switch");
+            this.#headerEl = this.shadowRoot.querySelector("header");
+            this.#lblOnEl = this.shadowRoot.querySelector(".lblOn");
+            this.#lblOffEl = this.shadowRoot.querySelector(".lblOff");
+            this.#switchEl = this.shadowRoot.querySelector("#switch");
         });
 
         return ToggleSwitch[CONSTRUCTOR_SYMBOL].apply(this, params);

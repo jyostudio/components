@@ -136,8 +136,8 @@ export default class SplitButton extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         SplitButton[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#startEl = this.shadow.querySelector(".start");
-            this.#endEl = this.shadow.querySelector(".end");
+            this.#startEl = this.shadowRoot.querySelector(".start");
+            this.#endEl = this.shadowRoot.querySelector(".end");
         });
 
         return SplitButton[CONSTRUCTOR_SYMBOL].apply(this, params);

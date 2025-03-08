@@ -651,8 +651,8 @@ export default class Window extends Component {
              * @this {Window}
              */
             function () {
-                this.shadow.adoptedStyleSheets = [...this.shadow.adoptedStyleSheets, this.#dynamicStyle];
-                this.#titleBarEl = this.shadow.querySelector(".titleBar");
+                this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, this.#dynamicStyle];
+                this.#titleBarEl = this.shadowRoot.querySelector(".titleBar");
                 this.#moveAreaEl = this.#titleBarEl.querySelector(".moveArea");
                 this.size = { width: 640, height: 480 };
                 const index = (Window.#counter++ - 1) % 9;
@@ -952,7 +952,7 @@ export default class Window extends Component {
                 document.documentElement.style.cursor = document.defaultView.getComputedStyle(e.target).cursor;
                 this.dispatchCustomEvent("resizebegin");
             });
-            this.shadow.querySelector(".resizeHandleFrame").appendChild(resizeHandle);
+            this.shadowRoot.querySelector(".resizeHandleFrame").appendChild(resizeHandle);
         });
     }
 
@@ -960,18 +960,18 @@ export default class Window extends Component {
      * 初始化事件
      */
     #initEvents() {
-        this.shadow.querySelector(".actionMin").addEventListener("click", this.minimize.bind(this));
-        this.shadow.querySelector(".actionMax").addEventListener("click", this.maximize.bind(this));
-        this.shadow.querySelector(".actionRestore").addEventListener("click", this.restore.bind(this));
-        this.shadow.querySelector(".actionClose").addEventListener("click", this.close.bind(this));
-        this.shadow.querySelectorAll(".btn").forEach(btn => {
+        this.shadowRoot.querySelector(".actionMin").addEventListener("click", this.minimize.bind(this));
+        this.shadowRoot.querySelector(".actionMax").addEventListener("click", this.maximize.bind(this));
+        this.shadowRoot.querySelector(".actionRestore").addEventListener("click", this.restore.bind(this));
+        this.shadowRoot.querySelector(".actionClose").addEventListener("click", this.close.bind(this));
+        this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
             btn.addEventListener("dblclick", e => e.stopPropagation());
             btn.addEventListener("pointerdown", e => {
                 e.stopPropagation();
                 this.active();
             });
         });
-        this.shadow.querySelector(".btnBack").addEventListener("click", () => {
+        this.shadowRoot.querySelector(".btnBack").addEventListener("click", () => {
             if (!this.canBack) return;
             this.active();
             this.dispatchCustomEvent("back", {
@@ -1153,7 +1153,7 @@ export default class Window extends Component {
                 return;
             }
             this.#transition();
-            const windowEl = this.shadow.querySelector(".window");
+            const windowEl = this.shadowRoot.querySelector(".window");
             const activeFn = () => {
                 const win = Window.#topmostWindows[Window.#topmostWindows.length - 1];
                 if (win) {

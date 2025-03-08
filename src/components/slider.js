@@ -548,9 +548,9 @@ export default class Slider extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         Slider[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#trackEl = this.shadow.querySelector(".track");
-            this.#thumbEl = this.shadow.querySelector(".thumb");
-            this.#tooltipEl = this.shadow.querySelector("jyo-tooltip");
+            this.#trackEl = this.shadowRoot.querySelector(".track");
+            this.#thumbEl = this.shadowRoot.querySelector(".thumb");
+            this.#tooltipEl = this.shadowRoot.querySelector("jyo-tooltip");
             this.#tooltipEl.anchor = this.#thumbEl;
         });
 

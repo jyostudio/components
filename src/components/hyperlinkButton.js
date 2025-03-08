@@ -75,8 +75,8 @@ export default class HyperlinkButton extends Component {
     connectedCallback(...params) {
         super.connectedCallback?.call(this, ...params);
 
-        this.shadow.host.addEventListener("click", () => {
-            const href = this.shadow.host.getAttribute("href");
+        this.shadowRoot.host.addEventListener("click", () => {
+            const href = this.shadowRoot.host.getAttribute("href");
             href && globalThis.open(href, "_blank");
         }, { signal: this.abortController.signal });
     }

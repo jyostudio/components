@@ -212,7 +212,7 @@ export default class MenuFlyoutItem extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         MenuFlyoutItem[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#indicatorEl = this.shadow.querySelector(".indicator");
+            this.#indicatorEl = this.shadowRoot.querySelector(".indicator");
         });
 
         return MenuFlyoutItem[CONSTRUCTOR_SYMBOL].apply(this, params);
@@ -278,7 +278,7 @@ export default class MenuFlyoutItem extends Component {
         /**
          * 子菜单变化时调用
          */
-        const flyoutSlot = this.shadow.querySelector("slot[name='flyout']");
+        const flyoutSlot = this.shadowRoot.querySelector("slot[name='flyout']");
         flyoutSlot.addEventListener("slotchange", () => {
             const flyout = flyoutSlot.assignedElements()?.[0];
             if (flyout) {
@@ -328,7 +328,7 @@ export default class MenuFlyoutItem extends Component {
      * 显示子菜单
      */
     #showFlyout() {
-        const flyoutSlot = this.shadow.querySelector("slot[name='flyout']");
+        const flyoutSlot = this.shadowRoot.querySelector("slot[name='flyout']");
         flyoutSlot?.assignedElements()?.[0]?.showPopover();
     }
 
@@ -336,7 +336,7 @@ export default class MenuFlyoutItem extends Component {
      * 隐藏子菜单
      */
     #hideFlyout() {
-        const flyoutSlot = this.shadow.querySelector("slot[name='flyout']");
+        const flyoutSlot = this.shadowRoot.querySelector("slot[name='flyout']");
         flyoutSlot?.assignedElements()?.[0]?.hidePopover();
     }
 
@@ -345,7 +345,7 @@ export default class MenuFlyoutItem extends Component {
      */
     #calcIndent() {
         let indent = 0;
-        if (this.shadow.querySelector("slot[name='start']")?.assignedElements()?.[0]) indent++;
+        if (this.shadowRoot.querySelector("slot[name='start']")?.assignedElements()?.[0]) indent++;
         if (this.type.valNumber !== 0) indent++;
         this.parentElement?.querySelectorAll("jyo-menu-flyout-item").forEach(item => {
             if (this.parentElement !== item.parentElement) return;

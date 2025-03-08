@@ -217,10 +217,10 @@ export default class InfoBar extends Component {
 
     static [CONSTRUCTOR_SYMBOL](...params) {
         InfoBar[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#backgroundEl = this.shadow.querySelector(".background");
-            this.#contentAreaEl = this.shadow.querySelector(".contentArea");
-            this.#iconInternalEl = this.shadow.querySelector(".iconInternal");
-            this.#closeEl = this.shadow.querySelector(".close");
+            this.#backgroundEl = this.shadowRoot.querySelector(".background");
+            this.#contentAreaEl = this.shadowRoot.querySelector(".contentArea");
+            this.#iconInternalEl = this.shadowRoot.querySelector(".iconInternal");
+            this.#closeEl = this.shadowRoot.querySelector(".close");
         });
 
         return InfoBar[CONSTRUCTOR_SYMBOL].apply(this, params);

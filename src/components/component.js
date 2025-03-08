@@ -82,12 +82,6 @@ export default class Component extends HTMLElement {
     }
 
     /**
-     * 影子根
-     * @type {ShadowRoot}
-     */
-    #shadow = null;
-
-    /**
      * 内部元素
      * @type {ElementInternals?}
      */
@@ -126,28 +120,28 @@ export default class Component extends HTMLElement {
             const { css, html } = this.constructor[OPTIONS_SYMBOL] || {};
 
             this.#internals = this.attachInternals?.();
-            this.#shadow = this.#internals?.shadowRoot || this.attachShadow({ mode: "closed" });
+            if (!this.#internals?.shadowRoot) {
+                this.attachShadow({ mode: "open" });
+            }
 
-            const styleSheets = [SHARED_STYLE];
-
-            this.#shadow.adoptedStyleSheets = [...this.#shadow.adoptedStyleSheets, SHARED_STYLE];
+            const styleSheets = new Set([...this.shadowRoot.adoptedStyleSheets, SHARED_STYLE]);
             if (css) {
                 const normalizedCSS = css instanceof CSSStyleSheet ?
                     themeManager.supportToHDR(css) :
                     createStyleSheet(themeManager.supportToHDR(css));
 
-                styleSheets.push(normalizedCSS);
+                styleSheets.add(normalizedCSS);
             }
-            this.#shadow.adoptedStyleSheets = this.#shadow.adoptedStyleSheets.concat(styleSheets);
+            this.shadowRoot.adoptedStyleSheets = Array.from(styleSheets);
 
             if (html) {
                 const template = document.createElement("template");
                 template.innerHTML = html;
                 const fragment = template.content.cloneNode(true);
-                while (this.#shadow.firstChild) {
-                    this.#shadow.removeChild(this.#shadow.firstChild);
+                while (this.shadowRoot.firstChild) {
+                    this.shadowRoot.removeChild(this.shadowRoot.firstChild);
                 }
-                this.#shadow.appendChild(fragment);
+                this.shadowRoot.appendChild(fragment);
             }
         });
 
@@ -158,9 +152,6 @@ export default class Component extends HTMLElement {
         super();
 
         Object.defineProperties(this, {
-            shadow: {
-                get: () => this.#shadow
-            },
             internals: {
                 get: () => this.#internals
             },
@@ -200,12 +191,10 @@ export default class Component extends HTMLElement {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback() {
-        themeManager.link(this.#shadow);
+        themeManager.link(this.shadowRoot);
 
-        this.#shadow ||= this.#internals?.shadowRoot || this.attachShadow({ mode: "closed" });
-
-        if (!this.#shadow.host.getAttribute("tabindex")) {
-            this.#shadow.host.tabIndex = 0;
+        if (!this.shadowRoot.host.getAttribute("tabindex")) {
+            this.shadowRoot.host.tabIndex = 0;
         }
 
         this.#abortController ||= new AbortController();
@@ -245,7 +234,7 @@ export default class Component extends HTMLElement {
         this.#abortController?.abort?.();
         this.#abortController = null;
 
-        themeManager.unlink(this.#shadow);
+        themeManager.unlink(this.shadowRoot);
 
         this.dispatchCustomEvent("disconnected");
     }
@@ -310,7 +299,7 @@ export default class Component extends HTMLElement {
              */
             async function (callback) {
                 await new Promise(resolve => {
-                    const TAG_NAME = this.shadow?.host?.parentElement?.tagName?.toLowerCase?.() ?? "";
+                    const TAG_NAME = this.shadowRoot.host?.parentElement?.tagName?.toLowerCase?.() ?? "";
                     if (customElements.get(TAG_NAME) || !TAG_NAME.includes("-")) {
                         resolve();
                     } else {
