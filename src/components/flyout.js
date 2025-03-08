@@ -1,7 +1,7 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
-import Component from "./component.js";
+import overload from "@jyostudio/overload";
 import { genEnumGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
 
 /**
  * 定位
@@ -216,7 +216,7 @@ export default class Flyout extends Component {
                  * @param {HTMLElement} targetEl - 目标元素
                  * @param {null} nullVal - 空值 
                  */
-                function (targetEl, nullVal) {
+                function (targetEl) {
                     const slotEl = targetEl.querySelector("slot[name='flyout']");
 
                     // 如果已经绑定，则移除监听

@@ -1,9 +1,9 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
-import Component from "./component.js";
+import overload from "@jyostudio/overload";
 import themeManager from "../libs/themeManager/themeManager.js";
-import "./hyperlinkButton.js";
 import { genBooleanGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
+import "./hyperlinkButton.js";
 
 /**
  * 输入框模式
@@ -12,11 +12,11 @@ import { genBooleanGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils
 class Mode extends Enum {
     static {
         this.set({
-            text: 0,
-            email: 1,
-            url: 2,
-            tel: 3,
-            search: 4
+            text: 0, // 文本
+            email: 1, // 电子邮件
+            url: 2, // 网址
+            tel: 3, // 电话
+            search: 4 // 搜索
         });
     }
 }

@@ -120,7 +120,7 @@ export default class Component extends HTMLElement {
             const { css, html } = this.constructor[OPTIONS_SYMBOL] || {};
 
             this.#internals = this.attachInternals?.();
-            if (!this.#internals?.shadowRoot) {
+            if (!this.#internals?.shadowRoot && !this.shadowRoot) {
                 this.attachShadow({ mode: "open" });
                 if (html) {
                     const template = document.createElement("template");
@@ -133,7 +133,7 @@ export default class Component extends HTMLElement {
                 }
             }
 
-            const styleSheets = new Set([...this.shadowRoot.adoptedStyleSheets, SHARED_STYLE]);
+            const styleSheets = new Set([SHARED_STYLE, ...this.shadowRoot.adoptedStyleSheets]);
             if (css) {
                 const normalizedCSS = css instanceof CSSStyleSheet ?
                     themeManager.supportToHDR(css) :

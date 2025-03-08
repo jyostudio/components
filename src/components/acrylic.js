@@ -1,7 +1,7 @@
 import overload from "@jyostudio/overload";
-import Component from "./component.js";
 import themeManager from "../libs/themeManager/themeManager.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
 
 const STYLES = `
 :host {

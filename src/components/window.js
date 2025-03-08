@@ -1,7 +1,7 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
-import Component from "./component.js";
+import overload from "@jyostudio/overload";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
 
 const STYLES = `
 :host {
@@ -409,9 +409,9 @@ const HTML = `
 class WindowState extends Enum {
     static {
         this.set({
-            normal: 0,
-            maximized: 1,
-            minimized: 2
+            normal: 0, // 正常
+            maximized: 1, // 最大化
+            minimized: 2 // 最小化
         });
     }
 }

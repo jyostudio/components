@@ -1,5 +1,5 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
+import overload from "@jyostudio/overload";
 import { genCSSNumberGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils.js";
 import Flyout, { FlyoutStyle } from "./flyout.js";
 

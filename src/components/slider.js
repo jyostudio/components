@@ -1,8 +1,8 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
+import overload from "@jyostudio/overload";
+import { genEnumGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 import "./tooltip.js";
-import { genEnumGetterAndSetter } from "../libs/utils.js";
 
 /**
  * 刻度位置

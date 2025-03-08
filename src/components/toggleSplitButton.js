@@ -1,7 +1,6 @@
-import overload from "@jyostudio/overload";
+import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 import Flyout from "./flyout.js";
-import { genBooleanGetterAndSetter } from "../libs/utils.js";
 
 const STYLES = `
 :host {

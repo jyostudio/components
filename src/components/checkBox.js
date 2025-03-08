@@ -1,6 +1,6 @@
 import overload from "@jyostudio/overload";
-import Component from "./component.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
 
 const STYLES = `
 :host {

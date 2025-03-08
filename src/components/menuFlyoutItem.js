@@ -11,9 +11,9 @@ import "./menuFlyout.js";
 class Type extends Enum {
     static {
         this.set({
-            default: 0,
-            radio: 1,
-            checkbox: 2
+            default: 0, // 默认
+            radio: 1, // 单选
+            checkbox: 2 // 复选
         });
     }
 }

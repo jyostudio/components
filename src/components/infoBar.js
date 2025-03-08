@@ -1,9 +1,8 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
-import Component from "./component.js";
-import { genBooleanGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils.js";
-import "./hyperlinkButton.js";
 import themeManager from "../libs/themeManager/themeManager.js";
+import { genBooleanGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
+import "./hyperlinkButton.js";
 
 /**
  * 信息栏严重性
@@ -12,10 +11,10 @@ import themeManager from "../libs/themeManager/themeManager.js";
 class InfoBarSeverity extends Enum {
     static {
         this.set({
-            informational: 0,
-            success: 1,
-            warning: 2,
-            error: 3
+            informational: 0, // 信息
+            success: 1, // 成功
+            warning: 2, // 警告
+            error: 3 // 错误
         });
     }
 }

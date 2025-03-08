@@ -1,4 +1,3 @@
-import overload from "@jyostudio/overload";
 import Component from "./component.js";
 import Flyout from "./flyout.js";
 

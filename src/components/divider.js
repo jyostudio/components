@@ -1,6 +1,6 @@
 import Enum from "@jyostudio/enum";
-import Component from "./component.js";
 import { genEnumGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
 
 /**
  * 内容对其方式
@@ -9,9 +9,9 @@ import { genEnumGetterAndSetter } from "../libs/utils.js";
 class AlignContent extends Enum {
     static {
         this.set({
-            start: 0,
-            center: 1,
-            end: 2
+            start: 0, // 开始
+            center: 1, // 居中
+            end: 2 // 结束
         });
     }
 }

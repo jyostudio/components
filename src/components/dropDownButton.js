@@ -1,6 +1,6 @@
+import "./button.js";
 import Component from "./component.js";
 import Flyout from "./flyout.js";
-import "./button.js";
 
 const STYLES = `
 :host {
