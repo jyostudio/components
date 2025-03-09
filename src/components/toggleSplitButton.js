@@ -1,9 +1,6 @@
-import overload from "@jyostudio/overload";
+import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 import Flyout from "./flyout.js";
-import { genBooleanGetterAndSetter } from "../libs/utils.js";
-
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 
 const STYLES = `
 :host {
@@ -189,23 +186,15 @@ export default class ToggleSplitButton extends Component {
         return Flyout.Positioning.belowStart;
     }
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        ToggleSplitButton[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#startEl = this.shadow.querySelector(".start");
-            this.#endEl = this.shadow.querySelector(".end");
-        });
-
-        return ToggleSplitButton[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#startEl = this.shadowRoot.querySelector(".start");
+        this.#endEl = this.shadowRoot.querySelector(".end");
 
         Object.defineProperties(this, {
             checked: genBooleanGetterAndSetter(this, { attrName: "checked" })
         });
-
-        return ToggleSplitButton[CONSTRUCTOR_SYMBOL].apply(this, params);
     }
 
     /**
@@ -215,7 +204,7 @@ export default class ToggleSplitButton extends Component {
         const signal = this.abortController.signal;
 
         this.#startEl.addEventListener("click", () => {
-            this.shadow.host.toggleAttribute("checked");
+            this.shadowRoot.host.toggleAttribute("checked");
         }, { signal });
 
         this.#endEl.addEventListener("click", (e) => {
@@ -235,11 +224,20 @@ export default class ToggleSplitButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
 
         Flyout.slotBinding(this, this.#endEl);
+
+        super.connectedCallback?.call(this, ...params);
+    }
+
+    /**
+     * 元素从 DOM 中删除时调用
+     */
+    disconnectedCallback(...params) {
+        Flyout.slotBinding(this, null);
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     static {

@@ -1,8 +1,6 @@
 import overload from "@jyostudio/overload";
 import Component from "./component.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
 const STYLES = `
 @keyframes indeterminate {
     0% {
@@ -139,16 +137,10 @@ export default class ProgressBar extends Component {
      */
     #fillEl;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        ProgressBar[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#fillEl = this.shadow.querySelector(".fill");
-        });
-
-        return ProgressBar[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#fillEl = this.shadowRoot.querySelector(".fill");
 
         Object.defineProperties(this, {
             isIndeterminate: {
@@ -215,8 +207,6 @@ export default class ProgressBar extends Component {
                     .any(() => this.setAttribute("min", 0))
             }
         });
-
-        return ProgressBar[CONSTRUCTOR_SYMBOL].apply(this, params);
     }
 
     static {

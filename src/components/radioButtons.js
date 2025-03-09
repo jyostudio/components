@@ -2,8 +2,6 @@ import overload from "@jyostudio/overload";
 import Component from "./component.js";
 import "./radioButton.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
-
 const STYLES = `
 :host {
     position: relative;
@@ -81,17 +79,11 @@ export default class RadioButtons extends Component {
      */
     #checkedBindFn;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        RadioButtons[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#headerEl = this.shadow.querySelector("header");
-            this.#checkedBindFn = this.#checkedFn.bind(this);
-        });
-
-        return RadioButtons[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#headerEl = this.shadowRoot.querySelector("header");
+        this.#checkedBindFn = this.#checkedFn.bind(this);
 
         Object.defineProperties(this, {
             header: {
@@ -152,8 +144,6 @@ export default class RadioButtons extends Component {
                     .any(() => this.#bindEls.forEach(el => el.setAttribute("disabled", "")))
             }
         });
-
-        return RadioButtons[CONSTRUCTOR_SYMBOL].apply(this, params);
     }
 
     /**
@@ -197,28 +187,28 @@ export default class RadioButtons extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         if (!this.#observer) {
             this.#observer = new MutationObserver(this.#checkEls);
             this.#observer.observe(this, { childList: true });
         }
         this.#checkEls();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     /**
      * 元素从 DOM 树中移除时调用
      */
     disconnectedCallback(...params) {
-        super.disconnectedCallback?.call(this, ...params);
-
         if (this.#observer) {
             this.#observer.disconnect();
             this.#observer = null;
         }
 
         this.#bindEls.forEach(el => el.removeEventListener("checked", this.#checkedBindFn));
-        this.#bindEls = [];
+        this.#bindEls.length = 0;
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     static {

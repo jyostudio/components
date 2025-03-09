@@ -70,15 +70,24 @@ const HTML = `
 
 export default class HyperlinkButton extends Component {
     /**
+     * 初始化事件
+     */
+    #initEvents() {
+        const signal = this.abortController.signal;
+
+        this.shadowRoot.host.addEventListener("click", () => {
+            const href = this.shadowRoot.host.getAttribute("href");
+            href && globalThis.open(href, "_blank");
+        }, { signal });
+    }
+
+    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
+        this.#initEvents();
 
-        this.shadow.host.addEventListener("click", () => {
-            const href = this.shadow.host.getAttribute("href");
-            href && globalThis.open(href, "_blank");
-        }, { signal: this.abortController.signal });
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

@@ -1,5 +1,5 @@
-import Component from "./component.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
 
 const STYLES = `
 :host {
@@ -110,14 +110,23 @@ export default class ToggleButton extends Component {
     }
 
     /**
+     * 初始化事件
+     */
+    #initEvents() {
+        const signal = this.abortController.signal;
+
+        this.shadowRoot.host.addEventListener("click", () => {
+            this.shadowRoot.host.toggleAttribute("checked");
+        }, { signal });
+    }
+
+    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
+        this.#initEvents();
 
-        this.shadow.host.addEventListener("click", () => {
-            this.shadow.host.toggleAttribute("checked");
-        }, { signal: this.abortController.signal });
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

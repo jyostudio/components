@@ -1,9 +1,8 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
-import Component from "./component.js";
+import overload from "@jyostudio/overload";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
-
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
+import "./acrylic.js";
+import Component from "./component.js";
 
 const STYLES = `
 :host {
@@ -411,9 +410,9 @@ const HTML = `
 class WindowState extends Enum {
     static {
         this.set({
-            normal: 0,
-            maximized: 1,
-            minimized: 2
+            normal: 0, // 正常
+            maximized: 1, // 最大化
+            minimized: 2 // 最小化
         });
     }
 }
@@ -644,31 +643,14 @@ export default class Window extends Component {
         merged.forEach((win, index) => win.zIndex = index);
     }
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        Window[CONSTRUCTOR_SYMBOL] = overload(
-            [],
-            /**
-             * @this {Window}
-             */
-            function () {
-                this.shadow.adoptedStyleSheets = [...this.shadow.adoptedStyleSheets, this.#dynamicStyle];
-                this.#titleBarEl = this.shadow.querySelector(".titleBar");
-                this.#moveAreaEl = this.#titleBarEl.querySelector(".moveArea");
-                this.size = { width: 640, height: 480 };
-                const index = (Window.#counter++ - 1) % 9;
-                this.left = 33 + index * 26;
-                this.top = 26 + index * 26;
-
-                this.#initResizeHandle();
-                this.#initEvents();
-            }
-        );
-
-        return Window[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.shadowRoot.adoptedStyleSheets = [...this.shadowRoot.adoptedStyleSheets, this.#dynamicStyle];
+        this.#titleBarEl = this.shadowRoot.querySelector(".titleBar");
+        this.#moveAreaEl = this.#titleBarEl.querySelector(".moveArea");
+
+        this.#initResizeHandle();
 
         Object.defineProperties(this, {
             left: {
@@ -699,9 +681,7 @@ export default class Window extends Component {
                     .add([null], () => this.left = 0)
             },
             top: {
-                get() {
-                    return this.#currentLocation.y;
-                },
+                get: () => this.#currentLocation.y,
                 set: overload()
                     .add([Number], async function (value) {
                         this.lock("top", () => {
@@ -883,7 +863,49 @@ export default class Window extends Component {
             })
         });
 
-        return Window[CONSTRUCTOR_SYMBOL].apply(this, params);
+        this.size = { width: 640, height: 480 };
+        const index = (Window.#counter++ - 1) % 9;
+        this.left = 33 + index * 26;
+        this.top = 26 + index * 26;
+    }
+
+    /**
+     * 初始化事件
+     */
+    #initEvents() {
+        const signal = this.abortController.signal;
+
+        this.shadowRoot.querySelector(".actionMin").addEventListener("click", this.minimize.bind(this), { signal });
+        this.shadowRoot.querySelector(".actionMax").addEventListener("click", this.maximize.bind(this), { signal });
+        this.shadowRoot.querySelector(".actionRestore").addEventListener("click", this.restore.bind(this), { signal });
+        this.shadowRoot.querySelector(".actionClose").addEventListener("click", this.close.bind(this), { signal });
+        this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
+            btn.addEventListener("dblclick", e => e.stopPropagation(), { signal });
+            btn.addEventListener("pointerdown", e => {
+                e.stopPropagation();
+                this.active();
+            }, { signal });
+        });
+        this.shadowRoot.querySelector(".btnBack").addEventListener("click", () => {
+            if (!this.canBack) return;
+            this.active();
+            this.dispatchCustomEvent("back", {
+                cancelable: false
+            });
+        }, { signal });
+
+        this.addEventListener("pointerdown", (e) => {
+            this.active();
+            e.stopPropagation();
+        }, { signal });
+
+        this.#moveAreaEl.addEventListener("pointerdown", this.moveBegin.bind(this), { signal });
+
+        this.#titleBarEl.addEventListener("dblclick", e => {
+            if (e.target.closest(".action")) return;
+            if (!this.canMaximize) return;
+            this.windowState === WindowState.maximized ? this.restore() : this.maximize();
+        }, { signal });
     }
 
     /**
@@ -952,44 +974,7 @@ export default class Window extends Component {
                 document.documentElement.style.cursor = document.defaultView.getComputedStyle(e.target).cursor;
                 this.dispatchCustomEvent("resizebegin");
             });
-            this.shadow.querySelector(".resizeHandleFrame").appendChild(resizeHandle);
-        });
-    }
-
-    /**
-     * 初始化事件
-     */
-    #initEvents() {
-        this.shadow.querySelector(".actionMin").addEventListener("click", this.minimize.bind(this));
-        this.shadow.querySelector(".actionMax").addEventListener("click", this.maximize.bind(this));
-        this.shadow.querySelector(".actionRestore").addEventListener("click", this.restore.bind(this));
-        this.shadow.querySelector(".actionClose").addEventListener("click", this.close.bind(this));
-        this.shadow.querySelectorAll(".btn").forEach(btn => {
-            btn.addEventListener("dblclick", e => e.stopPropagation());
-            btn.addEventListener("pointerdown", e => {
-                e.stopPropagation();
-                this.active();
-            });
-        });
-        this.shadow.querySelector(".btnBack").addEventListener("click", () => {
-            if (!this.canBack) return;
-            this.active();
-            this.dispatchCustomEvent("back", {
-                cancelable: false
-            });
-        });
-
-        this.addEventListener("pointerdown", (e) => {
-            this.active();
-            e.stopPropagation();
-        });
-
-        this.#moveAreaEl.addEventListener("pointerdown", this.moveBegin.bind(this));
-
-        this.#titleBarEl.addEventListener("dblclick", e => {
-            if (e.target.closest(".action")) return;
-            if (!this.canMaximize) return;
-            this.windowState === WindowState.maximized ? this.restore() : this.maximize();
+            this.shadowRoot.querySelector(".resizeHandleFrame").appendChild(resizeHandle);
         });
     }
 
@@ -1050,23 +1035,23 @@ export default class Window extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.setAttribute("role", "window");
+
+        this.#initEvents();
 
         Window.#openWindows.push(this);
         if (!this.topmost) Window.#normalWindows.push(this);
         else Window.#topmostWindows.push(this);
         Window.#resort();
         this.active();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     /**
      * 元素在 DOM 树中被删除时调用
      */
     disconnectedCallback(...params) {
-        super.disconnectedCallback?.call(this, ...params);
-
         /**
          * 从打开窗口列表中移除
          */
@@ -1075,6 +1060,8 @@ export default class Window extends Component {
         if (Window.#activeWindow === this) Window.#activeWindow = null;
 
         this.close();
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     /**
@@ -1153,7 +1140,7 @@ export default class Window extends Component {
                 return;
             }
             this.#transition();
-            const windowEl = this.shadow.querySelector(".window");
+            const windowEl = this.shadowRoot.querySelector(".window");
             const activeFn = () => {
                 const win = Window.#topmostWindows[Window.#topmostWindows.length - 1];
                 if (win) {

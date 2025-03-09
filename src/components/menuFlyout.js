@@ -1,3 +1,4 @@
+import "./acrylic.js";
 import Flyout, { FlyoutStyle } from "./flyout.js";
 
 const STYLES = `${FlyoutStyle}
@@ -53,6 +54,34 @@ export default class MenuFlyout extends Flyout {
     #eventAbortController = new AbortController();
 
     /**
+     * 初始化事件
+     */
+    #initEvents() {
+        const signal = this.abortController.signal;
+
+        this.addEventListener("rebind", e => {
+            this.#rebind(e.detail.newBindEl);
+        }, { signal });
+
+        this.addEventListener("click", e => {
+            if (e.target?.internals?.states?.has("flyout") || e.target?.type?.valNumber !== 0) {
+                e.preventDefault();
+                e.stopPropagation();
+            } else {
+                let parent = this.parentElement;
+                let lastMenu = this;
+                while (parent) {
+                    if (parent.hasAttribute("popover")) {
+                        lastMenu = parent;
+                    }
+                    parent = parent.parentElement;
+                }
+                lastMenu.hidePopover();
+            }
+        }, { signal });
+    }
+
+    /**
      * 重新绑定
      * @param {HTMLElement} newBindEl - 新的绑定元素
      */
@@ -75,49 +104,21 @@ export default class MenuFlyout extends Flyout {
     }
 
     /**
-     * 初始化事件
-     */
-    #initEvents() {
-        const signal = this.abortController.signal;
-
-        this.addEventListener("rebind", e => {
-            this.#rebind(e.detail.newBindEl);
-        }, { signal: this.abortController.signal });
-
-        this.addEventListener("click", e => {
-            if (e.target?.internals?.states?.has("flyout") || e.target?.type?.valNumber !== 0) {
-                e.preventDefault();
-                e.stopPropagation();
-            } else {
-                let parent = this.parentElement;
-                let lastMenu = this;
-                while (parent) {
-                    if (parent.hasAttribute("popover")) {
-                        lastMenu = parent;
-                    }
-                    parent = parent.parentElement;
-                }
-                lastMenu.hidePopover();
-            }
-        }, { signal });
-    }
-
-    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     /**
-     * DOM 元素从文档中断开时调用
+     * 元素从 DOM 中移除时调用
      */
     disconnectedCallback(...params) {
-        super.disconnectedCallback?.call(this, ...params);
-
         this.#eventAbortController.abort();
+
+        super.disconnectedCallback?.call(this, ...params);
     }
 
     static {

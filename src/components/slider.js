@@ -1,8 +1,8 @@
-import overload from "@jyostudio/overload";
 import Enum from "@jyostudio/enum";
+import overload from "@jyostudio/overload";
+import { genEnumGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 import "./tooltip.js";
-import { genEnumGetterAndSetter } from "../libs/utils.js";
 
 /**
  * 刻度位置
@@ -238,8 +238,6 @@ CSS?.paintWorklet?.addModule?.(function () {
     const worklet = new Blob([code], { type: "text/javascript" });
     return URL.createObjectURL(worklet);
 }());
-
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 
 const STYLES = `
 :host {
@@ -546,19 +544,13 @@ export default class Slider extends Component {
         return Math.max(1, this.maximum - this.minimum);
     }
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        Slider[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#trackEl = this.shadow.querySelector(".track");
-            this.#thumbEl = this.shadow.querySelector(".thumb");
-            this.#tooltipEl = this.shadow.querySelector("jyo-tooltip");
-            this.#tooltipEl.anchor = this.#thumbEl;
-        });
-
-        return Slider[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#trackEl = this.shadowRoot.querySelector(".track");
+        this.#thumbEl = this.shadowRoot.querySelector(".thumb");
+        this.#tooltipEl = this.shadowRoot.querySelector("jyo-tooltip");
+        this.#tooltipEl.anchor = this.#thumbEl;
 
         Object.defineProperties(this, {
             minimum: {
@@ -694,8 +686,27 @@ export default class Slider extends Component {
                 }
             })
         });
+    }
 
-        return Slider[CONSTRUCTOR_SYMBOL].apply(this, params);
+    /**
+     * 初始化事件
+     */
+    #initEvents() {
+        const signal = this.abortController.signal;
+
+        this.addEventListener("pointerdown", this.#onPointerDown, { signal });
+        this.addEventListener("pointerup", this.#onPointerUp, { signal });
+        this.addEventListener("pointercancel", this.#onPointerUp, { signal });
+        this.addEventListener("pointermove", this.#onPointerMove, { signal });
+
+        [this.#trackEl, this.#thumbEl].forEach(el => {
+            ["pointerdown", "pointerenter"].forEach(eventName => {
+                el.addEventListener(eventName, this.#showTooltip.bind(this), { signal });
+            });
+            ["pointerleave", "pointerout"].forEach(eventName => {
+                el.addEventListener(eventName, this.#hideTooltip.bind(this), { signal });
+            });
+        });
     }
 
     /**
@@ -839,27 +850,6 @@ export default class Slider extends Component {
     };
 
     /**
-     * 初始化事件
-     */
-    #initEvents() {
-        const signal = this.abortController.signal;
-
-        this.addEventListener("pointerdown", this.#onPointerDown, { signal });
-        this.addEventListener("pointerup", this.#onPointerUp, { signal });
-        this.addEventListener("pointercancel", this.#onPointerUp, { signal });
-        this.addEventListener("pointermove", this.#onPointerMove, { signal });
-
-        [this.#trackEl, this.#thumbEl].forEach(el => {
-            ["pointerdown", "pointerenter"].forEach(eventName => {
-                el.addEventListener(eventName, this.#showTooltip.bind(this), { signal });
-            });
-            ["pointerleave", "pointerout"].forEach(eventName => {
-                el.addEventListener(eventName, this.#hideTooltip.bind(this), { signal });
-            });
-        });
-    }
-
-    /**
      * 显示提示
      */
     #showTooltip() {
@@ -879,9 +869,9 @@ export default class Slider extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

@@ -1,9 +1,7 @@
 import overload from "@jyostudio/overload";
-import Component from "./component.js";
-import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import themeManager from "../libs/themeManager/themeManager.js";
-
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
+import { genBooleanGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
 
 const STYLES = `
 :host {
@@ -229,19 +227,13 @@ export default class ToggleSwitch extends Component {
      */
     #switchEl;
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        ToggleSwitch[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            this.#headerEl = this.shadow.querySelector("header");
-            this.#lblOnEl = this.shadow.querySelector(".lblOn");
-            this.#lblOffEl = this.shadow.querySelector(".lblOff");
-            this.#switchEl = this.shadow.querySelector("#switch");
-        });
-
-        return ToggleSwitch[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
+
+        this.#headerEl = this.shadowRoot.querySelector("header");
+        this.#lblOnEl = this.shadowRoot.querySelector(".lblOn");
+        this.#lblOffEl = this.shadowRoot.querySelector(".lblOff");
+        this.#switchEl = this.shadowRoot.querySelector("#switch");
 
         Object.defineProperties(this, {
             header: {
@@ -278,15 +270,6 @@ export default class ToggleSwitch extends Component {
                 }
             })
         });
-
-        return ToggleSwitch[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    /**
-     * 检查主题配置
-     */
-    #checkThemeConfig() {
-        this.#switchEl.setAttribute("theme", themeManager.currentTheme.valString);
     }
 
     /**
@@ -303,14 +286,21 @@ export default class ToggleSwitch extends Component {
     }
 
     /**
+     * 检查主题配置
+     */
+    #checkThemeConfig() {
+        this.#switchEl.setAttribute("theme", themeManager.currentTheme.valString);
+    }
+
+    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
-
         this.#initEvents();
 
         this.#checkThemeConfig();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

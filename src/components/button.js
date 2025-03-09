@@ -1,6 +1,6 @@
 import Enum from "@jyostudio/enum";
-import Component from "./component.js";
 import { genEnumGetterAndSetter } from "../libs/utils.js";
+import Component from "./component.js";
 
 /**
  * 按钮类型
@@ -9,9 +9,9 @@ import { genEnumGetterAndSetter } from "../libs/utils.js";
 class Type extends Enum {
     static {
         this.set({
-            submit: 0,
-            reset: 1,
-            button: 2
+            submit: 0, // 提交
+            reset: 1, // 重置
+            button: 2 // 按钮
         });
     }
 }
@@ -117,10 +117,10 @@ export default class Button extends Component {
     }
 
     /**
-     * 元素被添加到 DOM 树中时调用
+     * 初始化事件
      */
-    connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
+    #initEvents() {
+        const signal = this.abortController.signal;
 
         this.addEventListener("click", () => {
             switch (this.type) {
@@ -131,7 +131,16 @@ export default class Button extends Component {
                     this.internals?.form?.reset();
                     break;
             }
-        }, { signal: this.abortController.signal });
+        }, { signal });
+    }
+
+    /**
+     * 元素被添加到 DOM 树中时调用
+     */
+    connectedCallback(...params) {
+        this.#initEvents();
+
+        super.connectedCallback?.call(this, ...params);
     }
 
     static {

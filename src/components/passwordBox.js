@@ -6,17 +6,15 @@ import Component from "./component.js";
 import "./hyperlinkButton.js";
 
 /**
- * 输入框模式
+ * 密码显示行为
  * @extends {Enum}
  */
-class Mode extends Enum {
+class PasswordRevealMode extends Enum {
     static {
         this.set({
-            text: 0, // 文本
-            email: 1, // 电子邮件
-            url: 2, // 网址
-            tel: 3, // 电话
-            search: 4 // 搜索
+            peed: 0, // 密码显示按钮可见，密码始终被掩盖
+            hidden: 1, // 密码显示按钮不可见，密码始终被掩盖
+            visible: 2 // 密码显示按钮不可见，密码不会被掩盖
         });
     }
 }
@@ -73,6 +71,12 @@ input {
     padding: 0;
     margin: 0;
     cursor: text;
+    ime-mode: disabled !important;
+}
+
+input::-ms-reveal,
+input::-ms-clear {
+    display: none;
 }
 
 input::placeholder {
@@ -86,8 +90,7 @@ input::placeholder {
     justify-content: center;
 }
 
-.end .search,
-.end .close {
+.end .visible {
     position: relative;
     display: none;
     width: 16px;
@@ -121,23 +124,14 @@ input::placeholder {
 
 const HTML = `
 <div class="input-wrapper">
-    <input type="text" autocomplete="off" />
+    <input type="password" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="none" autocomplete="off" />
     <div class="end">
-        <jyo-hyperlink-button class="search">\uee11</jyo-hyperlink-button>
-        <jyo-hyperlink-button class="close">\ue5fd</jyo-hyperlink-button>
+        <jyo-hyperlink-button class="visible">\ue795</jyo-hyperlink-button>
     </div>
 </div>
 `;
 
-export default class TextBox extends Component {
-    /**
-     * 输入框模式
-     * @returns {Mode}
-     */
-    static get Mode() {
-        return Mode;
-    }
-
+export default class PasswordBox extends Component {
     /**
      * 是否支持 form 关联
      * @returns {Boolean}
@@ -151,7 +145,7 @@ export default class TextBox extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "value", "placeholder", "disabled", "readonly", "maxlength", "mode"];
+        return [...super.observedAttributes, "value", "placeholder", "disabled", "readonly", "maxlength", "password-reveal-mode"];
     }
 
     /**
@@ -167,24 +161,23 @@ export default class TextBox extends Component {
     #inputEl;
 
     /**
-     * 搜索元素
+     * 显示密码按钮元素
      * @type {HTMLElement}
      */
-    #searchEl;
+    #visibleEl;
 
     /**
-     * 关闭元素
-     * @type {HTMLElement}
+     * 是否显示密码
+     * @type {Boolean}
      */
-    #closeEl;
+    #isVisiblePassword = false;
 
     constructor() {
         super();
 
         this.#inputWrapper = this.shadowRoot.querySelector(".input-wrapper");
         this.#inputEl = this.shadowRoot.querySelector("input");
-        this.#searchEl = this.shadowRoot.querySelector(".search");
-        this.#closeEl = this.shadowRoot.querySelector(".close");
+        this.#visibleEl = this.shadowRoot.querySelector(".visible");
 
         Object.defineProperties(this, {
             value: {
@@ -192,8 +185,7 @@ export default class TextBox extends Component {
                 set: overload([String], value => {
                     this.lock("value", () => {
                         this.#inputEl.value = value;
-                        this.setAttribute("value", value);
-                        this.#checkShowSearch();
+                        this.#handleInput();
                     });
                 }).any(() => this.value = "")
             },
@@ -236,15 +228,11 @@ export default class TextBox extends Component {
                     })
                     .any(() => this.maxlength = -1)
             },
-            mode: genEnumGetterAndSetter(this, {
-                attrName: "mode",
-                enumClass: Mode,
-                defaultValue: "text",
-                fn: () => {
-                    this.#inputEl.type = this.mode.valString;
-                    this.#inputEl.inputMode = this.mode.valString;
-                    this.#checkShowSearch();
-                }
+            passwordRevealMode: genEnumGetterAndSetter(this, {
+                attrName: "password-reveal-mode",
+                enumClass: PasswordRevealMode,
+                defaultValue: "peed",
+                fn: () => this.#handleInput()
             })
         });
     }
@@ -258,50 +246,38 @@ export default class TextBox extends Component {
         // 输入框包装元素点击事件处理
         this.#inputWrapper.addEventListener("click", () => this.#inputEl.focus(), { signal });
 
+        this.#inputEl.addEventListener("compositionstart", e => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, { signal });
+
+        this.#inputEl.addEventListener("compositionupdate", e => {
+            e.preventDefault();
+            e.stopPropagation();
+        }, { signal });
+
         // 输入事件处理
         this.#inputEl.addEventListener("input", () => {
-            this.value = this.#inputEl.value;
-            if (this.#inputEl.offsetWidth < this.#inputEl.scrollWidth) {
-                this.#closeEl.style.display = "inline-flex";
-            } else {
-                this.#closeEl.style.display = "none";
-            }
+            this.#handleInput();
             this.dispatchCustomEvent("input");
         }, { signal });
 
-        // 关闭按钮按下事件处理
-        this.#closeEl.addEventListener("pointerdown", e => {
+        // 密码显示按钮事件处理
+        this.#visibleEl.addEventListener("pointerdown", e => {
             e.preventDefault();
-            this.#inputEl.focus();
+            this.#isVisiblePassword = true;
+            this.#handleInput();
         }, { signal });
 
-        // 搜索按钮按下事件处理
-        this.#searchEl.addEventListener("pointerdown", e => {
-            e.preventDefault();
-            this.#inputEl.focus();
-        }, { signal });
-
-        // 搜索按钮点击事件处理
-        this.#searchEl.addEventListener("click", () => {
-            this.dispatchCustomEvent("search", { detail: this.value });
-        }, { signal });
-
-        // 关闭按钮点击事件处理
-        this.#closeEl.addEventListener("click", () => {
-            this.value = "";
-            this.#closeEl.style.display = "none";
-            this.dispatchCustomEvent("clear");
-        }, { signal });
+        ["pointerup", "pointerleave", "pointercancel"].forEach(eventName => {
+            this.#visibleEl.addEventListener(eventName, () => {
+                this.#isVisiblePassword = false;
+                this.#handleInput();
+            }, { signal });
+        });
 
         // 主题变更事件处理
         themeManager.addEventListener("update", () => this.#checkThemeConfig(), { signal });
-    }
-
-    /**
-     * 检查是否显示搜索按钮
-     */
-    #checkShowSearch() {
-        this.#searchEl.style.display = this.mode === Mode.search && this.value.length ? "inline-flex" : "none";
     }
 
     /**
@@ -312,12 +288,38 @@ export default class TextBox extends Component {
     }
 
     /**
+     * 处理输入显示
+     */
+    #handleInput() {
+        const revealMode = this.passwordRevealMode;
+        if (revealMode === PasswordRevealMode.peed) {
+            this.#visibleEl.style.display = this.#inputEl.value.length ? 'inline-flex' : 'none';
+        } else if (revealMode === PasswordRevealMode.hidden) {
+            this.#visibleEl.style.display = 'none';
+            this.#isVisiblePassword = false;
+        } else if (revealMode === PasswordRevealMode.visible) {
+            this.#visibleEl.style.display = 'none';
+            this.#isVisiblePassword = true;
+        }
+
+        if (this.#isVisiblePassword) {
+            this.#inputEl.type = "text";
+        } else {
+            this.#inputEl.type = "password";
+        }
+
+        requestAnimationFrame(() => {
+            this.#inputEl.setSelectionRange(this.#inputEl.value.length, this.#inputEl.value.length);
+        });
+    }
+
+    /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
         this.#initEvents();
-
         this.#checkThemeConfig();
+        this.#handleInput();
 
         super.connectedCallback?.call(this, ...params);
     }
