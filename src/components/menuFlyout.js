@@ -1,3 +1,4 @@
+import "./acrylic.js";
 import Flyout, { FlyoutStyle } from "./flyout.js";
 
 const STYLES = `${FlyoutStyle}

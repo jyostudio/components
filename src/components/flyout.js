@@ -1,6 +1,7 @@
 import Enum from "@jyostudio/enum";
 import overload from "@jyostudio/overload";
 import { genEnumGetterAndSetter } from "../libs/utils.js";
+import "./acrylic.js";
 import Component from "./component.js";
 
 /**

@@ -26,3 +26,4 @@ export { default as RadioButtons } from "./components/radioButtons.js";
 export { default as Divider } from "./components/divider.js";
 export { default as TextBox } from "./components/textBox.js";
 export { default as PasswordBox } from "./components/passwordBox.js";
+export { default as Dialog } from "./components/dialog.js";

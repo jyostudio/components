@@ -69,7 +69,7 @@ export default class Acrylic extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "tint-color", "tint-opacity", "fallback-color", "deactive", "deactivate"];
+        return [...super.observedAttributes, "tint-color", "tint-opacity", "fallback-color", "deactive"];
     }
 
     /**

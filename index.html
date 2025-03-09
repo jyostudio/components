@@ -40,6 +40,14 @@
       // import * as module from "./dist/index.js";
 
       console.dir(module);
+
+      customElements.whenDefined("jyo-button").then(() => {
+        const btn = document.getElementById("btnOpenDialog");
+        btn.addEventListener("click", () => {
+          const dialog = document.querySelector("jyo-dialog");
+          dialog.open();
+        });
+      });
     </script>
   </head>
 
@@ -214,8 +222,15 @@
 
     <jyo-window size="{width: 400, height: 200}" topmost>
       <div slot="title">置顶窗口2</div>
-      <jyo-text-box></jyo-text-box>
-      <jyo-password-box></jyo-password-box>
+      <jyo-text-box></jyo-text-box><br />
+      <jyo-password-box></jyo-password-box><br />
+      <jyo-button id="btnOpenDialog">打开对话框</jyo-button>
+      <jyo-dialog title-text="测试对话框">
+        <div>
+          这是一个对话框<br />
+          <jyo-check-box content="勾选框"></jyo-check-box>
+        </div>
+      </jyo-dialog>
     </jyo-window>
 
     <jyo-window size="{width: 640, height: 480}">
