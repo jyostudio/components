@@ -359,6 +359,7 @@ export default new class ThemeManager extends EventTarget {
             }
 
             this.#initAutoSet();
+            this.#initTransparency();
             this.applyTheme(this.#autoTheme || Themes.light);
         });
 
@@ -424,6 +425,20 @@ export default new class ThemeManager extends EventTarget {
         });
 
         ThemeManager[CONSTRUCTOR_SYMBOL].apply(this, params);
+    }
+
+    #initTransparency() {
+        if (typeof globalThis !== "undefined" && !("matchMedia" in globalThis)) {
+            this.#enableAlpha = false;
+            return;
+        }
+
+        const prefersTransparency = globalThis.matchMedia("(prefers-reduced-transparency: reduce)");
+        prefersTransparency.addEventListener("change", () => {
+            this.#enableAlpha = !prefersTransparency.matches;
+            this.#generateStyleSheet();
+        });
+        this.#enableAlpha = !prefersTransparency.matches;
     }
 
     #initAutoSet() {

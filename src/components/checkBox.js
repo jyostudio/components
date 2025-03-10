@@ -6,7 +6,8 @@ const STYLES = `
 :host {
     position: relative;
     vertical-align: middle;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     text-decoration-line: none;
     outline-style: none;
     color: var(--colorNeutralForeground1);
