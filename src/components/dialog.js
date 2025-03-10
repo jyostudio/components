@@ -3,7 +3,7 @@ import Component from "./component.js";
 import "./button.js";
 import "./divider.js";
 
-const STYLES = `
+const STYLES = /* css */`
 @keyframes fade-in {
     0% {
         opacity: 0;
@@ -75,8 +75,8 @@ const STYLES = `
     box-shadow: var(--shadow64);
     color: var(--colorNeutralForeground1);
     font-family: var(----fontFamilyBase);
-    font-size: var(--fontSizeBase300);
-    line-height: var(--lineHeightBase300);
+    font-size: var(--fontSizeBase200);
+    line-height: var(--lineHeightBase200);
     padding: var(--spacingHorizontalXL) 0;
     contain: paint;
     overflow: hidden;
@@ -95,8 +95,8 @@ const STYLES = `
 }
 
 .title {
-    font-size: var(--fontSizeBase500);
-    line-height: var(--lineHeightBase500);
+    font-size: var(--fontSizeBase400);
+    line-height: var(--lineHeightBase400);
     font-weight: bold;
     margin-bottom: var(--spacingVerticalXS);
     padding: 0 var(--spacingHorizontalXL);
@@ -126,7 +126,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="dialog">
     <div class="title"></div>
     <div class="content">

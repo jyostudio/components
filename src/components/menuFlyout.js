@@ -1,7 +1,7 @@
 import "./acrylic.js";
 import Flyout, { FlyoutStyle } from "./flyout.js";
 
-const STYLES = `${FlyoutStyle}
+const STYLES = /* css */`${FlyoutStyle}
 :host(:popover-open) {
     pointer-events: auto;
 }
@@ -27,9 +27,9 @@ const STYLES = `${FlyoutStyle}
     flex-direction: column;
     filter: drop-shadow(0 0 2px var(--colorNeutralShadowAmbient)) drop-shadow(0 4px 8px var(--colorNeutralShadowKey));
     font-family: var(--fontFamilyBase);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     inset: unset;
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     margin: unset;
     overflow: visible;
     padding: 2px;
@@ -42,7 +42,7 @@ const STYLES = `${FlyoutStyle}
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <jyo-acrylic></jyo-acrylic>
 <slot></slot>
 `;

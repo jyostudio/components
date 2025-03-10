@@ -50,7 +50,7 @@ class Orientation extends Enum {
  * 新增一个 Paint Worklet，用于绘制滑块的占位符
  */
 CSS?.paintWorklet?.addModule?.(function () {
-    const code = `registerPaint("jyo-slider-placeholder", class JyoSliderPlaceholder {
+    const code = /* js */`registerPaint("jyo-slider-placeholder", class JyoSliderPlaceholder {
     static get contextOptions() {
         return { alpha: true };
     }
@@ -239,7 +239,7 @@ CSS?.paintWorklet?.addModule?.(function () {
     return URL.createObjectURL(worklet);
 }());
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     --slider-thumb: 0%;
     --slider-progress: 0%;
@@ -429,7 +429,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="track"></div>
 <div class="thumb"></div>
 <jyo-tooltip horizontal-offset="-10px" vertical-offset="-10px" mode="manual">0</jyo-tooltip>

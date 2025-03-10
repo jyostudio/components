@@ -2,18 +2,19 @@ import overload from "@jyostudio/overload";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
     text-decoration-line: none;
     outline-style: none;
     color: var(--colorNeutralForeground1);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -30,7 +31,7 @@ span {
     border: var(--strokeWidthThin) solid var(--mix-colorNeutralStrokeAccessible);
     color: var(--colorNeutralForegroundInverted);
     font-family: "FluentSystemIcons-Resizable";
-    font-size: var(--fontSizeBase200);
+    font-size: var(--fontSizeBase100);
     box-sizing: border-box;
     position: relative;
     text-align: center;
@@ -95,7 +96,7 @@ label {
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <span></span>
 <label></label>
 `;
@@ -162,26 +163,29 @@ export default class CheckBox extends Component {
                 set: overload()
                     .add([Boolean], value => this.isChecked = value ? "true" : "false")
                     .add([String], value => {
-                        if (value === "null") {
-                            if (this.isChecked !== null) {
-                                this.setAttribute("is-checked", "null");
-                                this.dispatchCustomEvent("indeterminate");
+                        this.lock("isChecked", () => {
+                            if (value === "null") {
+                                if (this.isChecked !== null) {
+                                    this.setAttribute("is-checked", "null");
+                                    this.dispatchCustomEvent("indeterminate");
+                                }
+                                this.#spanEl.textContent = "\uef91";
+                            } else if (value === "true") {
+                                if (this.isChecked !== true) {
+                                    this.setAttribute("is-checked", "true");
+                                    this.dispatchCustomEvent("checked");
+                                }
+                                this.#spanEl.textContent = "\ue3e8";
+                            } else {
+                                if (this.isChecked !== false) {
+                                    this.removeAttribute("is-checked");
+                                    this.dispatchCustomEvent("unchecked");
+                                }
+                                this.#spanEl.innerHTML = "";
                             }
-                            this.#spanEl.textContent = "\uef91";
-                        } else if (value === "true") {
-                            if (this.isChecked !== true) {
-                                this.setAttribute("is-checked", "true");
-                                this.dispatchCustomEvent("checked");
-                            }
-                            this.#spanEl.textContent = "\ue3e8";
-                        } else {
-                            if (this.isChecked !== false) {
-                                this.removeAttribute("is-checked");
-                                this.dispatchCustomEvent("unchecked");
-                            }
-                            this.#spanEl.innerHTML = "";
-                        }
+                        });
                     })
+                    .add([null], () => this.isChecked = "null")
                     .any(() => this.isChecked = false)
             }
         });

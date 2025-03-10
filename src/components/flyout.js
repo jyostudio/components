@@ -38,7 +38,7 @@ const DEFALUT_SLOT_ELEMENTS = [
     "JYO-TOGGLE-SPLIT-BUTTON"
 ];
 
-const STYLES = `
+const STYLES = /* css */`
 @keyframes fade-in {
     0% {
         display: initial;
@@ -135,7 +135,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <jyo-acrylic></jyo-acrylic>
 <slot></slot>
 `;

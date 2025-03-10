@@ -19,7 +19,7 @@ class InfoBarSeverity extends Enum {
     }
 }
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     display: flex;
     justify-content: space-between;
@@ -131,7 +131,7 @@ const STYLES = `
 
 .contentArea .message {
     display: block;
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     vertical-align: middle;
 }
 
@@ -142,7 +142,7 @@ const STYLES = `
 }
 
 .functionArea .actions {
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
 }
 
 .functionArea .close {
@@ -159,7 +159,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="background"></div>
 <div class="contentArea">
     <div class="icon">

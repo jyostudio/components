@@ -3,7 +3,7 @@ import themeManager from "../libs/themeManager/themeManager.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     --just-show-fallback: 0;
     --background: var(--colorNeutralBackground5);
@@ -55,7 +55,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="fallback"></div>
 <div class="luminosityBlend"></div>
 <div class="mixColor"></div>

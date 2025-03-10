@@ -1,7 +1,7 @@
 import overload from "@jyostudio/overload";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 @keyframes indeterminate {
     0% {
         inset-inline-start: -33%;
@@ -110,7 +110,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="fill"></div>
 `;
 

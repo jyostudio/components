@@ -4,7 +4,7 @@ import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import "./acrylic.js";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: absolute;
     display: block;
@@ -371,7 +371,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="window">
     <slot name="background" aria-hidden="true">
         <jyo-acrylic></jyo-acrylic>

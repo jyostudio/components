@@ -2,12 +2,12 @@ import Component from "./component.js";
 import Flyout from "./flyout.js";
 import "./menuFlyout.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     display: inline-block;
     font-family: var(--fontFamilyBase);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     border-radius: var(--borderRadiusMedium);
     padding: 4px 8px;
     margin-inline-end: 4px;
@@ -45,7 +45,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <slot></slot>
 `;
 

@@ -21,14 +21,14 @@ class Mode extends Enum {
     }
 }
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     display: inline-block;
     vertical-align: middle;
     min-width: 120px;
     font-family: var(--fontFamilyBase);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     color: var(--colorNeutralForeground1);
     contain: paint;
     outline: none;
@@ -119,7 +119,7 @@ input::placeholder {
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="input-wrapper">
     <input type="text" autocomplete="off" />
     <div class="end">

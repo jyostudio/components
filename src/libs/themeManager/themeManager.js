@@ -19,7 +19,7 @@ class Themes extends Enum {
     }
 }
 
-const BASIC_STYLES = `
+const BASIC_STYLES = /* css */`
 --borderRadiusNone: 0;
 --borderRadiusSmall: 2px;
 --borderRadiusMedium: 4px;
@@ -359,6 +359,7 @@ export default new class ThemeManager extends EventTarget {
             }
 
             this.#initAutoSet();
+            this.#initTransparency();
             this.applyTheme(this.#autoTheme || Themes.light);
         });
 
@@ -424,6 +425,20 @@ export default new class ThemeManager extends EventTarget {
         });
 
         ThemeManager[CONSTRUCTOR_SYMBOL].apply(this, params);
+    }
+
+    #initTransparency() {
+        if (typeof globalThis !== "undefined" && !("matchMedia" in globalThis)) {
+            this.#enableAlpha = false;
+            return;
+        }
+
+        const prefersTransparency = globalThis.matchMedia("(prefers-reduced-transparency: reduce)");
+        prefersTransparency.addEventListener("change", () => {
+            this.#enableAlpha = !prefersTransparency.matches;
+            this.#generateStyleSheet();
+        });
+        this.#enableAlpha = !prefersTransparency.matches;
     }
 
     #initAutoSet() {
@@ -513,7 +528,7 @@ export default new class ThemeManager extends EventTarget {
     #generateStyleSheet() {
         this.#styleSheet = this.#styleSheet ?? new CSSStyleSheet();
         const themeName = this.#currentTheme.valString;
-        const styles = this.supportToHDR(`
+        const styles = this.supportToHDR(/* css */`
             :host {
               --theme: ${themeName};
               --disableAlpha: ${this.enableAlpha ? "1" : "0"};

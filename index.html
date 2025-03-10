@@ -29,9 +29,9 @@
     <script type="importmap">
       {
         "imports": {
-          "@jyostudio/overload": "https://unpkg.com/@jyostudio/overload",
-          "@jyostudio/io": "https://unpkg.com/@jyostudio/io",
-          "@jyostudio/enum": "https://unpkg.com/@jyostudio/enum"
+          "@jyostudio/overload": "https://esm.sh/@jyostudio/overload",
+          "@jyostudio/io": "https://esm.sh/@jyostudio/io",
+          "@jyostudio/enum": "https://esm.sh/@jyostudio/enum"
         }
       }
     </script>
@@ -216,14 +216,18 @@
       >
     </jyo-window>
 
-    <jyo-window size="{width: 300, height: 200}" topmost>
-      <div slot="title">置顶窗口1</div>
-    </jyo-window>
+    <!-- <jyo-window size="{width: 300, height: 200}" topmost>
+    <div slot="title">置顶窗口1</div>
+  </jyo-window>
 
-    <jyo-window size="{width: 400, height: 200}" topmost>
-      <div slot="title">置顶窗口2</div>
-      <jyo-text-box></jyo-text-box><br />
-      <jyo-password-box></jyo-password-box><br />
+  <jyo-window size="{width: 400, height: 300}" topmost>
+    <div slot="title">置顶窗口2</div>
+  </jyo-window> -->
+
+    <jyo-window size="{width: 640, height: 480}">
+      <div slot="title">测试窗口2</div>
+      <jyo-text-box></jyo-text-box><br /><br />
+      <jyo-password-box></jyo-password-box><br /><br />
       <jyo-button id="btnOpenDialog">打开对话框</jyo-button>
       <jyo-dialog title-text="测试对话框">
         <div>
@@ -231,10 +235,22 @@
           <jyo-check-box content="勾选框"></jyo-check-box>
         </div>
       </jyo-dialog>
-    </jyo-window>
-
-    <jyo-window size="{width: 640, height: 480}">
-      <div slot="title">测试窗口2</div>
+      <br /><br />
+      <jyo-tree-view tree-view-selection-mode="multiple">
+        <jyo-tree-view-item text="根节点1">
+          <jyo-tree-view-item text="子节点1">
+            <jyo-tree-view-item text="子子节点1"></jyo-tree-view-item>
+            <jyo-tree-view-item text="子子节点2"></jyo-tree-view-item>
+            <jyo-tree-view-item text="子子节点3"></jyo-tree-view-item>
+          </jyo-tree-view-item>
+          <jyo-tree-view-item text="子节点2">
+            <jyo-tree-view-item text="子子节点1"></jyo-tree-view-item>
+            <jyo-tree-view-item text="子子节点2"></jyo-tree-view-item>
+            <jyo-tree-view-item text="子子节点3"></jyo-tree-view-item>
+          </jyo-tree-view-item>
+        </jyo-tree-view-item>
+        <jyo-tree-view-item text="根节点2"></jyo-tree-view-item>
+      </jyo-tree-view>
     </jyo-window>
   </body>
 </html>

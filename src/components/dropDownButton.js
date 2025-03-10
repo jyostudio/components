@@ -2,7 +2,7 @@ import "./button.js";
 import Component from "./component.js";
 import Flyout from "./flyout.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
@@ -20,10 +20,10 @@ const STYLES = `
     border-bottom-color: var(--mix-colorNeutralStroke1Hover);
     padding: 0 var(--spacingHorizontalM);
     border-radius: var(--borderRadiusMedium);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -35,7 +35,7 @@ const STYLES = `
 .dropdown {
     margin-inline-start: 8px;
     font-family: "FluentSystemIcons-Resizable";
-    font-size: var(--fontSizeBase200);
+    font-size: var(--fontSizeBase100);
     vertical-align: middle;
 }
 
@@ -68,7 +68,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <slot>Button</slot>
 <span class="dropdown">\ue40c</span>
 <slot name="flyout"></slot>

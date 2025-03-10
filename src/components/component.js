@@ -19,7 +19,7 @@ function createStyleSheet(css) {
  * 共享样式
  * @type {CSSStyleSheet}
  */
-const SHARED_STYLE = createStyleSheet(themeManager.supportToHDR(`
+const SHARED_STYLE = createStyleSheet(themeManager.supportToHDR(/* css */`
 * {
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;

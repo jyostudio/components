@@ -17,7 +17,7 @@ class Mode extends Enum {
     }
 }
 
-const STYLES = `${FlyoutStyle}
+const STYLES = /* css */`${FlyoutStyle}
 :host {
     --block-offset: var(--spacingVerticalXS);
     --inline-offset: var(--spacingHorizontalXS);
@@ -29,9 +29,9 @@ const STYLES = `${FlyoutStyle}
     color: var(--colorNeutralForeground1);
     filter: drop-shadow(0 0 2px var(--colorNeutralShadowAmbient)) drop-shadow(0 4px 8px var(--colorNeutralShadowKey));
     font-family: var(--fontFamilyBase);
-    font-size: var(--fontSizeBase200);
+    font-size: var(--fontSizeBase100);
     inset: unset;
-    line-height: var(--lineHeightBase200);
+    line-height: var(--lineHeightBase100);
     margin: unset;
     max-width: 240px;
     overflow: visible;
@@ -45,7 +45,7 @@ const STYLES = `${FlyoutStyle}
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <jyo-acrylic></jyo-acrylic>
 <div id="content">
     <slot></slot>

@@ -1,6 +1,6 @@
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     display: flex;
@@ -20,7 +20,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="start">
     <slot></slot>
 </div>

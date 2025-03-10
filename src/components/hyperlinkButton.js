@@ -1,6 +1,6 @@
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
@@ -17,10 +17,10 @@ const STYLES = `
     border-color: transparent;
     padding: 0 var(--spacingHorizontalM);
     border-radius: var(--borderRadiusMedium);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -64,7 +64,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <slot>Button</slot>
 `;
 
