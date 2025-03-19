@@ -75,6 +75,14 @@ export default class TreeView extends Component {
      */
     #activeList = new Set();
 
+    /**
+     * 获取选择的项目
+     * @returns {Array<TreeViewItem>}
+     */
+    get selectedItems() {
+        return Array.from(this.#activeList);
+    }
+
     constructor() {
         super();
 
@@ -100,11 +108,20 @@ export default class TreeView extends Component {
     #initEvents() {
         const signal = this.abortController.signal;
 
-        this.addEventListener("active", event => {
-            if (this.treeViewSelectionMode === TreeViewSelectionMode.none.description) {
+        this.addEventListener("activeSingle", event => {
+            event.stopPropagation();
+            if (this.treeViewSelectionMode !== TreeViewSelectionMode.single) {
                 return;
             }
-            if (this.treeViewSelectionMode === TreeViewSelectionMode.single.description) {
+            event.target.dispatchEvent(new CustomEvent("active", { bubbles: true }));
+        }, { signal });
+
+        this.addEventListener("active", event => {
+            event.stopPropagation();
+            if (this.treeViewSelectionMode === TreeViewSelectionMode.none) {
+                return;
+            }
+            if (this.treeViewSelectionMode === TreeViewSelectionMode.single) {
                 this.#activeList.forEach(item => {
                     if (item !== event.target) {
                         item.dispatchEvent(new CustomEvent("inactive", { bubbles: true }));
@@ -116,6 +133,7 @@ export default class TreeView extends Component {
         }, { signal });
 
         this.addEventListener("inactive", event => {
+            event.stopPropagation();
             event.target.internals.states.delete("active");
             this.#activeList.delete(event.target);
         }, { signal });

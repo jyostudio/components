@@ -39,6 +39,17 @@ const STYLES = /* css */`
     outline-style: none;
 }
 
+:host(:state(active):not(:state(show-checkbox))) .item::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 15%;
+    width: 3px;
+    height: 70%;
+    border-radius: var(--borderRadiusCircular);
+    background-color: var(--colorCompoundBrandBackground);
+}
+
 .content {
     position: relative;
     display: flex;
@@ -129,6 +140,12 @@ export default class TreeViewItem extends Component {
     }
 
     /**
+     * 项元素
+     * @type {HTMLElement}
+     */
+    #itemEl;
+
+    /**
      * 复选框元素
      * @type {HTMLElement}
      */
@@ -161,6 +178,7 @@ export default class TreeViewItem extends Component {
     constructor() {
         super();
 
+        this.#itemEl = this.shadowRoot.querySelector(".item");
         this.#checkboxEl = this.shadowRoot.querySelector(".checkbox");
         this.#dropdownEl = this.shadowRoot.querySelector(".dropdown");
         this.#titleEl = this.shadowRoot.querySelector(".title");
@@ -196,9 +214,18 @@ export default class TreeViewItem extends Component {
     #initEvents() {
         const signal = this.abortController.signal;
 
+        this.#itemEl.addEventListener("click", () => {
+            this.dispatchEvent(new CustomEvent("activeSingle", { bubbles: true }));
+        }, { signal });
+
         this.#childrenSlotEl.addEventListener('slotchange', () => this.#updateNodeState(), { signal });
 
-        this.#dropdownEl.addEventListener("click", () => {
+        this.#checkboxEl.addEventListener("click", event => {
+            event.stopPropagation();
+        });
+
+        this.#dropdownEl.addEventListener("click", event => {
+            event.stopPropagation();
             if (this.internals.states.has("has-children")) {
                 this.isExpanded = !this.isExpanded;
             }
