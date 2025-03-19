@@ -29,9 +29,9 @@ const STYLES = /* css */`${FlyoutStyle}
     color: var(--colorNeutralForeground1);
     filter: drop-shadow(0 0 2px var(--colorNeutralShadowAmbient)) drop-shadow(0 4px 8px var(--colorNeutralShadowKey));
     font-family: var(--fontFamilyBase);
-    font-size: var(--fontSizeBase100);
+    font-size: var(--fontSizeBase200);
     inset: unset;
-    line-height: var(--lineHeightBase100);
+    line-height: var(--lineHeightBase200);
     margin: unset;
     max-width: 240px;
     overflow: visible;

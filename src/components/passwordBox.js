@@ -124,7 +124,7 @@ input::placeholder {
 
 const HTML = /* html */`
 <div class="input-wrapper">
-    <input type="password" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="none" autocomplete="off" />
+    <input type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" inputmode="none" />
     <div class="end">
         <jyo-hyperlink-button class="visible">\ue795</jyo-hyperlink-button>
     </div>
