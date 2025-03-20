@@ -158,12 +158,12 @@ export default class Tooltip extends Flyout {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         // 添加无障碍属性
         this.setAttribute("role", "tooltip");
 
         this.#initEvents();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     /**

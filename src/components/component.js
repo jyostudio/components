@@ -200,14 +200,14 @@ export default class Component extends HTMLElement {
 
         this.#initEvents();
 
-        this.dispatchCustomEvent("connected");
+        requestAnimationFrame(() => this.dispatchCustomEvent("connected"));
     }
 
     /**
      * DOM 元素被移动到新文档时调用
      */
     adoptedCallback() {
-        this.dispatchCustomEvent("adopted");
+        requestAnimationFrame(() => this.dispatchCustomEvent("adopted"));
     }
 
     /**
@@ -223,7 +223,7 @@ export default class Component extends HTMLElement {
         } else {
             console.warn(`未定义的观察属性: ${propName}`);
         }
-        this.dispatchCustomEvent("attributeChanged", { detail: { name, oldValue, newValue } });
+        requestAnimationFrame(() => this.dispatchCustomEvent("attributeChanged", { detail: { name, oldValue, newValue } }));
     }
 
     /**
@@ -235,7 +235,7 @@ export default class Component extends HTMLElement {
 
         themeManager.unlink(this.shadowRoot);
 
-        this.dispatchCustomEvent("disconnected");
+        requestAnimationFrame(() => this.dispatchCustomEvent("disconnected"));
     }
 
     dispatchCustomEvent(...params) {

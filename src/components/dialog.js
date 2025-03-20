@@ -202,16 +202,9 @@ export default class Dialog extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        this.#initEvents();
-
         super.connectedCallback?.call(this, ...params);
-    }
 
-    /**
-     * DOM 元素从文档中断开时调用
-     */
-    disconnectedCallback(...params) {
-        super.disconnectedCallback?.call(this, ...params);
+        this.#initEvents();
     }
 
     /**

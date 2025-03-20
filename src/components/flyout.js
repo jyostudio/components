@@ -325,6 +325,8 @@ export default class Flyout extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.#initEvents();
 
         this.setAttribute("popover", "auto");
@@ -348,8 +350,6 @@ export default class Flyout extends Component {
                 this.positioning = parentEl.flyoutPositioning;
             }
         });
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     /**

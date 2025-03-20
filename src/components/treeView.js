@@ -165,9 +165,9 @@ export default class TreeView extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        this.#initEvents();
-
         super.connectedCallback?.call(this, ...params);
+
+        this.#initEvents();
     }
 
     static {

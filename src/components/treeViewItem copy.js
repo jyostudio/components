@@ -69,7 +69,7 @@ const STYLES = /* css */`
     display: inline-block;
 }
 
-.arrow {
+.dropdown {
     position: relative;
     display: inline-flex;
     justify-content: center;
@@ -78,7 +78,7 @@ const STYLES = /* css */`
     height: 100%;
 }
 
-.arrow::before {
+.dropdown::before {
     font-family: "FluentSystemIcons-Resizable";
     font-size: var(--fontSizeBase100);
     vertical-align: middle;
@@ -89,7 +89,7 @@ const STYLES = /* css */`
     transition-timing-function: var(--curveEasyEase);
 }
 
-:host(:state(has-children)) .arrow::before {
+:host(:state(has-children)) .dropdown::before {
     content: "\ue40c";
 }
 
@@ -97,7 +97,7 @@ const STYLES = /* css */`
     display: none;
 }
 
-:host([is-expanded]) .arrow::before {
+:host([is-expanded]) .dropdown::before {
     transform: rotate(0);
 }
 
@@ -115,37 +115,13 @@ const STYLES = /* css */`
     outline: none !important;
     pointer-events: none !important;
 }
-
-.item[draggable="true"] {
-    cursor: grab;
-}
-
-.item.dragging {
-    opacity: 0.5;
-    cursor: grabbing;
-}
-
-.drop-insert-line {
-    position: absolute;
-    left: 0;
-    right: 0;
-    height: 2px;
-    background: var(--colorCompoundBrandBackground);
-    pointer-events: none;
-    display: none;
-}
-
-.drop-insert-line.visible {
-    display: block;
-}
 `;
 
 const HTML = /* html */`
 <div class="item">
-    <div class="drop-insert-line"></div>
     <div class="content">
         <jyo-check-box class="checkbox"></jyo-check-box>
-        <div class="arrow"></div>
+        <div class="dropdown"></div>
         <div class="title"></div>
     </div>
 </div>
@@ -164,22 +140,10 @@ export default class TreeViewItem extends Component {
     }
 
     /**
-     * 被拖动的项
-     * @type {TreeViewItem}
-     */
-    static #draggedItem;
-
-    /**
      * 项元素
      * @type {HTMLElement}
      */
     #itemEl;
-
-    /**
-     * 拖拽插入线元素
-     * @type {HTMLElement}
-     */
-    #dropLineEl;
 
     /**
      * 复选框元素
@@ -188,10 +152,10 @@ export default class TreeViewItem extends Component {
     #checkboxEl;
 
     /**
-     * 箭头元素
+     * 下拉元素
      * @type {HTMLElement}
      */
-    #arrowEl;
+    #dropdownEl;
 
     /**
      * 标题元素
@@ -211,26 +175,15 @@ export default class TreeViewItem extends Component {
      */
     #childrenSlotEl;
 
-    /**
-     * 所有子树视图项
-     * @returns {TreeViewItem}
-     */
-    get #allChildTreeViewItems() {
-        return this.#childrenSlotEl.assignedElements({ flatten: true }).filter(item => item instanceof TreeViewItem);
-    }
-
     constructor() {
         super();
 
         this.#itemEl = this.shadowRoot.querySelector(".item");
-        this.#dropLineEl = this.shadowRoot.querySelector(".drop-insert-line");
         this.#checkboxEl = this.shadowRoot.querySelector(".checkbox");
-        this.#arrowEl = this.shadowRoot.querySelector(".arrow");
+        this.#dropdownEl = this.shadowRoot.querySelector(".dropdown");
         this.#titleEl = this.shadowRoot.querySelector(".title");
         this.#childrenEl = this.shadowRoot.querySelector(".children");
         this.#childrenSlotEl = this.shadowRoot.querySelector("#children");
-
-        this.#itemEl.draggable = true; // 启用拖拽
 
         Object.defineProperties(this, {
             text: {
@@ -271,7 +224,7 @@ export default class TreeViewItem extends Component {
             event.stopPropagation();
         });
 
-        this.#arrowEl.addEventListener("click", event => {
+        this.#dropdownEl.addEventListener("click", event => {
             event.stopPropagation();
             if (this.internals.states.has("has-children")) {
                 this.isExpanded = !this.isExpanded;
@@ -281,8 +234,10 @@ export default class TreeViewItem extends Component {
         this.#checkboxEl.addEventListener("checked", () => {
             this.#updateParentCheckboxState();
             if (this.internals.states.has("has-children")) {
-                this.#allChildTreeViewItems.forEach(child => {
-                    child.#checkboxEl.isChecked = true;
+                this.#childrenSlotEl.assignedElements({ flatten: true }).forEach(child => {
+                    if (child instanceof TreeViewItem) {
+                        child.#checkboxEl.isChecked = true;
+                    }
                 });
             }
             this.dispatchCustomEvent("active", { bubbles: true });
@@ -297,156 +252,14 @@ export default class TreeViewItem extends Component {
         this.#checkboxEl.addEventListener("unchecked", () => {
             this.#updateParentCheckboxState();
             if (this.internals.states.has("has-children")) {
-                this.#allChildTreeViewItems.forEach(child => {
-                    child.#checkboxEl.isChecked = false;
+                this.#childrenSlotEl.assignedElements({ flatten: true }).forEach(child => {
+                    if (child instanceof TreeViewItem) {
+                        child.#checkboxEl.isChecked = false;
+                    }
                 });
             }
             this.dispatchCustomEvent("inactive", { bubbles: true });
         }, { signal });
-
-        this.#initDragEvents();
-    }
-
-    /**
-     * 初始化拖拽事件
-     */
-    #initDragEvents() {
-        const signal = this.abortController.signal;
-
-        // 拖拽开始
-        this.#itemEl.addEventListener("dragstart", e => {
-            TreeViewItem.#draggedItem = this;
-            e.dataTransfer.setData("text/plain", this.dataset.id || this.text);
-            this.#itemEl.classList.add("dragging");
-            this.dispatchCustomEvent("dragstart", { detail: this });
-        }, { signal });
-
-        // 拖拽结束
-        this.#itemEl.addEventListener("dragend", () => {
-            this.#itemEl.classList.remove("dragging");
-            this.#dropLineEl.classList.remove("visible");
-            this.dispatchCustomEvent("dragend");
-            TreeViewItem.#draggedItem = null;
-        }, { signal });
-
-        // 拖拽进入
-        this.#itemEl.addEventListener("dragover", e => {
-            e.preventDefault();
-            if (!this.#isValidDropTarget(e)) return;
-
-            const { position, offsetY } = this.#calcDropPosition(e);
-            this.#showDropIndicator(position, offsetY);
-        }, { signal });
-
-        // 拖拽离开
-        this.#itemEl.addEventListener("dragleave", () => {
-            this.#dropLineEl.classList.remove("visible");
-        }, { signal });
-
-        // 放置处理
-        this.#itemEl.addEventListener("drop", e => {
-            e.preventDefault();
-            const draggedItem = TreeViewItem.#draggedItem; // 获取被拖动的元素
-
-            if (!this.#isValidDropTarget(e)) return;
-
-            this.#handleDrop(draggedItem, e);
-            this.#dropLineEl.classList.remove("visible");
-        }, { signal });
-    }
-
-    /**
-     * 判断是否是有效放置目标
-     */
-    #isValidDropTarget(e) {
-        /* TODO 这里有严重问题！！！！！！！ */
-        const draggedItem = TreeViewItem.#draggedItem;
-        if (draggedItem === this) return false;
-        let el = e.toElement;
-        console.dir(e.toElement)
-        while (el && !(el instanceof TreeViewItem)) {
-            el = el.parentElement;
-        }
-        console.dir(el);
-        if (!el) return false;
-        if (draggedItem.#childrenSlotEl.assignedElements({ flatten: true }).find(item => item === e.toElement)) return false;
-        return true;
-    }
-
-    /**
-     * 计算放置位置
-     */
-    #calcDropPosition(e) {
-        const rect = this.#itemEl.getBoundingClientRect();
-        const offsetY = e.clientY - rect.top;
-        const threshold = rect.height / 3;
-
-        return {
-            position: offsetY < threshold ? "before" :
-                offsetY > rect.height - threshold ? "after" : "inside",
-            offsetY
-        };
-    }
-
-    /**
-     * 显示放置指示线
-     */
-    #showDropIndicator(position, offsetY) {
-        this.#dropLineEl.style.transform = `translateY(${offsetY}px)`;
-        this.#dropLineEl.classList.toggle("visible", position !== "inside");
-    }
-
-    /**
-     * 处理放置操作
-     */
-    #handleDrop(draggedItem, e) {
-        const { position } = this.#calcDropPosition(e);
-        const parentSlot = this.parentElement?.closest("jyo-tree-view-item")?.shadowRoot?.querySelector("#children");
-
-        // 同级移动
-        if (position === "before" || position === "after") {
-            this.#moveSibling(draggedItem, position);
-        }
-        // 作为子节点
-        else if (position === "inside") {
-            this.#moveToChildren(draggedItem);
-        }
-
-        this.#updateNodeState();
-        this.#childrenSlotEl.assignedElements({ flatten: true }).filter(item => item instanceof TreeViewItem).forEach(item => item.#updateNodeState());
-
-        this.dispatchCustomEvent("drop", {
-            detail: {
-                draggedItem,
-                target: this,
-                position
-            },
-            bubbles: true
-        });
-    }
-
-    /**
-     * 移动为兄弟节点
-     */
-    #moveSibling(draggedItem, position) {
-        const parent = this.parentElement;
-        const referenceNode = position === "before" ? this : this.nextElementSibling;
-
-        parent.moveBefore(draggedItem, referenceNode);
-    }
-
-    /**
-     * 移动为子节点
-     */
-    #moveToChildren(draggedItem) {
-        const targetChildren = this.#childrenSlotEl;
-        if (!targetChildren) return;
-
-        // 如果当前未展开则自动展开
-        if (!this.isExpanded) this.isExpanded = true;
-
-        // 插入到子节点列表末尾
-        targetChildren.appendChild(draggedItem);
     }
 
     /**
@@ -498,15 +311,13 @@ export default class TreeViewItem extends Component {
         } else {
             this.internals.states.delete("has-children");
         }
-
-        this.#updateParentCheckboxState();
     }
 
     /**
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        super.connectedCallback.call(this, ...params);
+        super.connectedCallback?.call(this, ...params);
 
         this.#initEvents();
 

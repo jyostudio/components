@@ -1035,6 +1035,8 @@ export default class Window extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.setAttribute("role", "window");
 
         this.#initEvents();
@@ -1044,8 +1046,6 @@ export default class Window extends Component {
         else Window.#topmostWindows.push(this);
         Window.#resort();
         this.active();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     /**

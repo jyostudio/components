@@ -198,6 +198,8 @@ export default class Acrylic extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         let parentWin = null;
         let parent = null;
         do {
@@ -212,8 +214,6 @@ export default class Acrylic extends Component {
         this.#initEvents();
 
         this.#checkThemeConfig();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     /**

@@ -87,9 +87,9 @@ export default class DropDownButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        Flyout.slotBinding(this);
-
         super.connectedCallback?.call(this, ...params);
+
+        Flyout.slotBinding(this);
     }
 
     /**

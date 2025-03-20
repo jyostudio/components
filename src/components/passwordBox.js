@@ -317,11 +317,11 @@ export default class PasswordBox extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.#initEvents();
         this.#checkThemeConfig();
         this.#handleInput();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     static {
