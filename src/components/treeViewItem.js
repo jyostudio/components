@@ -156,6 +156,12 @@ const HTML = /* html */`
 
 export default class TreeViewItem extends Component {
     /**
+     * 引用 Symbol
+     * @type {Symbol}
+     */
+    static #refSymbol = Symbol("ref");
+
+    /**
      * 观察属性
      * @returns {Array<String>}
      */
@@ -229,6 +235,10 @@ export default class TreeViewItem extends Component {
         this.#titleEl = this.shadowRoot.querySelector(".title");
         this.#childrenEl = this.shadowRoot.querySelector(".children");
         this.#childrenSlotEl = this.shadowRoot.querySelector("#children");
+
+        this.shadowRoot.querySelectorAll("*").forEach(el => {
+            el[TreeViewItem.#refSymbol] = this;
+        });
 
         this.#itemEl.draggable = true; // 启用拖拽
 
@@ -356,21 +366,28 @@ export default class TreeViewItem extends Component {
     }
 
     /**
+     * 判断目标元素是否是当前元素的子代
+     * @param {TreeViewItem} parent 父元素
+     * @param {TreeViewItem} child 子元素
+     * @returns {boolean}
+     */
+    #isDescendant(parent, child) {
+        let node = child;
+        while (node) {
+            node = node.parentElement?.closest?.("jyo-tree-view-item");
+            if (node === parent) return true;
+            if (!node) break;
+        }
+        return false;
+    }
+
+    /**
      * 判断是否是有效放置目标
      */
-    #isValidDropTarget(e) {
-        /* TODO 这里有严重问题！！！！！！！ */
+    #isValidDropTarget() {
         const draggedItem = TreeViewItem.#draggedItem;
-        if (draggedItem === this) return false;
-        let el = e.toElement;
-        console.dir(e.toElement)
-        while (el && !(el instanceof TreeViewItem)) {
-            el = el.parentElement;
-        }
-        console.dir(el);
-        if (!el) return false;
-        if (draggedItem.#childrenSlotEl.assignedElements({ flatten: true }).find(item => item === e.toElement)) return false;
-        return true;
+        if (!draggedItem || draggedItem === this) return false;
+        return !this.#isDescendant(draggedItem, this);
     }
 
     /**
@@ -401,19 +418,21 @@ export default class TreeViewItem extends Component {
      */
     #handleDrop(draggedItem, e) {
         const { position } = this.#calcDropPosition(e);
-        const parentSlot = this.parentElement?.closest("jyo-tree-view-item")?.shadowRoot?.querySelector("#children");
+        const originalParent = draggedItem.parentElement?.closest("jyo-tree-view-item");
 
-        // 同级移动
         if (position === "before" || position === "after") {
             this.#moveSibling(draggedItem, position);
-        }
-        // 作为子节点
-        else if (position === "inside") {
+        } else if (position === "inside") {
             this.#moveToChildren(draggedItem);
         }
 
+        // 更新所有相关节点的状态
+        originalParent?.#updateNodeState();
         this.#updateNodeState();
-        this.#childrenSlotEl.assignedElements({ flatten: true }).filter(item => item instanceof TreeViewItem).forEach(item => item.#updateNodeState());
+        draggedItem.#updateNodeState();
+        this.#childrenSlotEl.assignedElements({ flatten: true })
+            .filter(item => item instanceof TreeViewItem)
+            .forEach(item => item.#updateNodeState());
 
         this.dispatchCustomEvent("drop", {
             detail: {
@@ -426,27 +445,19 @@ export default class TreeViewItem extends Component {
     }
 
     /**
-     * 移动为兄弟节点
-     */
+       * 移动为兄弟节点
+       */
     #moveSibling(draggedItem, position) {
-        const parent = this.parentElement;
         const referenceNode = position === "before" ? this : this.nextElementSibling;
-
-        parent.moveBefore(draggedItem, referenceNode);
+        this.parentElement.insertBefore(draggedItem, referenceNode);
     }
 
     /**
      * 移动为子节点
      */
     #moveToChildren(draggedItem) {
-        const targetChildren = this.#childrenSlotEl;
-        if (!targetChildren) return;
-
-        // 如果当前未展开则自动展开
         if (!this.isExpanded) this.isExpanded = true;
-
-        // 插入到子节点列表末尾
-        targetChildren.appendChild(draggedItem);
+        this.#childrenSlotEl.appendChild(draggedItem);
     }
 
     /**
@@ -493,12 +504,13 @@ export default class TreeViewItem extends Component {
         }
         this.shadowRoot.host.style.setProperty("--deep", deep);
 
-        if (this.#childrenSlotEl.assignedElements().length) {
+        // 更新子节点状态
+        const hasChildren = this.#childrenSlotEl.assignedElements().length > 0;
+        if (hasChildren) {
             this.internals.states.add("has-children");
         } else {
             this.internals.states.delete("has-children");
         }
-
         this.#updateParentCheckboxState();
     }
 
