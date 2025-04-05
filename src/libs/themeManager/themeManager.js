@@ -301,41 +301,83 @@ const CONSTRUCTOR_SYMBOL = Symbol("constructor");
  * @class
  */
 export default new class ThemeManager extends EventTarget {
-    // 样式
+    /**
+     * 样式
+     * @type {String?}
+     */
     #styles = null;
 
-    // 样式表
+    /**
+     * 样式表
+     * @type {CSSStyleSheet?}
+     */
     #styleSheet = null;
 
-    // 获取是否支持HDR色彩空间
+    /**
+     * 获取是否支持HDR色彩空间
+     * @type {Boolean}
+     */
     #supportHDR = false;
 
-    // 获取是否支持P3色彩空间
+    /**
+     * 获取是否支持P3色彩空间
+     * @type {Boolean}
+     */
     #supportP3 = false;
 
-    // 主色
+    /**
+     * 主色
+     * @type {String}
+     */
     #mainColor = "#2D7D9A";
 
-    // 色相偏移(-50 至 50)
+    /**
+     * 色相偏移(-50 至 50)
+     * @type {Number}
+     */
     #hueTorsion = 0;
 
-    // 活力值(-50 至 50)
+    /**
+     * 活力值(-50 至 50)
+     * @type {Number}
+     */
     #vibrancy = 0;
 
-    // 是否启用透明度
+    /**
+     * 是否启用透明度
+     * @type {Boolean}
+     */
     #enableAlpha = true;
 
-    // 当前主题
+    /**
+     * 当前主题
+     * @type {Theme?}
+     */
     #currentTheme = null;
 
-    // 是否自动设置主题
+    /**
+     * 是否自动设置主题
+     * @type {Boolean}
+     */
     #isAutoTheme = true;
 
-    // 自动设置的主题
+    /**
+     * 自动设置的主题
+     * @type {Theme}
+     */
     #autoTheme = Themes.light;
 
-    // 关联的根DOM
+    /**
+     * 关联的根DOM元素集合
+     * @type {Set<HTMLElement>}
+     */
     #linkedRoots = new Set();
+
+    /**
+     * 防抖定时器
+     * @type {Number?}
+     */
+    #debounceTimer = null;
 
     get Themes() {
         return Themes;
@@ -359,7 +401,7 @@ export default new class ThemeManager extends EventTarget {
             }
 
             this.#initAutoSet();
-            this.#initTransparency();
+            this.#initTransparencyObserver();
             this.applyTheme(this.#autoTheme || Themes.light);
         });
 
@@ -386,28 +428,28 @@ export default new class ThemeManager extends EventTarget {
                 get: () => this.#mainColor,
                 set: overload([String], value => {
                     this.#mainColor = value;
-                    this.#generateStyleSheet();
+                    this.#generateStyleSheetDebounced();
                 })
             },
             hueTorsion: {
                 get: () => this.#hueTorsion * 100,
                 set: overload([Number], value => {
                     this.#hueTorsion = Math.max(-50, Math.min(50, value)) / 100;
-                    this.#generateStyleSheet();
+                    this.#generateStyleSheetDebounced();
                 })
             },
             vibrancy: {
                 get: () => this.#vibrancy * 100,
                 set: overload([Number], value => {
                     this.#vibrancy = Math.max(-50, Math.min(50, value)) / 100;
-                    this.#generateStyleSheet();
+                    this.#generateStyleSheetDebounced();
                 })
             },
             enableAlpha: {
                 get: () => this.#enableAlpha && this.#currentTheme !== Themes.highContrast,
                 set: overload([Boolean], value => {
                     this.#enableAlpha = value;
-                    this.#generateStyleSheet();
+                    this.#generateStyleSheetDebounced();
                 })
             },
             isAutoTheme: {
@@ -427,7 +469,10 @@ export default new class ThemeManager extends EventTarget {
         ThemeManager[CONSTRUCTOR_SYMBOL].apply(this, params);
     }
 
-    #initTransparency() {
+    /**
+     * 初始化透明度监听
+     */
+    #initTransparencyObserver() {
         if (typeof globalThis !== "undefined" && !("matchMedia" in globalThis)) {
             this.#enableAlpha = false;
             return;
@@ -441,6 +486,9 @@ export default new class ThemeManager extends EventTarget {
         this.#enableAlpha = !prefersTransparency.matches;
     }
 
+    /**
+     * 初始化自动设置主题
+     */
     #initAutoSet() {
         if (typeof globalThis !== "undefined" && !("matchMedia" in globalThis)) {
             this.applyTheme(Themes.light);
@@ -472,6 +520,10 @@ export default new class ThemeManager extends EventTarget {
         checkFn();
     }
 
+    /**
+     * 获取当前主题的颜色
+     * @returns {Object} - 颜色对象
+     */
     #getColors() {
         // const darkCp = 2 / 3;
         // const lightCp = 1 / 3;
@@ -499,9 +551,17 @@ export default new class ThemeManager extends EventTarget {
                 return darkTheme;
             case Themes.highContrast:
                 return createHighContrastColor();
+            default:
+                console.warn("未定义的主题颜色，返回默认配色", this.#currentTheme);
+                return createLightColor(brandVariants);
         }
     }
 
+    /**
+     * 转换颜色为CSS变量
+     * @param {Object} colors - 颜色对象
+     * @returns {String} - CSS变量字符串 
+     */
     #convertColorsToCSS(colors) {
         const enableAlpha = this.enableAlpha;
         return Object.entries(colors).map(([key, value]) =>
@@ -510,6 +570,10 @@ export default new class ThemeManager extends EventTarget {
         ).join("\n");
     }
 
+    /**
+     * 生成混合颜色的CSS变量
+     * @returns {String} - CSS变量字符串
+     */
     #genMixColorsCSS() {
         const enableAlpha = this.enableAlpha;
         const colorRegex = /--([^:]+):\s*(#[0-9a-fA-F]+);/g;
@@ -525,6 +589,21 @@ export default new class ThemeManager extends EventTarget {
         return cssLines.join("\n");
     }
 
+    /**
+     * 防抖生成样式表
+     */
+    #generateStyleSheetDebounced() {
+        if (this.#debounceTimer) {
+            clearTimeout(this.#debounceTimer);
+        }
+        this.#debounceTimer = setTimeout(() => {
+            this.#generateStyleSheet();
+        }, 100);
+    }
+
+    /**
+     * 生成样式表
+     */
     #generateStyleSheet() {
         this.#styleSheet = this.#styleSheet ?? new CSSStyleSheet();
         const themeName = this.#currentTheme.valString;
@@ -685,7 +764,9 @@ export default new class ThemeManager extends EventTarget {
                         return;
                     }
                     this.#linkedRoots.add(root);
-                    root.adoptedStyleSheets = [...root.adoptedStyleSheets, this.#styleSheet];
+                    if (!root.adoptedStyleSheets.includes(this.#styleSheet)) {
+                        root.adoptedStyleSheets = [...root.adoptedStyleSheets, this.#styleSheet];
+                    }
                 }
             );
 

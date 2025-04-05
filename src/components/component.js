@@ -1,7 +1,6 @@
 import overload from "@jyostudio/overload";
 import themeManager from "../libs/themeManager/themeManager.js";
 
-const CONSTRUCTOR_SYMBOL = Symbol("constructor");
 const OPTIONS_SYMBOL = Symbol("options");
 
 /**
@@ -10,9 +9,14 @@ const OPTIONS_SYMBOL = Symbol("options");
  * @returns {CSSStyleSheet} 样式表
  */
 function createStyleSheet(css) {
-    const sheet = new CSSStyleSheet();
-    sheet.replaceSync(css);
-    return sheet;
+    try {
+        const sheet = new CSSStyleSheet();
+        sheet.replaceSync(css);
+        return sheet;
+    } catch (e) {
+        console.error("创建样式表失败", e);
+        return null;
+    }
 }
 
 /**
@@ -89,9 +93,9 @@ export default class Component extends HTMLElement {
 
     /**
      * 中止控制器
-     * @type {AbortController}
+     * @type {AbortController?}
      */
-    #abortController = new AbortController();
+    #abortController = null;
 
     /**
      * 节流函数名称集合
@@ -115,39 +119,7 @@ export default class Component extends HTMLElement {
         return Component.registerComponent.apply(this, params);
     }
 
-    static [CONSTRUCTOR_SYMBOL](...params) {
-        Component[CONSTRUCTOR_SYMBOL] = overload([], function () {
-            const { css, html } = this.constructor[OPTIONS_SYMBOL] || {};
-
-            this.#internals = this.attachInternals?.();
-            if (!this.#internals?.shadowRoot && !this.shadowRoot) {
-                this.attachShadow({ mode: "open" });
-                if (html) {
-                    const template = document.createElement("template");
-                    template.innerHTML = html;
-                    const fragment = template.content.cloneNode(true);
-                    while (this.shadowRoot.firstChild) {
-                        this.shadowRoot.removeChild(this.shadowRoot.firstChild);
-                    }
-                    this.shadowRoot.appendChild(fragment);
-                }
-            }
-
-            const styleSheets = new Set([SHARED_STYLE, ...this.shadowRoot.adoptedStyleSheets]);
-            if (css) {
-                const normalizedCSS = css instanceof CSSStyleSheet ?
-                    themeManager.supportToHDR(css) :
-                    createStyleSheet(themeManager.supportToHDR(css));
-
-                styleSheets.add(normalizedCSS);
-            }
-            this.shadowRoot.adoptedStyleSheets = Array.from(styleSheets);
-        });
-
-        return Component[CONSTRUCTOR_SYMBOL].apply(this, params);
-    }
-
-    constructor(...params) {
+    constructor() {
         super();
 
         Object.defineProperties(this, {
@@ -159,7 +131,7 @@ export default class Component extends HTMLElement {
             }
         });
 
-        return Component[CONSTRUCTOR_SYMBOL].apply(this, params);
+        this.#initShadowDOM();
     }
 
     [Symbol.dispose](...params) {
@@ -170,6 +142,42 @@ export default class Component extends HTMLElement {
         });
 
         return Component.prototype[Symbol.dispose].apply(this, params);
+    }
+
+    #initShadowDOM() {
+        const { css, html } = this.constructor[OPTIONS_SYMBOL] || {};
+
+        this.#internals = this.attachInternals?.();
+        if (!this.#internals?.shadowRoot && !this.shadowRoot) {
+            try {
+                this.attachShadow({ mode: "open" });
+
+            } catch (e) {
+                console.error("创建 Shadow DOM 失败", e);
+            }
+        }
+
+        if (html && !this.shadowRoot.querySelector("template")) {
+            const template = document.createElement("template");
+            template.innerHTML = html;
+            const fragment = template.content.cloneNode(true);
+            while (this.shadowRoot.firstChild) {
+                this.shadowRoot.removeChild(this.shadowRoot.firstChild);
+            }
+            this.shadowRoot.appendChild(fragment);
+        }
+
+        const styleSheets = new Set([SHARED_STYLE, ...this.shadowRoot.adoptedStyleSheets]);
+        if (css) {
+            const normalizedCSS = css instanceof CSSStyleSheet ?
+                themeManager.supportToHDR(css) :
+                createStyleSheet(themeManager.supportToHDR(css));
+
+            if (normalizedCSS && !styleSheets.has(normalizedCSS)) {
+                styleSheets.add(normalizedCSS);
+            }
+        }
+        this.shadowRoot.adoptedStyleSheets = Array.from(styleSheets);
     }
 
     /**
@@ -190,15 +198,16 @@ export default class Component extends HTMLElement {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback() {
+        if (!this.#abortController) {
+            this.#abortController = new AbortController();
+            this.#initEvents();
+        }
+
         themeManager.link(this.shadowRoot);
 
         if (!this.shadowRoot.host.getAttribute("tabindex")) {
             this.shadowRoot.host.tabIndex = 0;
         }
-
-        this.#abortController ||= new AbortController();
-
-        this.#initEvents();
 
         requestAnimationFrame(() => this.dispatchCustomEvent("connected"));
     }
@@ -217,9 +226,11 @@ export default class Component extends HTMLElement {
      * @param {String} newValue - 新值
      */
     attributeChangedCallback(name, oldValue, newValue) {
+        if (oldValue === newValue) return;
+
         const propName = name.replace(/-([a-z])/g, (_, c) => c.toUpperCase());
         if (propName in this) {
-            this[propName] = newValue; // 触发setter
+            this[propName] = newValue;
         } else {
             console.warn(`未定义的观察属性: ${propName}`);
         }
@@ -230,8 +241,10 @@ export default class Component extends HTMLElement {
      * DOM 元素从文档中断开时调用
      */
     disconnectedCallback() {
-        this.#abortController?.abort?.();
-        this.#abortController = null;
+        if (this.#abortController) {
+            this.#abortController.abort();
+            this.#abortController = null;
+        }
 
         themeManager.unlink(this.shadowRoot);
 
@@ -253,7 +266,7 @@ export default class Component extends HTMLElement {
                 /**
                  * 分发自定义事件
                  * @param {String} type - 类型
-                 * @param {Object} [eventInitDict] - 事件初始化字典
+                 * @param {CustomEventInit<any>} [eventInitDict] - 事件初始化字典
                  * @returns {Boolean} 是否成功触发
                  */
                 function (type, eventInitDict) {
@@ -289,6 +302,29 @@ export default class Component extends HTMLElement {
         return Component.prototype.lock.apply(this, params);
     }
 
+    getClosestByTagName() {
+        Component.prototype.getClosestByTagName = overload(
+            [String],
+            /**
+             * 根据TAG_NAME获取最近的父元素
+             * @param {String} tagName - 标签名
+             * @returns {HTMLElement?} 元素
+             */
+            function (tagName) {
+                let parent = this;
+                while (parent) {
+                    parent = parent.getRootNode()?.host;
+                    if (parent?.tagName === tagName.toUpperCase()) {
+                        return parent;
+                    }
+                }
+                return null;
+            }
+        );
+
+        return Component.prototype.getClosestByTagName.apply(this, arguments);
+    }
+
     thenParentDefined(...params) {
         Component.prototype.thenParentDefined = overload(
             [Function],
@@ -297,12 +333,21 @@ export default class Component extends HTMLElement {
              * @param {Function} callback - 回调
              */
             async function (callback) {
-                await new Promise(resolve => {
+                await new Promise((resolve, reject) => {
                     const TAG_NAME = this.shadowRoot.host?.parentElement?.tagName?.toLowerCase?.() ?? "";
                     if (customElements.get(TAG_NAME) || !TAG_NAME.includes("-")) {
                         resolve();
                     } else {
-                        customElements.whenDefined(TAG_NAME).then(resolve);
+                        let hasTimeout = false;
+                        const timeout = setTimeout(() => {
+                            hasTimeout = true;
+                            reject(new Error("等待父级超时"))
+                        }, 5000);
+                        customElements.whenDefined(TAG_NAME).then(() => {
+                            if (hasTimeout) return;
+                            clearTimeout(timeout);
+                            resolve();
+                        });
                     }
                 });
                 return callback();

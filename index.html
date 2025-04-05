@@ -1,32 +1,33 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>演示文档</title>
-    <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        background: #888;
-        overscroll-behavior: none;
-        contain: paint;
-        overflow: hidden;
-      }
 
-      body {
-        background: url(./background.jpg) no-repeat center center;
-        background-size: cover;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>演示文档</title>
+  <style>
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background: #888;
+      overscroll-behavior: none;
+      contain: paint;
+      overflow: hidden;
+    }
 
-      :not(:defined) {
-        display: none;
-      }
-    </style>
-    <script type="importmap">
+    body {
+      background: url(./background.jpg) no-repeat center center;
+      background-size: cover;
+    }
+
+    :not(:defined) {
+      display: none;
+    }
+  </style>
+  <!-- <script type="importmap">
       {
         "imports": {
           "@jyostudio/overload": "https://esm.sh/@jyostudio/overload",
@@ -34,189 +35,145 @@
           "@jyostudio/enum": "https://esm.sh/@jyostudio/enum"
         }
       }
+    </script> -->
+  <script type="importmap">
+      {
+        "imports": {
+          "@jyostudio/overload": "./node_modules/@jyostudio/overload/dist/index.js",
+          "@jyostudio/io": "./node_modules/@jyostudio/io/dist/io.js",
+          "@jyostudio/enum": "./node_modules/@jyostudio/enum/dist/index.js"
+        }
+      }
     </script>
-    <script type="module">
-      import * as module from "./src/index.js";
-      // import * as module from "./dist/index.js";
+  <script type="module">
+    import * as module from "./src/index.js";
+    // import * as module from "./dist/index.js";
 
-      console.dir(module);
+    console.dir(module);
 
-      customElements.whenDefined("jyo-button").then(() => {
-        const btn = document.getElementById("btnOpenDialog");
-        btn.addEventListener("click", () => {
-          const dialog = document.querySelector("jyo-dialog");
-          dialog.open();
-        });
+    customElements.whenDefined("jyo-button").then(() => {
+      const btn = document.getElementById("btnOpenDialog");
+      btn.addEventListener("click", () => {
+        const dialog = document.querySelector("jyo-dialog");
+        dialog.open();
       });
-    </script>
-  </head>
+    });
+  </script>
+</head>
 
-  <body>
-    <jyo-window location="center">
-      <div slot="title">测试窗口1</div>
-      <jyo-menu-bar>
-        <jyo-menu-bar-item>
-          文件
-          <jyo-menu-flyout>
-            <jyo-menu-flyout-item
-              >新建
-              <jyo-menu-flyout>
-                <jyo-menu-flyout-item>项目</jyo-menu-flyout-item>
-                <jyo-menu-flyout-item>文件</jyo-menu-flyout-item>
-              </jyo-menu-flyout>
-            </jyo-menu-flyout-item>
-            <jyo-menu-flyout-item>打开</jyo-menu-flyout-item>
-            <jyo-menu-flyout-item>保存</jyo-menu-flyout-item>
-            <jyo-menu-flyout-item>另存为</jyo-menu-flyout-item>
-            <jyo-divider></jyo-divider>
-            <jyo-menu-flyout-item>退出</jyo-menu-flyout-item>
-          </jyo-menu-flyout>
-        </jyo-menu-bar-item>
-        <jyo-menu-bar-item>
-          编辑
-          <jyo-menu-flyout>
-            <jyo-menu-flyout-item>撤销</jyo-menu-flyout-item>
-            <jyo-menu-flyout-item>重做</jyo-menu-flyout-item>
-            <jyo-divider></jyo-divider>
-            <jyo-menu-flyout-item>剪切</jyo-menu-flyout-item>
-            <jyo-menu-flyout-item>复制</jyo-menu-flyout-item>
-            <jyo-menu-flyout-item>粘贴</jyo-menu-flyout-item>
-          </jyo-menu-flyout>
-        </jyo-menu-bar-item>
-      </jyo-menu-bar>
-      <jyo-button name="btn" value="123" style="min-width: 96px"
-        >普通按钮</jyo-button
-      >
-      <jyo-toggle-button style="min-width: 96px">可切换按钮</jyo-toggle-button>
-      <jyo-hyperlink-button style="min-width: 96px"
-        >超链接按钮</jyo-hyperlink-button
-      >
-      <jyo-toggle-switch
-        header="切换开关"
-        off-content="关了"
-        on-content="打开"
-        is-on
-      ></jyo-toggle-switch>
-      <jyo-check-box content="两态勾选框"></jyo-check-box>
-      <jyo-check-box is-three-state content="三态勾选框"></jyo-check-box>
-      <jyo-progress-bar value="80"></jyo-progress-bar>
-      <jyo-radio-buttons header="选项：" selected-index="1">
-        <jyo-radio-button content="单选框1"></jyo-radio-button>
-        <jyo-radio-button content="单选框2"></jyo-radio-button>
-      </jyo-radio-buttons>
-      <jyo-slider
-        minimum="-50"
-        maximum="50"
-        tick-frequency="20"
-        snaps-to="ticks"
-        tick-placement="outside"
-        style="margin-inline-start: 20px; width: 200px"
-      ></jyo-slider>
-      <jyo-slider
-        tick-frequency="10"
-        tick-placement="outside"
-        orientation="vertical"
-      ></jyo-slider>
-      <jyo-button id="openMenu">打开菜单</jyo-button>
-      <jyo-menu-flyout anchor="openMenu" positioning="below">
-        <jyo-menu-flyout-item
-          >菜单项
-          <jyo-menu-flyout>
-            <jyo-menu-flyout-item type="radio" group-name="test"
-              >子菜单项1
-              <span slot="indicator">👍</span>
-              <span slot="start">
-                <svg
-                  fill="currentColor"
-                  aria-hidden="true"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12.92 2.87a2.97 2.97 0 014.2 4.21l-.66.67-4.2-4.2.66-.68zm-1.38 1.38l-8 8c-.32.33-.55.74-.65 1.2l-.88 3.94a.5.5 0 00.6.6l3.92-.87c.47-.1.9-.34 1.24-.68l7.98-7.98-4.2-4.21z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </span>
-            </jyo-menu-flyout-item>
-            <jyo-divider></jyo-divider>
-            <jyo-menu-flyout-item type="checkbox" group-name="test"
-              >子菜单项2
-              <span slot="indicator">✅</span>
-              <span slot="start">
-                <svg
-                  fill="currentColor"
-                  aria-hidden="true"
-                  width="14"
-                  height="14"
-                  viewBox="0 0 20 20"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M12.92 2.87a2.97 2.97 0 014.2 4.21l-.66.67-4.2-4.2.66-.68zm-1.38 1.38l-8 8c-.32.33-.55.74-.65 1.2l-.88 3.94a.5.5 0 00.6.6l3.92-.87c.47-.1.9-.34 1.24-.68l7.98-7.98-4.2-4.21z"
-                    fill="currentColor"
-                  ></path>
-                </svg>
-              </span>
-              <jyo-menu-flyout>
-                <jyo-menu-flyout-item disabled type="radio" group-name="test"
-                  >子菜单项1</jyo-menu-flyout-item
-                >
-                <jyo-menu-flyout-item type="radio" group-name="test"
-                  >子菜单项2</jyo-menu-flyout-item
-                >
-                <jyo-menu-flyout-item type="radio" group-name="test"
-                  >子菜单项3</jyo-menu-flyout-item
-                >
-              </jyo-menu-flyout></jyo-menu-flyout-item
-            >
-          </jyo-menu-flyout>
-        </jyo-menu-flyout-item>
+<body>
+  <jyo-window location="center">
+    <div slot="title">测试窗口1</div>
+    <jyo-menu-bar>
+      <jyo-menu-bar-item>
+        文件
+        <jyo-menu-flyout>
+          <jyo-menu-flyout-item>新建
+            <jyo-menu-flyout>
+              <jyo-menu-flyout-item>项目</jyo-menu-flyout-item>
+              <jyo-menu-flyout-item>文件</jyo-menu-flyout-item>
+            </jyo-menu-flyout>
+          </jyo-menu-flyout-item>
+          <jyo-menu-flyout-item>打开</jyo-menu-flyout-item>
+          <jyo-menu-flyout-item>保存</jyo-menu-flyout-item>
+          <jyo-menu-flyout-item>另存为</jyo-menu-flyout-item>
+          <jyo-divider></jyo-divider>
+          <jyo-menu-flyout-item>退出</jyo-menu-flyout-item>
+        </jyo-menu-flyout>
+      </jyo-menu-bar-item>
+      <jyo-menu-bar-item>
+        编辑
+        <jyo-menu-flyout>
+          <jyo-menu-flyout-item>撤销</jyo-menu-flyout-item>
+          <jyo-menu-flyout-item>重做</jyo-menu-flyout-item>
+          <jyo-divider></jyo-divider>
+          <jyo-menu-flyout-item>剪切</jyo-menu-flyout-item>
+          <jyo-menu-flyout-item>复制</jyo-menu-flyout-item>
+          <jyo-menu-flyout-item>粘贴</jyo-menu-flyout-item>
+        </jyo-menu-flyout>
+      </jyo-menu-bar-item>
+    </jyo-menu-bar>
+    <jyo-button name="btn" value="123" style="min-width: 96px">普通按钮</jyo-button>
+    <jyo-toggle-button style="min-width: 96px">可切换按钮</jyo-toggle-button>
+    <jyo-hyperlink-button style="min-width: 96px">超链接按钮</jyo-hyperlink-button>
+    <jyo-toggle-switch header="切换开关" off-content="关了" on-content="打开" is-on></jyo-toggle-switch>
+    <jyo-check-box content="两态勾选框"></jyo-check-box>
+    <jyo-check-box is-three-state content="三态勾选框"></jyo-check-box>
+    <jyo-progress-bar value="80"></jyo-progress-bar>
+    <jyo-radio-buttons header="选项：" selected-index="1">
+      <jyo-radio-button content="单选框1"></jyo-radio-button>
+      <jyo-radio-button content="单选框2"></jyo-radio-button>
+    </jyo-radio-buttons>
+    <jyo-slider minimum="-50" maximum="50" tick-frequency="20" snaps-to="ticks" tick-placement="outside"
+      style="margin-inline-start: 20px; width: 200px"></jyo-slider>
+    <jyo-slider tick-frequency="10" tick-placement="outside" orientation="vertical"></jyo-slider>
+    <jyo-button id="openMenu">打开菜单</jyo-button>
+    <jyo-menu-flyout anchor="openMenu" positioning="below">
+      <jyo-menu-flyout-item>菜单项
+        <jyo-menu-flyout>
+          <jyo-menu-flyout-item type="radio" group-name="test">子菜单项1
+            <span slot="indicator">👍</span>
+            <span slot="start">
+              <svg fill="currentColor" aria-hidden="true" width="14" height="14" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12.92 2.87a2.97 2.97 0 014.2 4.21l-.66.67-4.2-4.2.66-.68zm-1.38 1.38l-8 8c-.32.33-.55.74-.65 1.2l-.88 3.94a.5.5 0 00.6.6l3.92-.87c.47-.1.9-.34 1.24-.68l7.98-7.98-4.2-4.21z"
+                  fill="currentColor"></path>
+              </svg>
+            </span>
+          </jyo-menu-flyout-item>
+          <jyo-divider></jyo-divider>
+          <jyo-menu-flyout-item type="checkbox" group-name="test">子菜单项2
+            <span slot="indicator">✅</span>
+            <span slot="start">
+              <svg fill="currentColor" aria-hidden="true" width="14" height="14" viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12.92 2.87a2.97 2.97 0 014.2 4.21l-.66.67-4.2-4.2.66-.68zm-1.38 1.38l-8 8c-.32.33-.55.74-.65 1.2l-.88 3.94a.5.5 0 00.6.6l3.92-.87c.47-.1.9-.34 1.24-.68l7.98-7.98-4.2-4.21z"
+                  fill="currentColor"></path>
+              </svg>
+            </span>
+            <jyo-menu-flyout>
+              <jyo-menu-flyout-item disabled type="radio" group-name="test">子菜单项1</jyo-menu-flyout-item>
+              <jyo-menu-flyout-item type="radio" group-name="test">子菜单项2</jyo-menu-flyout-item>
+              <jyo-menu-flyout-item type="radio" group-name="test">子菜单项3</jyo-menu-flyout-item>
+            </jyo-menu-flyout></jyo-menu-flyout-item>
+        </jyo-menu-flyout>
+      </jyo-menu-flyout-item>
+    </jyo-menu-flyout>
+    <jyo-drop-down-button>打开菜单
+      <jyo-menu-flyout>
+        <jyo-menu-flyout-item>菜单项1</jyo-menu-flyout-item>
+        <jyo-menu-flyout-item>菜单项2</jyo-menu-flyout-item>
+        <jyo-menu-flyout-item>菜单项3</jyo-menu-flyout-item>
       </jyo-menu-flyout>
-      <jyo-drop-down-button
-        >打开菜单
-        <jyo-menu-flyout>
-          <jyo-menu-flyout-item>菜单项1</jyo-menu-flyout-item>
-          <jyo-menu-flyout-item>菜单项2</jyo-menu-flyout-item>
-          <jyo-menu-flyout-item>菜单项3</jyo-menu-flyout-item>
-        </jyo-menu-flyout>
-      </jyo-drop-down-button>
+    </jyo-drop-down-button>
 
-      <jyo-split-button>
-        分割按钮
-        <jyo-menu-flyout>
-          <jyo-menu-flyout-item>菜单项1</jyo-menu-flyout-item>
-          <jyo-menu-flyout-item>菜单项2</jyo-menu-flyout-item>
-          <jyo-menu-flyout-item>菜单项3</jyo-menu-flyout-item>
-        </jyo-menu-flyout>
-      </jyo-split-button>
+    <jyo-split-button>
+      分割按钮
+      <jyo-menu-flyout>
+        <jyo-menu-flyout-item>菜单项1</jyo-menu-flyout-item>
+        <jyo-menu-flyout-item>菜单项2</jyo-menu-flyout-item>
+        <jyo-menu-flyout-item>菜单项3</jyo-menu-flyout-item>
+      </jyo-menu-flyout>
+    </jyo-split-button>
 
-      <jyo-toggle-split-button>
-        切换分割按钮
-        <jyo-menu-flyout>
-          <jyo-menu-flyout-item>菜单项1</jyo-menu-flyout-item>
-          <jyo-menu-flyout-item>菜单项2</jyo-menu-flyout-item>
-          <jyo-menu-flyout-item>菜单项3</jyo-menu-flyout-item>
-        </jyo-menu-flyout>
-      </jyo-toggle-split-button>
+    <jyo-toggle-split-button>
+      切换分割按钮
+      <jyo-menu-flyout>
+        <jyo-menu-flyout-item>菜单项1</jyo-menu-flyout-item>
+        <jyo-menu-flyout-item>菜单项2</jyo-menu-flyout-item>
+        <jyo-menu-flyout-item>菜单项3</jyo-menu-flyout-item>
+      </jyo-menu-flyout>
+    </jyo-toggle-split-button>
 
-      <jyo-info-bar severity="informational"
-        >需用户知悉、确认或处理的重要应用消息。</jyo-info-bar
-      >
-      <jyo-info-bar severity="success"
-        >需用户知悉、确认或处理的重要应用消息。</jyo-info-bar
-      >
-      <jyo-info-bar severity="warning"
-        >需用户知悉、确认或处理的重要应用消息。</jyo-info-bar
-      >
-      <jyo-info-bar severity="error"
-        >需用户知悉、确认或处理的重要应用消息。</jyo-info-bar
-      >
-    </jyo-window>
+    <jyo-info-bar severity="informational">需用户知悉、确认或处理的重要应用消息。</jyo-info-bar>
+    <jyo-info-bar severity="success">需用户知悉、确认或处理的重要应用消息。</jyo-info-bar>
+    <jyo-info-bar severity="warning">需用户知悉、确认或处理的重要应用消息。</jyo-info-bar>
+    <jyo-info-bar severity="error">需用户知悉、确认或处理的重要应用消息。</jyo-info-bar>
+  </jyo-window>
 
-    <!-- <jyo-window size="{width: 300, height: 200}" topmost>
+  <!-- <jyo-window size="{width: 300, height: 200}" topmost>
     <div slot="title">置顶窗口1</div>
   </jyo-window>
 
@@ -224,33 +181,34 @@
     <div slot="title">置顶窗口2</div>
   </jyo-window> -->
 
-    <jyo-window size="{width: 640, height: 480}">
-      <div slot="title">测试窗口2</div>
-      <jyo-text-box placeholder="请输入账号"></jyo-text-box><br /><br />
-      <jyo-password-box placeholder="请输入密码"></jyo-password-box><br /><br />
-      <jyo-button id="btnOpenDialog">打开对话框</jyo-button>
-      <jyo-dialog title-text="测试对话框">
-        <div>
-          这是一个对话框<br />
-          <jyo-check-box content="勾选框"></jyo-check-box>
-        </div>
-      </jyo-dialog>
-      <br /><br />
-      <jyo-tree-view tree-view-selection-mode="single">
-        <jyo-tree-view-item text="根节点1">
-          <jyo-tree-view-item text="子节点1">
-            <jyo-tree-view-item text="子子节点1"></jyo-tree-view-item>
-            <jyo-tree-view-item text="子子节点2"></jyo-tree-view-item>
-            <jyo-tree-view-item text="子子节点3"></jyo-tree-view-item>
-          </jyo-tree-view-item>
-          <jyo-tree-view-item text="子节点2">
-            <jyo-tree-view-item text="子子节点1"></jyo-tree-view-item>
-            <jyo-tree-view-item text="子子节点2"></jyo-tree-view-item>
-            <jyo-tree-view-item text="子子节点3"></jyo-tree-view-item>
-          </jyo-tree-view-item>
+  <jyo-window size="{width: 640, height: 480}">
+    <div slot="title">测试窗口2</div>
+    <jyo-text-box placeholder="请输入账号"></jyo-text-box><br /><br />
+    <jyo-password-box placeholder="请输入密码"></jyo-password-box><br /><br />
+    <jyo-button id="btnOpenDialog">打开对话框</jyo-button>
+    <jyo-dialog title-text="测试对话框">
+      <div>
+        这是一个对话框<br />
+        <jyo-check-box content="勾选框"></jyo-check-box>
+      </div>
+    </jyo-dialog>
+    <br /><br />
+    <jyo-tree-view tree-view-selection-mode="single">
+      <jyo-tree-view-item text="根节点1">
+        <jyo-tree-view-item text="子节点1">
+          <jyo-tree-view-item text="子子节点1"></jyo-tree-view-item>
+          <jyo-tree-view-item text="子子节点2"></jyo-tree-view-item>
+          <jyo-tree-view-item text="子子节点3"></jyo-tree-view-item>
         </jyo-tree-view-item>
-        <jyo-tree-view-item text="根节点2"></jyo-tree-view-item>
-      </jyo-tree-view>
-    </jyo-window>
-  </body>
+        <jyo-tree-view-item text="子节点2">
+          <jyo-tree-view-item text="子子节点1"></jyo-tree-view-item>
+          <jyo-tree-view-item text="子子节点2"></jyo-tree-view-item>
+          <jyo-tree-view-item text="子子节点3"></jyo-tree-view-item>
+        </jyo-tree-view-item>
+      </jyo-tree-view-item>
+      <jyo-tree-view-item text="根节点2"></jyo-tree-view-item>
+    </jyo-tree-view>
+  </jyo-window>
+</body>
+
 </html>

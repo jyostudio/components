@@ -74,48 +74,44 @@ export default class Acrylic extends Component {
 
     /**
      * 混色层元素
-     * @type {HTMLElement}
+     * @type {HTMLElement?}
      */
     #mixColorEl = null;
 
     /**
      * 亮度混合层元素
-     * @type {HTMLElement}
+     * @type {HTMLElement?}
      */
     #luminosityBlendEl = null;
 
     /**
      * 高斯模糊层元素
-     * @type {HTMLElement}
+     * @type {HTMLElement?}
      */
     #gaussianBlurEl = null;
 
     /**
      * 噪点纹理层元素
-     * @type {HTMLElement}
+     * @type {HTMLElement?}
      */
     #noiseTextureEl = null;
 
     /**
      * 回退元素
-     * @type {HTMLElement}
+     * @type {HTMLElement?}
      */
     #fallbackEl = null;
 
     /**
      * 父窗口
-     * @type {Window}
+     * @type {Window?}
      */
     #parentWindow = null;
 
     constructor() {
         super();
 
-        this.#mixColorEl = this.shadowRoot.querySelector(".mixColor");
-        this.#luminosityBlendEl = this.shadowRoot.querySelector(".luminosityBlend");
-        this.#gaussianBlurEl = this.shadowRoot.querySelector(".gaussianBlur");
-        this.#noiseTextureEl = this.shadowRoot.querySelector(".noiseTexture");
-        this.#fallbackEl = this.shadowRoot.querySelector(".fallback");
+        this.#initElements();
 
         Object.defineProperties(this, {
             tintColor: {
@@ -158,6 +154,17 @@ export default class Acrylic extends Component {
     }
 
     /**
+     * 初始化元素
+     */
+    #initElements() {
+        this.#mixColorEl = this.shadowRoot.querySelector(".mixColor");
+        this.#luminosityBlendEl = this.shadowRoot.querySelector(".luminosityBlend");
+        this.#gaussianBlurEl = this.shadowRoot.querySelector(".gaussianBlur");
+        this.#noiseTextureEl = this.shadowRoot.querySelector(".noiseTexture");
+        this.#fallbackEl = this.shadowRoot.querySelector(".fallback");
+    }
+
+    /**
      * 绑定事件
      */
     #initEvents() {
@@ -180,18 +187,15 @@ export default class Acrylic extends Component {
      * 检查主题配置
      */
     #checkThemeConfig() {
+        const isHighContrast = themeManager.currentTheme === themeManager.Themes.highContrast;
+        const isDarkTheme = themeManager.currentTheme === themeManager.Themes.dark;
+        const shouldShowColors = themeManager.enableAlpha && !this.deactive && !isHighContrast;
+
+        this.#luminosityBlendEl.style.filter = shouldShowColors && isDarkTheme ? "saturate(0.4)" : "";
+        this.#fallbackEl.style.opacity = shouldShowColors ? 0 : 1;
+
         const colorEls = [this.#luminosityBlendEl, this.#mixColorEl, this.#gaussianBlurEl, this.#noiseTextureEl];
-        if (themeManager.enableAlpha && !this.deactive && themeManager.currentTheme !== themeManager.Themes.highContrast) {
-            if (themeManager.currentTheme === themeManager.Themes.dark) {
-                this.#luminosityBlendEl.style.filter = "saturate(0.4)";
-            }
-            this.#fallbackEl.style.opacity = 0;
-            colorEls.forEach(el => el.classList.remove("hideColors"));
-        } else {
-            this.#luminosityBlendEl.style.filter = "";
-            this.#fallbackEl.style.opacity = 1;
-            colorEls.forEach(el => el.classList.add("hideColors"));
-        }
+        colorEls.forEach(el => el.classList.toggle("hideColors", !shouldShowColors));
     }
 
     /**
@@ -200,16 +204,7 @@ export default class Acrylic extends Component {
     connectedCallback(...params) {
         super.connectedCallback?.call(this, ...params);
 
-        let parentWin = null;
-        let parent = null;
-        do {
-            parent = (parent ?? this)?.getRootNode()?.host;
-            if (parent?.tagName === "JYO-WINDOW") {
-                parentWin = parent;
-            }
-        } while (parent);
-
-        this.#parentWindow = parentWin;
+        this.#parentWindow = this.getClosestByTagName("JYO-WINDOW");
 
         this.#initEvents();
 
