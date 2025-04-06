@@ -86,6 +86,12 @@ export default class Component extends HTMLElement {
     }
 
     /**
+     * 是否已初始化
+     * @type {Boolean}
+     */
+    #hasInit = false;
+
+    /**
      * 内部元素
      * @type {ElementInternals?}
      */
@@ -102,6 +108,14 @@ export default class Component extends HTMLElement {
      * @type {Set<string>}
      */
     #lockNameSet = new Set();
+
+    /**
+     * 是否已初始化
+     * @returns {Boolean}
+     */
+    get hasInit() {
+        return this.#hasInit;
+    }
 
     /**
      * 注册组件
@@ -232,7 +246,10 @@ export default class Component extends HTMLElement {
             this.shadowRoot.host.tabIndex = 0;
         }
 
-        requestAnimationFrame(() => this.dispatchCustomEvent("connected"));
+        requestAnimationFrame(() => {
+            this.#hasInit = true;
+            this.dispatchCustomEvent("connected")
+        });
     }
 
     /**

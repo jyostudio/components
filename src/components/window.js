@@ -862,11 +862,6 @@ export default class Window extends Component {
                 fn: (domAttrName, value) => this.#setTopmost(value)
             })
         });
-
-        this.size = { width: 640, height: 480 };
-        const index = (Window.#counter++ - 1) % 9;
-        this.left = 33 + index * 26;
-        this.top = 26 + index * 26;
     }
 
     /**
@@ -1036,6 +1031,13 @@ export default class Window extends Component {
      */
     connectedCallback(...params) {
         super.connectedCallback?.call(this, ...params);
+
+        if (!this.hasInit) {
+            this.size = { width: 640, height: 480 };
+            const index = (Window.#counter++ - 1) % 9;
+            this.left = 33 + index * 26;
+            this.top = 26 + index * 26;
+        }
 
         this.setAttribute("role", "window");
 
