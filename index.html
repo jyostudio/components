@@ -27,7 +27,7 @@
       display: none;
     }
   </style>
-  <!-- <script type="importmap">
+  <script type="importmap">
       {
         "imports": {
           "@jyostudio/overload": "https://esm.sh/@jyostudio/overload",
@@ -35,19 +35,10 @@
           "@jyostudio/enum": "https://esm.sh/@jyostudio/enum"
         }
       }
-    </script> -->
-  <script type="importmap">
-      {
-        "imports": {
-          "@jyostudio/overload": "./node_modules/@jyostudio/overload/dist/index.js",
-          "@jyostudio/io": "./node_modules/@jyostudio/io/dist/io.js",
-          "@jyostudio/enum": "./node_modules/@jyostudio/enum/dist/index.js"
-        }
-      }
-    </script>
+  </script>
   <script type="module">
-    import * as module from "./src/index.js";
-    // import * as module from "./dist/index.js";
+    // import * as module from "./src/index.js";
+    import * as module from "./dist/components.js";
 
     console.dir(module);
 

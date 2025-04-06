@@ -558,16 +558,18 @@ export default new class ThemeManager extends EventTarget {
     }
 
     /**
-     * 转换颜色为CSS变量
-     * @param {Object} colors - 颜色对象
-     * @returns {String} - CSS变量字符串 
+     * 转换颜色对象为 CSS 变量字符串
+     * @param {Object} colors - 颜色对象，键为变量名，值为颜色值
+     * @returns {String} - 生成的 CSS 变量字符串
      */
     #convertColorsToCSS(colors) {
         const enableAlpha = this.enableAlpha;
-        return Object.entries(colors).map(([key, value]) =>
-            `--${key}: ${value};
-        --mix-${key}: ${enableAlpha ? `color-mix(in srgb, ${value} 50%, var(--mixColor))` : value};`
-        ).join("\n");
+        return Object.entries(colors)
+            .map(([key, value]) => {
+                const mixValue = enableAlpha ? `color-mix(in srgb, ${value} 50%, var(--mixColor))` : value;
+                return `--${key}: ${value};\n--mix-${key}: ${mixValue};`;
+            })
+            .join("\n");
     }
 
     /**

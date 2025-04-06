@@ -144,18 +144,34 @@ export default class Component extends HTMLElement {
         return Component.prototype[Symbol.dispose].apply(this, params);
     }
 
+    /**
+     * 初始化 Shadow DOM
+     */
     #initShadowDOM() {
-        const { css, html } = this.constructor[OPTIONS_SYMBOL] || {};
+        this.#createShadowRoot();
+        this.#applyTemplate();
+        this.#applyStyles();
+    }
 
+    /**
+     * 创建 Shadow DOM
+     */
+    #createShadowRoot() {
         this.#internals = this.attachInternals?.();
         if (!this.#internals?.shadowRoot && !this.shadowRoot) {
             try {
                 this.attachShadow({ mode: "open" });
-
             } catch (e) {
                 console.error("创建 Shadow DOM 失败", e);
             }
         }
+    }
+
+    /**
+     * 应用模板
+     */
+    #applyTemplate() {
+        const { html } = this.constructor[OPTIONS_SYMBOL] || {};
 
         if (html && !this.shadowRoot.querySelector("template")) {
             const template = document.createElement("template");
@@ -166,6 +182,13 @@ export default class Component extends HTMLElement {
             }
             this.shadowRoot.appendChild(fragment);
         }
+    }
+
+    /**
+     * 应用样式
+     */
+    #applyStyles() {
+        const { css } = this.constructor[OPTIONS_SYMBOL] || {};
 
         const styleSheets = new Set([SHARED_STYLE, ...this.shadowRoot.adoptedStyleSheets]);
         if (css) {

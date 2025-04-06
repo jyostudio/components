@@ -1,11 +1,10 @@
 import * as esbuild from "esbuild";
-import * as fs from 'node:fs/promises';
 
 const entryPoints = ["./src/index.js"];
 
 const options = {
     entryPoints,
-    outdir: "./dist",
+    outfile: "./dist/components.js",
     format: "esm",
     keepNames: true,
     bundle: true,

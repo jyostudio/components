@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
@@ -11,6 +12,5 @@
     "vue",
     "html"
   ],
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "liveServer.settings.port": 5559
 }
