@@ -123,8 +123,6 @@ export default class Divider extends Component {
     constructor() {
         super();
 
-        this.setAttribute("tabindex", "-1");
-
         Object.defineProperties(this, {
             alignContent: genEnumGetterAndSetter(this, {
                 attrName: "alignContent",
@@ -151,6 +149,15 @@ export default class Divider extends Component {
                 }
             })
         });
+    }
+
+    /**
+     * 元素被添加到 DOM 树中时调用
+     */
+    connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
+        this.setAttribute("tabindex", "-1");
     }
 
     static {
