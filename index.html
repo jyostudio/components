@@ -37,8 +37,8 @@
       }
   </script>
   <script type="module">
-    // import * as module from "./src/index.js";
-    import * as module from "./dist/components.js";
+    import * as module from "./src/index.js";
+    // import * as module from "./dist/components.js";
 
     console.dir(module);
 
@@ -87,7 +87,7 @@
     <jyo-button name="btn" value="123" style="min-width: 96px">普通按钮</jyo-button>
     <jyo-toggle-button style="min-width: 96px">可切换按钮</jyo-toggle-button>
     <jyo-hyperlink-button style="min-width: 96px">超链接按钮</jyo-hyperlink-button>
-    <jyo-toggle-switch header="切换开关" off-content="关了" on-content="打开" is-on></jyo-toggle-switch>
+    <jyo-toggle-switch header="切换开关" content-off="关了" content-on="打开" is-on></jyo-toggle-switch>
     <jyo-check-box content="两态勾选框"></jyo-check-box>
     <jyo-check-box is-three-state content="三态勾选框"></jyo-check-box>
     <jyo-progress-bar value="80"></jyo-progress-bar>
@@ -177,7 +177,8 @@
     <jyo-text-box placeholder="请输入账号"></jyo-text-box><br /><br />
     <jyo-password-box placeholder="请输入密码"></jyo-password-box><br /><br />
     <jyo-button id="btnOpenDialog">打开对话框</jyo-button>
-    <jyo-dialog title-text="测试对话框">
+    <jyo-dialog>
+      <div slot="title">测试对话框</div>
       <div>
         这是一个对话框<br />
         <jyo-check-box content="勾选框"></jyo-check-box>
@@ -200,6 +201,44 @@
       <jyo-tree-view-item text="根节点2"></jyo-tree-view-item>
     </jyo-tree-view>
   </jyo-window>
+
+  <jyo-window>
+    <!-- 基本用法 -->
+<jyo-dock-panel id="myDock" left-width="250px" right-width="300px" top-height="150px" bottom-height="100px">
+  <!-- 添加内容到左侧面板 -->
+  <div slot="left"><div>左侧面板内容</div></div>
+  
+  <!-- 添加内容到右侧面板 -->
+  <div slot="right">右侧面板内容</div>
+  
+  <!-- 添加内容到顶部面板 -->
+  <div slot="top">顶部面板内容</div>
+  
+  <!-- 添加内容到底部面板 -->
+  <div slot="bottom">底部面板内容</div>
+  
+  <!-- 添加内容到中心面板 -->
+  <div slot="center">中心面板内容</div>
+</jyo-dock-panel>
+  </jyo-window>
+
+  <script type="module">
+    import { DockPanel } from "./src/index.js";
+    customElements.whenDefined("jyo-dock-panel").then(() => {
+      const dockPanel = document.getElementById('myDock');
+
+      // 创建一个新元素
+      const newElement = document.createElement('div');
+      newElement.textContent = '这是动态添加的面板';
+
+      // 设置面板大小
+      // dockPanel.leftWidth = '300px';
+
+      // 隐藏/显示面板
+      // dockPanel.bottomVisible = false; // 隐藏底部面板
+    });
+   
+  </script>
 </body>
 
 </html>

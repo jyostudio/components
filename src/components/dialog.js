@@ -1,4 +1,3 @@
-import overload from "@jyostudio/overload";
 import Component from "./component.js";
 import "./button.js";
 import "./divider.js";
@@ -128,7 +127,9 @@ const STYLES = /* css */`
 
 const HTML = /* html */`
 <div class="dialog">
-    <div class="title"></div>
+    <div class="title">
+        <slot name="title"></slot>
+    </div>
     <div class="content">
         <slot></slot>
     </div>
@@ -142,20 +143,6 @@ const HTML = /* html */`
 
 export default class Dialog extends Component {
     /**
-     * 观察属性
-     * @returns {Array<String>}
-     */
-    static get observedAttributes() {
-        return [...super.observedAttributes, "title-text"];
-    }
-
-    /**
-     * 标题元素
-     * @type {HTMLElement}
-     */
-    #titleEl;
-
-    /**
      * 是否可见
      * @type {Boolean}
      */
@@ -167,24 +154,6 @@ export default class Dialog extends Component {
      */
     get isVisible() {
         return this.#isVisible;
-    }
-
-    constructor() {
-        super();
-
-        this.#titleEl = this.shadowRoot.querySelector(".title");
-
-        Object.defineProperties(this, {
-            titleText: {
-                get: () => this.#titleEl.textContent,
-                set: overload([String], value => {
-                    this.lock("titleText", () => {
-                        this.#titleEl.textContent = value;
-                        this.setAttribute("title-text", value);
-                    });
-                }).any(() => this.titleText = "")
-            },
-        });
     }
 
     /**

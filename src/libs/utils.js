@@ -134,3 +134,29 @@ export function genBooleanGetterAndSetter(self, { attrName, setValueDontRemove =
             .any(() => self[attrName] = defaultValue)
     };
 }
+
+/**
+ * 等待自定义元素定义完成
+ * @param {String} tagName - 自定义元素名称
+ * @return {Promise} - Promise 对象
+ */
+export function waitDefine(tagName, timeout = Infinity) {
+    return new Promise((resolve, reject) => {
+        if (customElements.get(tagName)) {
+            return resolve();
+        }
+        let hasTimeout = false;
+        let timer;
+        if (timeout !== Infinity) {
+            timer = setTimeout(() => {
+                hasTimeout = true;
+                reject(new Error(`等待组件定义超时: ${tagName}`));
+            }, timeout);
+        }
+        customElements.whenDefined(tagName).then(() => {
+            if (hasTimeout) return;
+            clearTimeout(timer);
+            resolve();
+        });
+    });
+}

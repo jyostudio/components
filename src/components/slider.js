@@ -1,6 +1,6 @@
 import Enum from "@jyostudio/enum";
 import overload from "@jyostudio/overload";
-import { genEnumGetterAndSetter } from "../libs/utils.js";
+import { genEnumGetterAndSetter, waitDefine } from "../libs/utils.js";
 import Component from "./component.js";
 import "./tooltip.js";
 
@@ -550,7 +550,9 @@ export default class Slider extends Component {
         this.#trackEl = this.shadowRoot.querySelector(".track");
         this.#thumbEl = this.shadowRoot.querySelector(".thumb");
         this.#tooltipEl = this.shadowRoot.querySelector("jyo-tooltip");
-        this.#tooltipEl.anchor = this.#thumbEl;
+        waitDefine("jyo-tooltip").then(() => {
+            this.#tooltipEl.anchor = this.#thumbEl;
+        });
 
         Object.defineProperties(this, {
             minimum: {

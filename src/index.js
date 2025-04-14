@@ -29,3 +29,4 @@ export { default as PasswordBox } from "./components/passwordBox.js";
 export { default as Dialog } from "./components/dialog.js";
 export { default as TreeView } from "./components/treeView.js";
 export { default as TreeViewItem } from "./components/treeViewItem.js";
+export { default as DockPanel } from "./components/dockPanel.js";

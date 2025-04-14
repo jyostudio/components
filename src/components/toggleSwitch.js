@@ -141,11 +141,11 @@ const STYLES = /* css */`
     vertical-align: middle;
 }
 
-:host([on-content]) .lblOn {
+:host([content-on]) .lblOn {
     margin-inline-start: var(--spacingHorizontalXS);
 }
 
-:host([off-content]) .lblOff {
+:host([content-off]) .lblOff {
     margin-inline-start: var(--spacingHorizontalXS);
 }
 
@@ -200,7 +200,7 @@ export default class ToggleSwitch extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "header", "off-content", "on-content", "is-on"];
+        return [...super.observedAttributes, "header", "content-off", "content-on", "is-on"];
     }
 
     /**
@@ -245,23 +245,23 @@ export default class ToggleSwitch extends Component {
                     });
                 }).any(() => this.header = "")
             },
-            offContent: {
+            contentOff: {
                 get: () => this.#lblOffEl.textContent,
                 set: overload([String], value => {
-                    this.lock("offContent", () => {
+                    this.lock("contentOff", () => {
                         this.#lblOffEl.textContent = value;
-                        this.setAttribute("off-content", value);
+                        this.setAttribute("content-off", value);
                     });
-                }).any(() => this.offContent = "")
+                }).any(() => this.contentOff = "")
             },
-            onContent: {
+            contentOn: {
                 get: () => this.#lblOnEl.textContent,
                 set: overload([String], value => {
-                    this.lock("onContent", () => {
+                    this.lock("contentOn", () => {
                         this.#lblOnEl.textContent = value;
-                        this.setAttribute("on-content", value);
+                        this.setAttribute("content-on", value);
                     });
-                }).any(() => this.onContent = "")
+                }).any(() => this.contentOn = "")
             },
             isOn: genBooleanGetterAndSetter(this, {
                 attrName: "isOn",

@@ -78,6 +78,14 @@ input[type="search"], input[type="text"] {
 
 export default class Component extends HTMLElement {
     /**
+     * 全局属性
+     * @type {Array<String>}
+     */
+    static #GLOBAL_ATTRIBUTES = [
+        "accesskey", "autocapitalize", "autofocus", "class", "contenteditable", "dir", "draggable", "enterkeyhint", "exportparts", "hidden", "id", "inert", "inputmode", "is", "itemid", "itemprop", "itemref", "itemscope", "itemtype", "lang", "nonce", "part", "popover", "role", "slot", "spellcheck", "style", "tabindex", "title", "translate", "virtualkeyboardpolicy"
+    ]
+
+    /**
      * 观察属性
      * @returns {Array<String>}
      */
@@ -117,6 +125,26 @@ export default class Component extends HTMLElement {
         return this.#hasInit;
     }
 
+    static #checkObservedAttributes(classFn) {
+        for (const attr of classFn.observedAttributes) {
+            if (this.#GLOBAL_ATTRIBUTES.includes(attr)) {
+                throw new Error(`在 ${classFn.name} 中不允许观察全局属性: ${attr}`);
+            }
+
+            if (attr.indexOf("aria-") === 0) {
+                throw new Error(`在 ${classFn.name} 中不允许观察 aria- 前缀的属性: ${attr}`);
+            }
+
+            if (attr.indexOf("data-") === 0) {
+                throw new Error(`在 ${classFn.name} 中不允许观察 data- 前缀的属性: ${attr}`);
+            }
+
+            if (attr.indexOf("on") === 0) {
+                console.warn(`在 ${classFn.name} 中 on 作为前缀会导致框架兼容性问题，如需要定义事件，请使用 event 作为前缀: ${attr}`);
+            }
+        }
+    }
+
     /**
      * 注册组件
      * @param {Object} options - 选项
@@ -125,6 +153,7 @@ export default class Component extends HTMLElement {
      */
     static registerComponent(...params) {
         Component.registerComponent = overload([Object], function (options) {
+            Component.#checkObservedAttributes(this);
             const registerName = this.name.replace(/([A-Z])/g, "-$1").toLowerCase();
             this[OPTIONS_SYMBOL] = options;
             customElements.define(`jyo${registerName}`, this);
