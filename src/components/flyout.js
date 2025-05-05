@@ -31,7 +31,7 @@ class Positioning extends Enum {
  * 默认插槽元素
  * @type {Array<String>}
  */
-const DEFALUT_SLOT_ELEMENTS = [
+const DEFAULT_SLOT_ELEMENTS = [
     "JYO-MENU-FLYOUT-ITEM",
     "JYO-DROP-DOWN-BUTTON",
     "JYO-SPLIT-BUTTON",
@@ -337,7 +337,7 @@ export default class Flyout extends Component {
         /**
          * 如果父级可以有子菜单，则设置插槽为 flyout
          */
-        if (DEFALUT_SLOT_ELEMENTS.includes(this.parentElement?.tagName)) {
+        if (DEFAULT_SLOT_ELEMENTS.includes(this.parentElement?.tagName)) {
             this.setAttribute("slot", "flyout");
         } else {
             this.removeAttribute("slot");

@@ -251,9 +251,9 @@ export default class InfoBar extends Component {
                     this.#iconInternalEl.textContent = icon;
                 }
             }),
-            isOpen: genBooleanGetterAndSetter(this, { attrName: "is-open", defaultValue: true, setValueDontRemove: true }),
-            isIconVisible: genBooleanGetterAndSetter(this, { attrName: "is-icon-visible", defaultValue: true, setValueDontRemove: true }),
-            isClosable: genBooleanGetterAndSetter(this, { attrName: "is-closable", defaultValue: true, setValueDontRemove: true })
+            isOpen: genBooleanGetterAndSetter(this, { attrName: "is-open", defaultValue: true, preserveFalseValue: true }),
+            isIconVisible: genBooleanGetterAndSetter(this, { attrName: "is-icon-visible", defaultValue: true, preserveFalseValue: true }),
+            isClosable: genBooleanGetterAndSetter(this, { attrName: "is-closable", defaultValue: true, preserveFalseValue: true })
         });
     }
 

@@ -609,7 +609,7 @@ export default new class ThemeManager extends EventTarget {
     #generateStyleSheet() {
         this.#styleSheet = this.#styleSheet ?? new CSSStyleSheet();
         const themeName = this.#currentTheme.valString;
-        const styles = this.supportToHDR(/* css */`
+        const styles = this.enhanceToHDR(/* css */`
             :host {
               --theme: ${themeName};
               --disableAlpha: ${this.enableAlpha ? "1" : "0"};
@@ -670,8 +670,8 @@ export default new class ThemeManager extends EventTarget {
         return ThemeManager.prototype.rgbaToP3.call(this, ...params);
     }
 
-    covertToP3(...params) {
-        ThemeManager.prototype.covertToP3 = overload(
+    convertToP3(...params) {
+        ThemeManager.prototype.convertToP3 = overload(
             [String],
             /**
              * 转换颜色到P3色彩空间
@@ -702,11 +702,11 @@ export default new class ThemeManager extends EventTarget {
             }
         );
 
-        return ThemeManager.prototype.covertToP3.call(this, ...params);
+        return ThemeManager.prototype.convertToP3.call(this, ...params);
     }
 
-    supportToHDR(...params) {
-        ThemeManager.prototype.supportToHDR = overload(
+    enhanceToHDR(...params) {
+        ThemeManager.prototype.enhanceToHDR = overload(
             [String],
             /**
              * 上升支持到HDR色彩空间
@@ -715,11 +715,11 @@ export default new class ThemeManager extends EventTarget {
              */
             function (styleText) {
                 if (!this.#supportHDR || !this.#supportP3) return styleText;
-                return this.covertToP3(styleText);
+                return this.convertToP3(styleText);
             }
         );
 
-        return ThemeManager.prototype.supportToHDR.call(this, ...params);
+        return ThemeManager.prototype.enhanceToHDR.call(this, ...params);
     }
 
     applyTheme(...params) {
@@ -821,4 +821,4 @@ export default new class ThemeManager extends EventTarget {
 
         return ThemeManager.prototype.unlinkAll.apply(this, params);
     }
-};
+}

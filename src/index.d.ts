@@ -1,11 +1,10 @@
-/// <reference path="./lib.dom.d.ts" />
-/// <reference path="./index.d.ts" />
-import "./libs/globalFonts.js";
-export { default as themeManager } from "./libs/themeManager/themeManager.js";
+import "./lib.dom.d.ts";
 
-export { default as Component } from "./components/component.js";
-export { default as Acrylic } from "./components/acrylic.js";
-export { default as Window } from "./components/window.js";
+export { default as themeManager } from "./libs/themeManager/themeManager.d.ts";
+
+export { default as Component } from "./components/component.d.ts";
+export { default as Acrylic } from "./components/acrylic.d.ts";
+export { default as Window } from "./components/window.d.ts";
 export { default as Flyout } from "./components/flyout.js";
 export { default as Tooltip } from "./components/tooltip.js";
 export { default as Slider } from "./components/slider.js";

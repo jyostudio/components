@@ -110,12 +110,12 @@ export function genCSSNumberGetterAndSetter(self, { attrName, defaultValue = "0"
  * @param {HTMLElement} self - 元素
  * @param {Object} options - 选项
  * @param {String} options.attrName - 属性名称
- * @param {Boolean} options.setValueDontRemove - 是否设置值但不移除属性
+ * @param {Boolean} options.preserveFalseValue - 是否设置值但不移除属性
  * @param {Boolean} options.defaultValue - 默认值
  * @param {Function} options.fn - 回调函数
  * @return {Object} - 包含 getter 和 setter 的对象
  */
-export function genBooleanGetterAndSetter(self, { attrName, setValueDontRemove = false, defaultValue = false, fn } = {}) {
+export function genBooleanGetterAndSetter(self, { attrName, preserveFalseValue = false, defaultValue = false, fn } = {}) {
     const domAttrName = getDomAttrName(attrName);
     return {
         get: () => self.hasAttribute(domAttrName) && self.getAttribute(domAttrName) !== "false",
@@ -125,7 +125,7 @@ export function genBooleanGetterAndSetter(self, { attrName, setValueDontRemove =
                     if (value) {
                         self.setAttribute(domAttrName, "true");
                     } else {
-                        setValueDontRemove ? self.setAttribute(domAttrName, "false") : self.removeAttribute(domAttrName);
+                        preserveFalseValue ? self.setAttribute(domAttrName, "false") : self.removeAttribute(domAttrName);
                     }
                     fn && fn(domAttrName, value);
                 });

@@ -530,7 +530,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否激活
+     * 是否为激活窗口
      * @type {Boolean}
      */
     get isActive() {
@@ -1029,8 +1029,8 @@ export default class Window extends Component {
     /**
      * 元素被添加到 DOM 树中时调用
      */
-    connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
+    connectedCallback() {
+        super.connectedCallback?.();
 
         if (!this.hasInit) {
             this.size = { width: 640, height: 480 };
@@ -1053,7 +1053,7 @@ export default class Window extends Component {
     /**
      * 元素在 DOM 树中被删除时调用
      */
-    disconnectedCallback(...params) {
+    disconnectedCallback() {
         /**
          * 从打开窗口列表中移除
          */
@@ -1063,7 +1063,7 @@ export default class Window extends Component {
 
         this.close();
 
-        super.disconnectedCallback?.call(this, ...params);
+        super.disconnectedCallback?.();
     }
 
     /**
@@ -1169,7 +1169,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 移动开始
+     * 开始移动窗口
      */
     moveBegin(...params) {
         Window.prototype.moveBegin = overload([PointerEvent], function (e) {

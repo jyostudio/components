@@ -23,7 +23,7 @@ function createStyleSheet(css) {
  * 共享样式
  * @type {CSSStyleSheet}
  */
-const SHARED_STYLE = createStyleSheet(themeManager.supportToHDR(/* css */`
+const SHARED_STYLE = createStyleSheet(themeManager.enhanceToHDR(/* css */`
 * {
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
@@ -125,6 +125,11 @@ export default class Component extends HTMLElement {
         return this.#hasInit;
     }
 
+    /**
+     * 检查观察属性合法性
+     * @param {Function} classFn - 类函数
+     * @throws {Error} 如果属性不合法则抛出错误
+     */
     static #checkObservedAttributes(classFn) {
         for (const attr of classFn.observedAttributes) {
             if (this.#GLOBAL_ATTRIBUTES.includes(attr)) {
@@ -236,8 +241,8 @@ export default class Component extends HTMLElement {
         const styleSheets = new Set([SHARED_STYLE, ...this.shadowRoot.adoptedStyleSheets]);
         if (css) {
             const normalizedCSS = css instanceof CSSStyleSheet ?
-                themeManager.supportToHDR(css) :
-                createStyleSheet(themeManager.supportToHDR(css));
+                themeManager.enhanceToHDR(css) :
+                createStyleSheet(themeManager.enhanceToHDR(css));
 
             if (normalizedCSS && !styleSheets.has(normalizedCSS)) {
                 styleSheets.add(normalizedCSS);

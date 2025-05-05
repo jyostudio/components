@@ -7,6 +7,8 @@
   "unpkg": "dist/components.js",
   "jsdelivr": "dist/components.js",
   "type": "module",
+  "types": "src/index.d.ts",
+  "typings": "src/index.d.ts",
   "scripts": {
     "publish": "npm publish --access public",
     "lint": "eslint ./src",
