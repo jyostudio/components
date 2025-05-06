@@ -19,31 +19,31 @@ class Type extends Enum {
 const STYLES = /* css */`
 :host {
     position: relative;
-    vertical-align: middle;
     display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    text-decoration-line: none;
-    text-align: center;
-    min-width: 32px;
-    min-height: 32px;
-    outline-style: none;
-    background-color: var(--mix-colorNeutralBackground1);
-    color: var(--colorNeutralForeground1);
-    border: var(--strokeWidthThin) solid var(--mix-colorNeutralStroke1);
-    border-bottom-color: var(--mix-colorNeutralStroke1Hover);
-    padding: 0 var(--spacingHorizontalM);
-    border-radius: var(--borderRadiusMedium);
-    font-size: var(--fontSizeBase200);
-    font-family: var(--fontFamilyBase);
-    font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase200);
-    transition-duration: var(--durationFaster);
-    transition-property: background, border, color;
-    transition-timing-function: var(--curveEasyEase);
-    user-select: none;
+    vertical-align: middle;
     contain: paint;
     overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0 var(--spacingHorizontalM);
+    border: var(--strokeWidthThin) solid var(--mix-colorNeutralStroke1);
+    border-bottom-color: var(--mix-colorNeutralStroke1Hover);
+    border-radius: var(--borderRadiusMedium);
+    font-family: var(--fontFamilyBase);
+    font-size: var(--fontSizeBase200);
+    font-weight: var(--fontWeightSemibold);
+    line-height: var(--lineHeightBase200);
+    text-align: center;
+    text-decoration-line: none;
+    color: var(--colorNeutralForeground1);
+    background-color: var(--mix-colorNeutralBackground1);
+    outline-style: none;
+    user-select: none;
+    transition: background-color var(--durationFaster) var(--curveEasyEase),
+                border-color var(--durationFaster) var(--curveEasyEase),
+                color var(--durationFaster) var(--curveEasyEase);
 }
 
 :host(:hover) {
@@ -52,11 +52,11 @@ const STYLES = /* css */`
     border-color: var(--mix-colorNeutralStroke1Hover);
 }
 
-:host(:hover:active), :host([flyout-visible]) {
+:host(:hover:active),
+:host([flyout-visible]) {
     background-color: var(--mix-colorNeutralBackground1Pressed);
     border-color: var(--mix-colorNeutralStroke1Pressed);
     color: var(--colorNeutralForeground1Pressed);
-    outline-style: none;
 }
 
 :host(:focus-visible) {
@@ -65,7 +65,8 @@ const STYLES = /* css */`
     box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
 }
 
-:host(:disabled), :host([disabled]) {
+:host(:disabled),
+:host([disabled]) {
     background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
     border-color: var(--mix-colorNeutralStrokeDisabled) !important;
     color: var(--colorNeutralForegroundDisabled) !important;
@@ -137,8 +138,8 @@ export default class Button extends Component {
     /**
      * 元素被添加到 DOM 树中时调用
      */
-    connectedCallback(...params) {
-        super.connectedCallback?.call(this, ...params);
+    connectedCallback() {
+        super.connectedCallback?.();
 
         this.#initEvents();
     }

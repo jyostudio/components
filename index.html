@@ -46,7 +46,7 @@
       const btn = document.getElementById("btnOpenDialog");
       btn.addEventListener("click", () => {
         const dialog = document.querySelector("jyo-dialog");
-        dialog.open();
+        dialog.isOpen = true;
       });
     });
   </script>
@@ -204,22 +204,24 @@
 
   <jyo-window>
     <!-- 基本用法 -->
-<jyo-dock-panel id="myDock" left-width="250px" right-width="300px" top-height="150px" bottom-height="100px">
-  <!-- 添加内容到左侧面板 -->
-  <div slot="left"><div>左侧面板内容</div></div>
-  
-  <!-- 添加内容到右侧面板 -->
-  <div slot="right">右侧面板内容</div>
-  
-  <!-- 添加内容到顶部面板 -->
-  <div slot="top">顶部面板内容</div>
-  
-  <!-- 添加内容到底部面板 -->
-  <div slot="bottom">底部面板内容</div>
-  
-  <!-- 添加内容到中心面板 -->
-  <div slot="center">中心面板内容</div>
-</jyo-dock-panel>
+    <jyo-dock-panel id="myDock" left-width="250px" right-width="300px" top-height="150px" bottom-height="100px">
+      <!-- 添加内容到左侧面板 -->
+      <div slot="left">
+        <div>左侧面板内容</div>
+      </div>
+
+      <!-- 添加内容到右侧面板 -->
+      <div slot="right">右侧面板内容</div>
+
+      <!-- 添加内容到顶部面板 -->
+      <div slot="top">顶部面板内容</div>
+
+      <!-- 添加内容到底部面板 -->
+      <div slot="bottom">底部面板内容</div>
+
+      <!-- 添加内容到中心面板 -->
+      <div slot="center">中心面板内容</div>
+    </jyo-dock-panel>
   </jyo-window>
 
   <script type="module" src="./index.js"></script>

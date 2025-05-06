@@ -103,19 +103,19 @@ const HTML = /* html */`
 
 export default class CheckBox extends Component {
     /**
-     * 是否支持 form 关联
-     * @returns {Boolean}
-     */
-    static get formAssociated() {
-        return true;
-    }
-
-    /**
      * 观察属性
      * @returns {Array<String>}
      */
     static get observedAttributes() {
         return [...super.observedAttributes, "content", "is-three-state", "is-checked"];
+    }
+
+    /**
+     * 是否支持 form 关联
+     * @returns {Boolean}
+     */
+    static get formAssociated() {
+        return true;
     }
 
     /**

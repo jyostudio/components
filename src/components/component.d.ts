@@ -22,6 +22,11 @@ export default class Component extends HTMLElement {
     static get observedAttributes():String[];
 
     /**
+     * 是否支持 form 关联
+     */
+    static get formAssociated(): Boolean;
+
+    /**
      * 是否已初始化
      */
     get hasInit():Boolean;

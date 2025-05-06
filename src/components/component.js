@@ -94,6 +94,14 @@ export default class Component extends HTMLElement {
     }
 
     /**
+     * 是否支持 form 关联
+     * @returns {Boolean}
+     */
+    static get formAssociated() {
+        return false;
+    }
+
+    /**
      * 是否已初始化
      * @type {Boolean}
      */
