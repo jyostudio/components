@@ -19,7 +19,7 @@ export default class Component extends HTMLElement {
     /**
      * 观察属性
      */
-    static get observedAttributes():String[];
+    static get observedAttributes(): String[];
 
     /**
      * 是否支持 form 关联
@@ -27,14 +27,20 @@ export default class Component extends HTMLElement {
     static get formAssociated(): Boolean;
 
     /**
+     * 获取组件 ID
+     * @returns {String} 组件 ID
+     */
+    get componentId(): String;
+
+    /**
      * 是否已初始化
      */
-    get hasInit():Boolean;
+    get hasInit(): Boolean;
 
     /**
      * 注册组件
      */
-    static registerComponent(options: RegisterOptions):void;
+    static registerComponent(options: RegisterOptions): void;
 
     /**
      * 内部部件
@@ -59,7 +65,7 @@ export default class Component extends HTMLElement {
     /**
      * DOM 元素被移动到新文档时调用
      */
-    adoptedCallback() : void;
+    adoptedCallback(): void;
 
     /**
      * DOM 元素属性更改时调用
@@ -72,7 +78,7 @@ export default class Component extends HTMLElement {
     /**
      * DOM 元素从文档中断开时调用
      */
-    disconnectedCallback() : void;
+    disconnectedCallback(): void;
 
     /**
      * 触发自定义事件

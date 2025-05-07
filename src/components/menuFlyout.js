@@ -94,7 +94,7 @@ export default class MenuFlyout extends Flyout {
 
             newBindEl.addEventListener("click", e => {
                 e.stopPropagation();
-                if (this.isVisible && !e.target?.internals?.states?.has("flyout")) {
+                if (this.isOpen && !e.target?.internals?.states?.has("flyout")) {
                     this.hidePopover();
                 } else {
                     this.showPopover();

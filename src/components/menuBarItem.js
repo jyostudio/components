@@ -116,7 +116,7 @@ export default class MenuBarItem extends Component {
     #toggleMenuFlyout() {
         const menuFlyout = this.querySelector("jyo-menu-flyout");
         if (!menuFlyout) return;
-        if (menuFlyout.isVisible) {
+        if (menuFlyout.isOpen) {
             menuFlyout.hidePopover();
         } else {
             menuFlyout.showPopover();

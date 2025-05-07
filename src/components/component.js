@@ -83,7 +83,13 @@ export default class Component extends HTMLElement {
      */
     static #GLOBAL_ATTRIBUTES = [
         "accesskey", "autocapitalize", "autofocus", "class", "contenteditable", "dir", "draggable", "enterkeyhint", "exportparts", "hidden", "id", "inert", "inputmode", "is", "itemid", "itemprop", "itemref", "itemscope", "itemtype", "lang", "nonce", "part", "popover", "role", "slot", "spellcheck", "style", "tabindex", "title", "translate", "virtualkeyboardpolicy"
-    ]
+    ];
+
+    /**
+     * 计数器
+     * @type {Number}
+     */
+    static #counter = 0n;
 
     /**
      * 观察属性
@@ -100,6 +106,12 @@ export default class Component extends HTMLElement {
     static get formAssociated() {
         return false;
     }
+
+    /**
+     * 组件 ID
+     * @type {String}
+     */
+    #componentId = `${this.tagName}-${++Component.#counter}`;
 
     /**
      * 是否已初始化
@@ -124,6 +136,14 @@ export default class Component extends HTMLElement {
      * @type {Set<string>}
      */
     #lockNameSet = new Set();
+
+    /**
+     * 获取组件 ID
+     * @returns {String} 组件 ID
+     */
+    get componentId() {
+        return this.#componentId;
+    }
 
     /**
      * 是否已初始化

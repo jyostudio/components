@@ -14,7 +14,7 @@ declare class Type extends Enum {
      * 重置按钮
      */
     static readonly reset: Type;
-    
+
     /**
      * 普通按钮
      */
@@ -37,6 +37,7 @@ export default class Button extends Component {
 
     /**
      * 设置按钮类型
+     * @param value - 按钮类型
      */
     set type(value: Type | "submit" | "reset" | "button");
 }

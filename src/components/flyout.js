@@ -145,7 +145,7 @@ export default class Flyout extends Component {
      * 计数器
      * @type {Number}
      */
-    static #counter = 0;
+    static #counter = 0n;
 
     /**
      * 定位
@@ -160,7 +160,7 @@ export default class Flyout extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "anchor", "positioning"];
+        return [...super.observedAttributes, "is-open", "anchor", "positioning"];
     }
 
     static slotBinding(...params) {
@@ -243,24 +243,29 @@ export default class Flyout extends Component {
      */
     #flyoutId = `jyo-flyout-${++Flyout.#counter}`;
 
-    /**
-     * 是否可见
-     * @type {Boolean}
-     */
-    #isVisible = false;
-
-    /**
-     * 是否可见
-     * @type {Boolean}
-     */
-    get isVisible() {
-        return this.#isVisible;
-    }
-
     constructor() {
         super();
 
         Object.defineProperties(this, {
+            isOpen: {
+                get: () => Boolean(this.hasAttribute("is-open")) || false,
+                set: overload()
+                    .add([String], value => {
+                        this.isOpen = Boolean(value);
+                    })
+                    .add([Boolean], function (value) {
+                        this.lock("isOpen", () => {
+                            if (value) {
+                                this.showPopover();
+                                this.setAttribute("is-open", "");
+                            } else {
+                                this.hidePopover();
+                                this.removeAttribute("is-open");
+                            }
+                        });
+                    })
+                    .any(() => this.isOpen = false)
+            },
             anchor: {
                 get: () => this.getAttribute("anchor") || "",
                 set: overload()
@@ -293,13 +298,13 @@ export default class Flyout extends Component {
         const signal = this.abortController.signal;
 
         this.addEventListener("toggle", e => {
-            this.#isVisible = e.newState === "open";
-            if (this.#isVisible) {
+            this.isOpen = e.newState === "open";
+            if (this.isOpen) {
                 this.#bindEl.setAttribute("flyout-visible", "");
             } else {
                 this.#bindEl.removeAttribute("flyout-visible");
             }
-            this.#bindEl?.dispatchCustomEvent?.("flyoutvisiblechange", { detail: { isVisible: this.#isVisible } });
+            this.#bindEl?.dispatchCustomEvent?.("flyoutvisiblechange", { detail: { isOpen: this.isOpen } });
         }, { signal });
     }
 
@@ -363,14 +368,24 @@ export default class Flyout extends Component {
     }
 
     /**
-     * 切换显示/隐藏
+     * 打开
      */
-    togglePopover() {
-        if (this.#isVisible) {
-            this.hidePopover();
-        } else {
-            this.showPopover();
-        }
+    open() {
+        this.isOpen = true;
+    }
+
+    /**
+     * 关闭
+     */
+    close() {
+        this.isOpen = false;
+    }
+
+    /**
+     * 切换打开状态
+     */
+    toggle() {
+        this.isOpen = !this.isOpen;
     }
 
     static {
