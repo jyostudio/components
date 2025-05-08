@@ -22,7 +22,12 @@ const STYLES = /* css */`
         transform: rotate(135deg);
     }
 
+    95% {
+        opacity: 1;
+    }
+
     100% {
+        opacity: 0;
         stroke-dashoffset: 187;
         transform: rotate(450deg);
     }
@@ -43,6 +48,12 @@ const STYLES = /* css */`
 
 .ring {
     transform: rotate(-90deg);
+}
+
+.bg {
+    stroke-dasharray: 190;
+    stroke-dashoffset: 0;
+    transform-origin: center;
 }
 
 .fill {
@@ -70,7 +81,8 @@ const STYLES = /* css */`
 
 const HTML = /* html */`
 <svg class="ring" width="100%" height="100%" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-    <circle class="fill" cx="33" cy="33" r="30" fill="none" stroke-width="6" stroke-linecap="round"></circle>
+    <circle class="bg" cx="33" cy="33" r="30" fill="none" stroke-width="5"></circle>
+    <circle class="fill" cx="33" cy="33" r="30" fill="none" stroke-width="5" stroke-linecap="round"></circle>
 </svg>
 `;
 
@@ -80,8 +92,14 @@ export default class ProgressRing extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "is-indeterminate", "value", "max", "min"];
+        return [...super.observedAttributes, "background", "is-indeterminate", "value", "max", "min"];
     }
+
+    /**
+     * 背景元素
+     * @type {HTMLElement}
+     */
+    #bgEl = null;
 
     /**
      * 填充元素
@@ -92,9 +110,16 @@ export default class ProgressRing extends Component {
     constructor() {
         super();
 
+        this.#bgEl = this.shadowRoot.querySelector(".bg");
         this.#fillEl = this.shadowRoot.querySelector(".fill");
 
         Object.defineProperties(this, {
+            background: {
+                get: () => this.#bgEl.style.stroke,
+                set: overload()
+                    .add([String], value => this.#bgEl.style.stroke = value)
+                    .any(() => this.#bgEl.style.stroke = "transparent")
+            },
             isIndeterminate: {
                 get: () => this.hasAttribute("is-indeterminate"),
                 set: overload()
