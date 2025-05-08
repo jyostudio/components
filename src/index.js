@@ -23,6 +23,7 @@ export { default as HyperlinkButton } from "./components/hyperlinkButton.js";
 export { default as ToggleSwitch } from "./components/toggleSwitch.js";
 export { default as CheckBox } from "./components/checkBox.js";
 export { default as ProgressBar } from "./components/progressBar.js";
+export { default as ProgressRing } from "./components/progressRing.js";
 export { default as RadioButton } from "./components/radioButton.js";
 export { default as RadioButtons } from "./components/radioButtons.js";
 export { default as Divider } from "./components/divider.js";

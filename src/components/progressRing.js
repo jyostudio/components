@@ -2,104 +2,61 @@ import overload from "@jyostudio/overload";
 import Component from "./component.js";
 
 const STYLES = /* css */`
-@keyframes indeterminate {
+@keyframes rotator {
     0% {
-        inset-inline-start: -33%;
-    }
-
-    60% {
-        inset-inline-start: 100%;
-        transform: translateY(0);
-    }
-
-    60.0001% {
-        inset-inline-start: 100%;
-        transform: translateY(100%);
-    }
-
-    60.0002% {
-        inset-inline-start: -33%;
-        transform: translateY(0);
+        transform: rotate(0deg);
     }
 
     100% {
-        inset-inline-start: 100%;
+        transform: rotate(270deg);
     }
 }
 
-@keyframes fill {
+@keyframes dash {
     0% {
-        width: 0%;
+        stroke-dashoffset: 187;
+    }
+
+    50% {
+        stroke-dashoffset: 46.75;
+        transform: rotate(135deg);
     }
 
     100% {
-        width: 100%;
+        stroke-dashoffset: 187;
+        transform: rotate(450deg);
     }
 }
 
 :host {
     display: block;
-    width: 100%;
-    height: 4px;
+    width: 60px;
+    height: 60px;
     contain: paint;
     overflow: hidden;
-    border-radius: var(--borderRadiusMedium);
     contain: content;
-    padding: var(--spacingVerticalS) 0;
 }
 
-:host::before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 0;
-    width: 100%;
-    height: 2px;
-    transform: translateY(-50%);
-    background-color: var(--mix-colorNeutralBackground6);
+:host([is-indeterminate]) {
+    animation: rotator 1.4s linear infinite;
 }
 
-:host([is-indeterminate])::before,
-:host([show-paused])::before,
-:host([show-error])::before{
-    background-color: var(--colorTransparentBackground);
+.ring {
+    transform: rotate(-90deg);
 }
 
 .fill {
-    position: absolute;
-    left: 0;
-    top: 50%;
-    background-color: var(--colorCompoundBrandBackground);
-    border-radius: inherit;
-    width: var(--width, 0%);
-    height: 4px;
-    transform: translateY(-50%);
-    transition-duration: var(--durationNormal) !important;
-    transition-property: width !important;
-    transition-timing-function: var(--curveEasyEase) !important;
+    stroke-dasharray: 187;
+    stroke-dashoffset: 0;
+    stroke: var(--colorCompoundBrandBackground);
+    transform-origin: center;
 }
 
 :host([is-indeterminate]) .fill {
-    width: 33%;
-    animation: indeterminate 2s var(--curveEasyEase) infinite !important;
+    animation: dash 1.4s ease-in-out infinite;
 }
 
-:host([show-paused]) .fill {
-    animation: fill var(--durationUltraSlow) var(--curveEasyEase) forwards;
-    background-color: var(--colorStatusWarningBackground3);
-}
-
-:host([show-error]) .fill {
-    animation: fill var(--durationUltraSlow) var(--curveEasyEase) forwards;
-    background-color: var(--colorStatusDangerBackground3);
-}
-
-:host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
+/*
 :host(:disabled), :host([disabled]) {
     background-color: var(--colorNeutralBackgroundDisabled) !important;
     border-color: var(--colorNeutralStrokeDisabled) !important;
@@ -108,19 +65,22 @@ const STYLES = /* css */`
     outline: none !important;
     pointer-events: none !important;
 }
+*/
 `;
 
 const HTML = /* html */`
-<div class="fill"></div>
+<svg class="ring" width="100%" height="100%" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
+    <circle class="fill" cx="33" cy="33" r="30" fill="none" stroke-width="6" stroke-linecap="round"></circle>
+</svg>
 `;
 
-export default class ProgressBar extends Component {
+export default class ProgressRing extends Component {
     /**
      * 观察属性
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "is-indeterminate", "value", "max", "min", "show-paused", "show-error"];
+        return [...super.observedAttributes, "is-indeterminate", "value", "max", "min"];
     }
 
     /**
@@ -147,7 +107,7 @@ export default class ProgressBar extends Component {
                     })
                     .any(() => {
                         if (this.isIndeterminate) {
-                            this.#fillEl.style.cssText += "--width: 0%";
+                            this.#fillEl.style.strokeDashoffset = "";
                         } else {
                             this.value = this.value;
                         }
@@ -161,7 +121,8 @@ export default class ProgressBar extends Component {
                             value = Math.max(this.min, Math.min(this.max, parseInt(value)));
                             if (isNaN(value)) value = 0;
                             if (this.value !== value) this.setAttribute("value", value);
-                            this.#fillEl.style.cssText += `--width: ${value}%`;
+                            this.#fillEl.style.strokeDashoffset = `${(this.max - value) / (this.max - this.min) * 187}`;
+                            this.#fillEl.style.opacity = value ? 1 : 0;
                         });
                     })
                     .add([Number], value => this.value = `${value}`)
