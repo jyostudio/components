@@ -1,4 +1,3 @@
-/// <reference path="./lib.dom.d.ts" />
 /// <reference path="./index.d.ts" />
 import "./libs/globalFonts.js";
 export { default as themeManager } from "./libs/themeManager/themeManager.js";

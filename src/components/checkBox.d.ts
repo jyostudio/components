@@ -7,30 +7,30 @@ export default class CheckBox extends Component {
     /**
      * 获取说明文字
      */
-    get content(): String;
+    get content(): string;
 
     /**
      * 设置说明文字
      */
-    set content(value: String);
+    set content(value: string);
 
     /**
      * 获取是否三态
      */
-    get isThreeState(): Boolean;
+    get isThreeState(): boolean;
 
     /**
      * 设置是否三态
      */
-    set isThreeState(value: Boolean);
+    set isThreeState(value: boolean);
 
     /**
      * 获取是否选中
      */
-    get isChecked(): Boolean | null;
+    get isChecked(): boolean | null;
 
     /**
      * 设置是否选中
      */
-    set isChecked(value: Boolean | null);
+    set isChecked(value: boolean | null);
 }

@@ -58,12 +58,12 @@ export default class Window extends Component {
     /**
      * 起始 z-index
      */
-    static startZIndex: Number;
+    static startZIndex: number;
 
     /**
      * 是否为激活窗口
      */
-    get isActive(): Boolean;
+    get isActive(): boolean;
 
     /**
      * 窗口状态
@@ -73,69 +73,69 @@ export default class Window extends Component {
     /**
      * 是否在 Native 环境中（如 Electron、Tauri）
      */
-    get isNative(): Boolean;
+    get isNative(): boolean;
 
     /**
      * 是否显示返回按钮
      */
-    get showBtnBack(): Boolean;
+    get showBtnBack(): boolean;
 
     /**
      * 是否可返回
      */
-    get canBack(): Boolean;
+    get canBack(): boolean;
 
     /**
      * 是否为自定义标题栏
      */
-    get customTitle(): Boolean;
+    get customTitle(): boolean;
 
     /**
      * 是否隐藏标题栏
      */
-    get hideTitleBar(): Boolean;
+    get hideTitleBar(): boolean;
 
     /**
      * 是否可调整大小
      */
-    get canResizable(): Boolean;
+    get canResizable(): boolean;
 
     /**
      * 是否可最大化
      */
-    get canMaximize(): Boolean;
+    get canMaximize(): boolean;
 
     /**
      * 是否可最小化
      */
-    get canMinimize(): Boolean;
+    get canMinimize(): boolean;
 
     /**
      * 是否可关闭
      */
-    get canClose(): Boolean;
+    get canClose(): boolean;
 
     /**
      * 获取距离父元素的左边距
      */
-    get left(): Number;
+    get left(): number;
 
     /**
      * 设置距离父元素的左边距
      * @param value 左边距
      */
-    set left(value: Number | String);
+    set left(value: number | string);
 
     /**
      * 获取距离父元素的上边距
      */
-    get top(): Number;
+    get top(): number;
 
     /**
      * 设置距离父元素的上边距
      * @param value 上边距
      */
-    set top(value: Number | String);
+    set top(value: number | string);
 
     /**
      * 获取窗口位置
@@ -146,29 +146,29 @@ export default class Window extends Component {
      * 设置窗口位置
      * @param value 窗口位置
      */
-    set location(value: IWindowLocation | String);
+    set location(value: IWindowLocation | string);
 
     /**
      * 获取窗口宽度
      */
-    get width(): Number;
+    get width(): number;
 
     /**
      * 设置窗口宽度
      * @param value 窗口宽度
      */
-    set width(value: Number | String);
+    set width(value: number | string);
 
     /**
      * 获取窗口高度
      */
-    get height(): Number;
+    get height(): number;
 
     /**
      * 设置窗口高度
      * @param value 窗口高度
      */
-    set height(value: Number | String);
+    set height(value: number | string);
 
     /**
      * 获取窗口尺寸
@@ -179,29 +179,29 @@ export default class Window extends Component {
      * 设置窗口尺寸
      * @param value 窗口尺寸
      */
-    set size(value: IWindowSize | String);
+    set size(value: IWindowSize | string);
 
     /**
      * 获取窗口是否可移动
      */
-    get canMove(): Boolean;
+    get canMove(): boolean;
 
     /**
      * 设置窗口是否可移动
      * @param value 是否可移动
      */
-    set canMove(value: Boolean);
+    set canMove(value: boolean);
 
     /**
      * 获取窗口 z-index
      */
-    get zIndex(): Number;
+    get zIndex(): number;
 
     /**
      * 设置窗口 z-index
      * @param value z-index
      */
-    set zIndex(value: Number);
+    set zIndex(value: number);
 
     /**
      * 获取窗口最小化目标元素
@@ -212,18 +212,18 @@ export default class Window extends Component {
      * 设置窗口最小化目标元素
      * @param value 最小化目标元素
      */
-    set minimizeTarget(value: HTMLElement | String | null);
+    set minimizeTarget(value: HTMLElement | string | null);
 
     /**
      * 获取窗口是否置顶
      */
-    get topmost(): Boolean;
+    get topmost(): boolean;
 
     /**
      * 设置窗口是否置顶
      * @param value 是否置顶
      */
-    set topmost(value: Boolean);
+    set topmost(value: boolean);
 
     /**
      * 最小化窗口
@@ -284,7 +284,7 @@ export default class Window extends Component {
      * 激活窗口
      * @param e 事件对象
      */
-    active(e:Event): void;
+    active(e: Event): void;
 
     /**
      * 失去焦点

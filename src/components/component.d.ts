@@ -5,11 +5,11 @@ interface RegisterOptions {
     /**
      * 样式代码
      */
-    css?: String;
+    css?: string;
     /**
      * HTML
      */
-    html?: String;
+    html?: string;
 }
 
 /**
@@ -19,23 +19,23 @@ export default class Component extends HTMLElement {
     /**
      * 观察属性
      */
-    static get observedAttributes(): String[];
+    static get observedAttributes(): string[];
 
     /**
      * 是否支持 form 关联
      */
-    static get formAssociated(): Boolean;
+    static get formAssociated(): boolean;
 
     /**
      * 获取组件 ID
-     * @returns {String} 组件 ID
+     * @returns {string} 组件 ID
      */
-    get componentId(): String;
+    get componentId(): string;
 
     /**
      * 是否已初始化
      */
-    get hasInit(): Boolean;
+    get hasInit(): boolean;
 
     /**
      * 注册组件
@@ -73,7 +73,7 @@ export default class Component extends HTMLElement {
      * @param oldValue - 旧值
      * @param newValue - 新值
      */
-    attributeChangedCallback(name: String, oldValue: String, newValue: String): void;
+    attributeChangedCallback(name: string, oldValue: string, newValue: string): void;
 
     /**
      * DOM 元素从文档中断开时调用
@@ -85,7 +85,7 @@ export default class Component extends HTMLElement {
      * @param type - 事件类型
      * @returns 是否成功触发
      */
-    dispatchCustomEvent(type: String): Boolean;
+    dispatchCustomEvent(type: string): boolean;
 
     /**
      * 触发自定义事件
@@ -93,26 +93,26 @@ export default class Component extends HTMLElement {
      * @param eventInitDict - 事件初始化字典
      * @returns 是否成功触发
      */
-    dispatchCustomEvent(type: String, eventInitDict: CustomEventInit<any>): Boolean;
+    dispatchCustomEvent(type: string, eventInitDict: CustomEventInit<any>): boolean;
 
     /**
      * 调用锁
      * @param name - 名称
      * @param callback - 回调函数
      */
-    lock(name: String, callback: Function): void;
+    lock(name: string, callback: () => any): void;
 
     /**
      * 根据 TAG_NAME 获取最近的父元素
      * @param tagName - 标签名
      * @returns 如果找到则返回元素，否则返回 null
      */
-    getClosestByTagName(tagName: String): HTMLElement | null;
+    getClosestByTagName(tagName: string): HTMLElement | null;
 
     /**
      * 等待父元素定义
      * @param callback - 当父元素定义后调用的回调函数
      * @returns 返回一个 Promise 对象，内容为回调函数的返回值
      */
-    thenParentDefined(callback: Function): Promise<any>;
+    thenParentDefined(callback: () => any): Promise<any>;
 }

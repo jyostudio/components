@@ -9,24 +9,24 @@ export default class RadioButtons extends Component {
     /**
      * 获取标头文本
      */
-    get header(): String;
+    get header(): string;
 
     /**
      * 设置标头文本
      * @param value - 标头文本
      */
-    set header(value: String);
+    set header(value: string);
 
     /**
      * 获取选择的单选按钮下标索引
      */
-    get selectedIndex(): Number;
+    get selectedIndex(): number;
 
     /**
      * 设置选择的单选按钮下标索引
      * @param value - 选择的单选按钮下标索引
      */
-    set selectedIndex(value: Number);
+    set selectedIndex(value: number);
 
     /**
      * 获取选择的单选按钮
@@ -48,11 +48,11 @@ export default class RadioButtons extends Component {
     /**
      * 获取是否禁用
      */
-    get disabled(): Boolean;
+    get disabled(): boolean;
 
     /**
      * 设置是否禁用
      * @param value - 是否禁用
      */
-    set disabled(value: Boolean);
+    set disabled(value: boolean);
 }

@@ -49,33 +49,33 @@ export default class InfoBar extends Component {
     /**
      * 获取是否打开
      */
-    get isOpen(): Boolean;
+    get isOpen(): boolean;
 
     /**
      * 设置是否打开
      * @param value - 是否打开
      */
-    set isOpen(value: Boolean);
+    set isOpen(value: boolean);
 
     /**
      * 获取是否可见图标
      */
-    get isIconVisible(): Boolean;
+    get isIconVisible(): boolean;
 
     /**
      * 设置是否可见图标
      * @param value - 是否可见图标
      */
-    set isIconVisible(value: Boolean);
+    set isIconVisible(value: boolean);
 
     /**
      * 获取是否可关闭
      */
-    get isClosable(): Boolean;
+    get isClosable(): boolean;
 
     /**
      * 设置是否可关闭
      * @param value - 是否可关闭
      */
-    set isClosable(value: Boolean);
+    set isClosable(value: boolean);
 }

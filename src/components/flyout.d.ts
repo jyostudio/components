@@ -98,24 +98,24 @@ export default class Flyout extends Component {
     /**
      * 获取是否打开
      */
-    get isOpen(): Boolean;
+    get isOpen(): boolean;
 
     /**
      * 设置是否打开
      * @param value - 是否打开
      */
-    set isOpen(value: Boolean | String);
+    set isOpen(value: boolean | string);
 
     /**
      * 获取锚点
      */
-    get anchor(): String;
+    get anchor(): string;
 
     /**
      * 设置锚点
      * @param value - 锚点元素选择前器或元素
      */
-    set anchor(value: String | HTMLElement);
+    set anchor(value: string | HTMLElement);
 
     /**
      * 获取定位
@@ -126,7 +126,7 @@ export default class Flyout extends Component {
      * 设置定位
      * @param value - 定位
      */
-    set positioning(value: Positioning | String);
+    set positioning(value: Positioning | string);
 
     /**
      * 打开
@@ -147,4 +147,4 @@ export default class Flyout extends Component {
 /**
  * 飞出菜单公用样式
  */
-export const FlyoutStyle: String;
+export const FlyoutStyle: string;
