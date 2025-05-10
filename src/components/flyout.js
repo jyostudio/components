@@ -140,6 +140,11 @@ const HTML = /* html */`
 <slot></slot>
 `;
 
+/**
+ * 飞出组件
+ * @class
+ * @extends {Component}
+ */
 export default class Flyout extends Component {
     /**
      * 计数器

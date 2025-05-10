@@ -80,6 +80,11 @@ const HTML = /* html */`
 <slot>Button</slot>
 `;
 
+/**
+ * 按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class Button extends Component {
     /**
      * 按钮类型
@@ -90,19 +95,19 @@ export default class Button extends Component {
     }
 
     /**
-     * 是否支持 form 关联
-     * @returns {Boolean}
-     */
-    static get formAssociated() {
-        return true;
-    }
-
-    /**
      * 观察属性
      * @returns {Array<String>}
      */
     static get observedAttributes() {
         return [...super.observedAttributes, "type"];
+    }
+
+    /**
+     * 是否支持 form 关联
+     * @returns {Boolean}
+     */
+    static get formAssociated() {
+        return true;
     }
 
     constructor() {

@@ -142,6 +142,11 @@ const HTML = /* html */`
 </div>
 `;
 
+/**
+ * 对话框组件
+ * @class
+ * @extends {Component}
+ */
 export default class Dialog extends Component {
     /**
      * 观察属性

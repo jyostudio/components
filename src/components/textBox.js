@@ -129,6 +129,11 @@ const HTML = /* html */`
 </div>
 `;
 
+/**
+ * 输入框组件
+ * @class
+ * @extends {Component}
+ */
 export default class TextBox extends Component {
     /**
      * 输入框模式

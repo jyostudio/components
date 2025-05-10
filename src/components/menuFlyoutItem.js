@@ -185,6 +185,11 @@ const HTML = /* html */`
 <slot name="flyout"></slot>
 `;
 
+/**
+ * 飞出菜单项组件
+ * @class
+ * @extends {Component}
+ */
 export default class MenuFlyoutItem extends Component {
     /**
      * 类型

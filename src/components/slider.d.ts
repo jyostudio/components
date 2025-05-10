@@ -87,7 +87,7 @@ export default class Slider extends Component {
 
     /**
      * 设置最小值
-     * @param {number} value - 最小值
+     * @param value - 最小值
      */
     set minimum(value: number);
 
@@ -98,7 +98,7 @@ export default class Slider extends Component {
 
     /**
      * 设置最大值
-     * @param {number} value - 最大值
+     * @param value - 最大值
      */
     set maximum(value: number);
 
@@ -109,7 +109,7 @@ export default class Slider extends Component {
 
     /**
      * 设置当前值
-     * @param {number} value - 当前值
+     * @param value - 当前值
      */
     set value(value: number);
 
@@ -120,7 +120,7 @@ export default class Slider extends Component {
 
     /**
      * 设置刻度频率
-     * @param {number} value - 刻度频率
+     * @param value - 刻度频率
      */
     set tickFrequency(value: number);
 
@@ -131,7 +131,7 @@ export default class Slider extends Component {
 
     /**
      * 设置刻度位置
-     * @param {TickPlacement} value - 刻度位置
+     * @param value - 刻度位置
      */
     set tickPlacement(value: TickPlacement);
 
@@ -142,7 +142,7 @@ export default class Slider extends Component {
 
     /**
      * 设置滑块对齐方式
-     * @param {SliderSnapsTo} value - 滑块对齐方式
+     * @param value - 滑块对齐方式
      */
     set snapsTo(value: SliderSnapsTo);
 
@@ -153,7 +153,7 @@ export default class Slider extends Component {
 
     /**
      * 设置方向
-     * @param {Orientation} value - 方向
+     * @param value - 方向
      */
     set orientation(value: Orientation);
 }

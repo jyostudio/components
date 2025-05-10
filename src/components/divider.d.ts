@@ -57,6 +57,7 @@ export default class Divider extends Component {
 
     /**
      * 设置内容对其方式
+     * @param value - 内容对其方式
      */
     set alignContent(value: AlignContent);
 
@@ -67,6 +68,7 @@ export default class Divider extends Component {
 
     /**
      * 设置方向
+     * @param value - 方向
      */
     set orientation(value: Orientation);
 }

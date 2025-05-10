@@ -11,7 +11,7 @@ export default class ToggleButton extends Component {
 
     /**
      * 设置开关状态
-     * @param {boolean} value - 开关状态
+     * @param value - 开关状态
      */
     set checked(value: boolean);
 }

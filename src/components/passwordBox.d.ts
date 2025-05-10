@@ -36,7 +36,7 @@ export default class PasswordBox extends Component {
 
     /**
      * 设置输入框的值
-     * @param {string} value 输入框的值
+     * @param value - 输入框的值
      */
     set value(value: string);
 
@@ -47,7 +47,7 @@ export default class PasswordBox extends Component {
 
     /**
      * 设置输入框的占位符
-     * @param {string} value 输入框的占位符
+     * @param value - 输入框的占位符
      */
     set placeholder(value: string);
 
@@ -58,7 +58,7 @@ export default class PasswordBox extends Component {
 
     /**
      * 设置输入框是否只读
-     * @param {boolean} value 输入框是否只读
+     * @param value - 输入框是否只读
      */
     set readonly(value: boolean);
 
@@ -69,7 +69,7 @@ export default class PasswordBox extends Component {
 
     /**
      * 设置输入框的最大长度
-     * @param {number} value 输入框的最大长度
+     * @param value - 输入框的最大长度
      */
     set maxlength(value: number);
 
@@ -80,7 +80,7 @@ export default class PasswordBox extends Component {
 
     /**
      * 设置密码显示模式
-     * @param {PasswordRevealMode} value 密码显示模式
+     * @param value - 密码显示模式
      */
     set passwordRevealMode(value: PasswordRevealMode);
 }

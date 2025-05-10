@@ -67,7 +67,7 @@ declare class Positioning extends Enum {
 }
 
 /**
- * 飞出菜单组件
+ * 飞出组件
  */
 export default class Flyout extends Component {
     /**
@@ -76,13 +76,13 @@ export default class Flyout extends Component {
     static get Positioning(): typeof Positioning;
 
     /**
-     * 将飞出菜单绑定到目标元素
+     * 将飞出组件绑定到目标元素
      * @param targetEl - 目标元素/绑定元素
      */
     slotBinding(targetEl: HTMLElement): void;
 
     /**
-     * 将飞出菜单绑定到目标元素
+     * 将飞出组件绑定到目标元素
      * @param targetEl - 目标元素
      * @param bindEl - 绑定元素
      */
@@ -145,6 +145,6 @@ export default class Flyout extends Component {
 }
 
 /**
- * 飞出菜单公用样式
+ * 飞出组件公用样式
  */
 export const FlyoutStyle: string;

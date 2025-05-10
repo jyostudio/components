@@ -75,6 +75,11 @@ const HTML = /* html */`
 <slot name="flyout"></slot>
 `;
 
+/**
+ * 下拉按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class DropDownButton extends Component {
     /**
      * 飞出菜单定位

@@ -56,62 +56,62 @@ declare interface IWindowSize {
  */
 export default class Window extends Component {
     /**
-     * 起始 z-index
+     * 获取或设置起始 z-index
      */
     static startZIndex: number;
 
     /**
-     * 是否为激活窗口
+     * 获取当前是否为激活窗口
      */
     get isActive(): boolean;
 
     /**
-     * 窗口状态
+     * 获取窗口状态
      */
     get windowState(): WindowState;
 
     /**
-     * 是否在 Native 环境中（如 Electron、Tauri）
+     * 获取当前是否在 Native 环境中（如 Electron、Tauri）
      */
     get isNative(): boolean;
 
     /**
-     * 是否显示返回按钮
+     * 获取是否显示返回按钮
      */
     get showBtnBack(): boolean;
 
     /**
-     * 是否可返回
+     * 获取是否可返回
      */
     get canBack(): boolean;
 
     /**
-     * 是否为自定义标题栏
+     * 获取是否为自定义标题栏
      */
     get customTitle(): boolean;
 
     /**
-     * 是否隐藏标题栏
+     * 获取是否隐藏标题栏
      */
     get hideTitleBar(): boolean;
 
     /**
-     * 是否可调整大小
+     * 获取是否可调整大小
      */
     get canResizable(): boolean;
 
     /**
-     * 是否可最大化
+     * 获取是否可最大化
      */
     get canMaximize(): boolean;
 
     /**
-     * 是否可最小化
+     * 获取是否可最小化
      */
     get canMinimize(): boolean;
 
     /**
-     * 是否可关闭
+     * 获取是否可关闭
      */
     get canClose(): boolean;
 
@@ -122,9 +122,9 @@ export default class Window extends Component {
 
     /**
      * 设置距离父元素的左边距
-     * @param value 左边距
+     * @param value - 左边距
      */
-    set left(value: number | string);
+    set left(value: number);
 
     /**
      * 获取距离父元素的上边距
@@ -133,9 +133,9 @@ export default class Window extends Component {
 
     /**
      * 设置距离父元素的上边距
-     * @param value 上边距
+     * @param value - 上边距
      */
-    set top(value: number | string);
+    set top(value: number);
 
     /**
      * 获取窗口位置
@@ -144,9 +144,9 @@ export default class Window extends Component {
 
     /**
      * 设置窗口位置
-     * @param value 窗口位置
+     * @param value - 窗口位置
      */
-    set location(value: IWindowLocation | string);
+    set location(value: IWindowLocation);
 
     /**
      * 获取窗口宽度
@@ -155,9 +155,9 @@ export default class Window extends Component {
 
     /**
      * 设置窗口宽度
-     * @param value 窗口宽度
+     * @param value - 窗口宽度
      */
-    set width(value: number | string);
+    set width(value: number);
 
     /**
      * 获取窗口高度
@@ -166,9 +166,9 @@ export default class Window extends Component {
 
     /**
      * 设置窗口高度
-     * @param value 窗口高度
+     * @param value - 窗口高度
      */
-    set height(value: number | string);
+    set height(value: number);
 
     /**
      * 获取窗口尺寸
@@ -177,9 +177,9 @@ export default class Window extends Component {
 
     /**
      * 设置窗口尺寸
-     * @param value 窗口尺寸
+     * @param value - 窗口尺寸
      */
-    set size(value: IWindowSize | string);
+    set size(value: IWindowSize);
 
     /**
      * 获取窗口是否可移动
@@ -188,7 +188,7 @@ export default class Window extends Component {
 
     /**
      * 设置窗口是否可移动
-     * @param value 是否可移动
+     * @param value - 是否可移动
      */
     set canMove(value: boolean);
 
@@ -199,7 +199,7 @@ export default class Window extends Component {
 
     /**
      * 设置窗口 z-index
-     * @param value z-index
+     * @param value - z-index
      */
     set zIndex(value: number);
 
@@ -210,7 +210,7 @@ export default class Window extends Component {
 
     /**
      * 设置窗口最小化目标元素
-     * @param value 最小化目标元素
+     * @param value - 最小化目标元素
      */
     set minimizeTarget(value: HTMLElement | string | null);
 
@@ -221,7 +221,7 @@ export default class Window extends Component {
 
     /**
      * 设置窗口是否置顶
-     * @param value 是否置顶
+     * @param value - 是否置顶
      */
     set topmost(value: boolean);
 
@@ -232,7 +232,7 @@ export default class Window extends Component {
 
     /**
      * 最小化窗口
-     * @param e 事件对象
+     * @param e - 事件对象
      */
     minimize(e: Event): void;
 
@@ -243,7 +243,7 @@ export default class Window extends Component {
 
     /**
      * 最大化窗口
-     * @param e 事件对象
+     * @param e - 事件对象
      */
     maximize(e: Event): void;
 
@@ -254,7 +254,7 @@ export default class Window extends Component {
 
     /**
      * 还原窗口
-     * @param e 事件对象
+     * @param e - 事件对象
      */
     restore(e: Event): void;
 
@@ -265,13 +265,13 @@ export default class Window extends Component {
 
     /**
      * 关闭窗口
-     * @param e 事件对象
+     * @param e - 事件对象
      */
     close(e: Event): void;
 
     /**
      * 开始移动窗口
-     * @param e 事件对象
+     * @param e - 事件对象
      */
     moveBegin(e: PointerEvent): void;
 
@@ -282,7 +282,7 @@ export default class Window extends Component {
 
     /**
      * 激活窗口
-     * @param e 事件对象
+     * @param e - 事件对象
      */
     active(e: Event): void;
 
@@ -293,7 +293,7 @@ export default class Window extends Component {
 
     /**
      * 失去焦点
-     * @param e 事件对象
+     * @param e - 事件对象
      */
     deactive(e: Event): void;
 }

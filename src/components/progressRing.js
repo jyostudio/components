@@ -40,10 +40,11 @@ const STYLES = /* css */`
     contain: paint;
     overflow: hidden;
     contain: content;
+    border-radius: 50%;
 }
 
 :host([is-indeterminate]) {
-    animation: rotator 1.4s linear infinite;
+    animation: rotator 1.4s linear infinite !important;
 }
 
 .ring {
@@ -64,10 +65,9 @@ const STYLES = /* css */`
 }
 
 :host([is-indeterminate]) .fill {
-    animation: dash 1.4s ease-in-out infinite;
+    animation: dash 1.4s ease-in-out infinite !important;
 }
 
-/*
 :host(:disabled), :host([disabled]) {
     background-color: var(--colorNeutralBackgroundDisabled) !important;
     border-color: var(--colorNeutralStrokeDisabled) !important;
@@ -76,7 +76,6 @@ const STYLES = /* css */`
     outline: none !important;
     pointer-events: none !important;
 }
-*/
 `;
 
 const HTML = /* html */`
@@ -86,6 +85,11 @@ const HTML = /* html */`
 </svg>
 `;
 
+/**
+ * 进度环组件
+ * @class
+ * @extends {Component}
+ */
 export default class ProgressRing extends Component {
     /**
      * 观察属性

@@ -1,4 +1,4 @@
-import Component from "./component.js";
+import Component from "./component.d.ts";
 
 /**
  * 对话框组件
@@ -11,6 +11,7 @@ export default class Dialog extends Component {
 
     /**
      * 设置是否打开
+     * @param value - 是否打开
      */
     set isOpen(value: boolean | string);
 

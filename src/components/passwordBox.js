@@ -131,6 +131,11 @@ const HTML = /* html */`
 </div>
 `;
 
+/**
+ * 密码输入框组件
+ * @class
+ * @extends {Component}
+ */
 export default class PasswordBox extends Component {
     /**
      * 是否支持 form 关联

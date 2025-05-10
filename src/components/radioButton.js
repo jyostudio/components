@@ -109,6 +109,11 @@ const HTML = /* html */`
     <label></label>
 `;
 
+/**
+ * 单选按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class RadioButton extends Component {
     /**
      * 是否支持 form 关联

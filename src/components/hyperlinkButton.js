@@ -68,6 +68,11 @@ const HTML = /* html */`
 <slot>Button</slot>
 `;
 
+/**
+ * 超链接按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class HyperlinkButton extends Component {
     /**
      * 初始化事件

@@ -29,6 +29,11 @@ const HTML = /* html */`
 </div>
 `;
 
+/**
+ * 菜单栏组件
+ * @class
+ * @extends {Component}
+ */
 export default class MenuBar extends Component {
     static {
         this.registerComponent({

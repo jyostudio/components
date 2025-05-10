@@ -11,6 +11,7 @@ export default class CheckBox extends Component {
 
     /**
      * 设置说明文字
+     * @param value - 说明文字
      */
     set content(value: string);
 
@@ -21,6 +22,7 @@ export default class CheckBox extends Component {
 
     /**
      * 设置是否三态
+     * @param value - 是否三态
      */
     set isThreeState(value: boolean);
 
@@ -31,6 +33,7 @@ export default class CheckBox extends Component {
 
     /**
      * 设置是否选中
+     * @param value - 是否选中
      */
     set isChecked(value: boolean | null);
 }

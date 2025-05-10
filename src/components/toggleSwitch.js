@@ -186,6 +186,11 @@ const HTML = /* html */`
 </div>
 `;
 
+/**
+ * 开关组件
+ * @class
+ * @extends {Component}
+ */
 export default class ToggleSwitch extends Component {
     /**
      * 是否支持 form 关联

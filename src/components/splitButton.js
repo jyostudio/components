@@ -110,6 +110,11 @@ const HTML = /* html */`
 </div>
 `;
 
+/**
+ * 分割按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class SplitButton extends Component {
     /**
      * 开始元素

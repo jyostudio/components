@@ -47,6 +47,11 @@ const HTML = /* html */`
 <slot></slot>
 `;
 
+/**
+ * 飞出菜单组件
+ * @class
+ * @extends {Flyout}
+ */
 export default class MenuFlyout extends Flyout {
     /**
      * 事件中止控制器

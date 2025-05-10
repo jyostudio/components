@@ -1,4 +1,4 @@
-import Component from "./component.js";
+import Component from "./component.d.ts";
 
 /**
  * 分割按钮组件

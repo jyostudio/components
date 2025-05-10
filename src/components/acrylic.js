@@ -61,6 +61,11 @@ const HTML = /* html */`
 <div class="layer noiseTexture"></div>
 `;
 
+/**
+ * 亚克力效果组件
+ * @class
+ * @extends {Component}
+ */
 export default class Acrylic extends Component {
     /**
      * 观察属性

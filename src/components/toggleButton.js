@@ -84,6 +84,11 @@ const HTML = /* html */`
 <slot>Button</slot>
 `;
 
+/**
+ * 开关按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class ToggleButton extends Component {
     /**
      * 是否支持 form 关联

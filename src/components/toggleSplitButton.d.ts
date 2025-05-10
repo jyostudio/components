@@ -19,7 +19,7 @@ export default class ToggleSplitButton extends Component {
 
     /**
      * 设置切换按钮的状态
-     * @param {boolean} value - 切换按钮的状态
+     * @param value - 切换按钮的状态
      */
     set checked(value: boolean);
 }

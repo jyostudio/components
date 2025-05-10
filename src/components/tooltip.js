@@ -52,6 +52,11 @@ const HTML = /* html */`
 </div>
 `;
 
+/**
+ * 工具提示组件
+ * @class
+ * @extends {Flyout}
+ */
 export default class Tooltip extends Flyout {
     /**
      * 定位

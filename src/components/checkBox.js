@@ -101,6 +101,11 @@ const HTML = /* html */`
 <label></label>
 `;
 
+/**
+ * 复选框组件
+ * @class
+ * @extends {Component}
+ */
 export default class CheckBox extends Component {
     /**
      * 观察属性

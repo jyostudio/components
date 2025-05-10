@@ -49,6 +49,11 @@ const HTML = /* html */`
 <slot></slot>
 `;
 
+/**
+ * 菜单栏项组件
+ * @class
+ * @extends {Component}
+ */
 export default class MenuBarItem extends Component {
     /**
      * 是否显示菜单

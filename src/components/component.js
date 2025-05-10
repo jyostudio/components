@@ -76,6 +76,11 @@ input[type="search"], input[type="text"] {
 }
 `));
 
+/**
+ * 组件基类
+ * @class
+ * @extends {HTMLElement}
+ */
 export default class Component extends HTMLElement {
     /**
      * 全局属性
@@ -178,19 +183,20 @@ export default class Component extends HTMLElement {
         }
     }
 
-    /**
-     * 注册组件
-     * @param {Object} options - 选项
-     * @param {String?} options.css - 样式表
-     * @param {String?} options.html - HTML
-     */
     static registerComponent(...params) {
-        Component.registerComponent = overload([Object], function (options) {
-            Component.#checkObservedAttributes(this);
-            const registerName = this.name.replace(/([A-Z])/g, "-$1").toLowerCase();
-            this[OPTIONS_SYMBOL] = options;
-            customElements.define(`jyo${registerName}`, this);
-        });
+        Component.registerComponent = overload([Object],
+            /**
+             * 注册组件
+             * @param {Object} options - 选项
+             * @param {String?} options.css - 样式表
+             * @param {String?} options.html - HTML
+             */
+            function (options) {
+                Component.#checkObservedAttributes(this);
+                const registerName = this.name.replace(/([A-Z])/g, "-$1").toLowerCase();
+                this[OPTIONS_SYMBOL] = options;
+                customElements.define(`jyo${registerName}`, this);
+            });
 
         return Component.registerComponent.apply(this, params);
     }

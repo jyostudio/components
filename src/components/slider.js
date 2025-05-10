@@ -435,6 +435,11 @@ const HTML = /* html */`
 <jyo-tooltip horizontal-offset="-10px" vertical-offset="-10px" mode="manual">0</jyo-tooltip>
 `;
 
+/**
+ * 滑块组件
+ * @class
+ * @extends {Component}
+ */
 export default class Slider extends Component {
     /**
      * 刻度位置

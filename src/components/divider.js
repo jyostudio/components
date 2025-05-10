@@ -95,6 +95,11 @@ const HTML = /* html */`
 <slot></slot>
 `;
 
+/**
+ * 分割线组件
+ * @class
+ * @extends {Component}
+ */
 export default class Divider extends Component {
     /**
      * 内容对其方式

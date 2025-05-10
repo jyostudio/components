@@ -114,6 +114,11 @@ const HTML = /* html */`
 <div class="fill"></div>
 `;
 
+/**
+ * 进度条组件
+ * @class
+ * @extends {Component}
+ */
 export default class ProgressBar extends Component {
     /**
      * 观察属性

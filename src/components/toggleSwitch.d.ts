@@ -12,7 +12,7 @@ export default class ToggleSwitch extends Component {
 
     /**
      * 设置头部文本
-     * @param {string} value - 头部文本
+     * @param value - 头部文本
      */
     set header(value: string);
 
@@ -23,7 +23,7 @@ export default class ToggleSwitch extends Component {
 
     /**
      * 设置关闭时的文本
-     * @param {string} value - 关闭时的文本
+     * @param value - 关闭时的文本
      */
     set contentOff(value: string);
 
@@ -34,7 +34,7 @@ export default class ToggleSwitch extends Component {
 
     /**
      * 设置打开时的文本
-     * @param {string} value - 打开时的文本
+     * @param value - 打开时的文本
      */
     set contentOn(value: string);
 
@@ -45,7 +45,7 @@ export default class ToggleSwitch extends Component {
 
     /**
      * 设置开关状态
-     * @param {boolean} value - 开关状态
+     * @param value - 开关状态
      */
     set isOn(value: boolean);
 }

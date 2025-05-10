@@ -33,7 +33,7 @@ export default class Component extends HTMLElement {
     get componentId(): string;
 
     /**
-     * 是否已初始化
+     * 获取是否已初始化
      */
     get hasInit(): boolean;
 
@@ -43,12 +43,12 @@ export default class Component extends HTMLElement {
     static registerComponent(options: RegisterOptions): void;
 
     /**
-     * 内部部件
+     * 获取内部部件
      */
     get internals(): ElementInternals;
 
     /**
-     * 取消控制器
+     * 获取取消控制器
      */
     get abortController(): AbortController;
 

@@ -37,7 +37,7 @@ export default class Tooltip extends Flyout {
 
     /**
      * 设置触发延迟
-     * @param {number} value - 触发延迟
+     * @param value - 触发延迟
      */
     set delay(value: number);
 
@@ -48,7 +48,7 @@ export default class Tooltip extends Flyout {
 
     /**
      * 设置触发模式
-     * @param {Mode} value - 触发模式
+     * @param value - 触发模式
      */
     set mode(value: Mode);
 
@@ -59,7 +59,7 @@ export default class Tooltip extends Flyout {
 
     /**
      * 设置垂直偏移量
-     * @param {number} value - 垂直偏移量
+     * @param value - 垂直偏移量
      */
     set verticalOffset(value: number);
 
@@ -70,7 +70,7 @@ export default class Tooltip extends Flyout {
 
     /**
      * 设置水平偏移量
-     * @param {number} value - 水平偏移量
+     * @param value - 水平偏移量
      */
     set horizontalOffset(value: number);
 }

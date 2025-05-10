@@ -175,6 +175,11 @@ const HTML = /* html */`
 </div>
 `;
 
+/**
+ * 信息栏组件
+ * @class
+ * @extends {Component}
+ */
 export default class InfoBar extends Component {
     /**
      * 信息栏严重性
