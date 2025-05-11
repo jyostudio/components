@@ -8,6 +8,7 @@ const STYLES = /* css */`
     position: relative;
     vertical-align: middle;
     display: inline-block;
+    min-width: 40px;
     text-decoration-line: none;
     outline-style: none;
     color: var(--colorNeutralForeground1);
@@ -25,6 +26,19 @@ const STYLES = /* css */`
 
 :host([header]) header {
     margin-bottom: var(--spacingVerticalXS);
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
+}
+
+.content {
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
 }
 
 #switch {
@@ -179,7 +193,7 @@ const STYLES = /* css */`
 
 const HTML = /* html */`
 <header></header>
-<div>
+<div class="content">
     <input id="switch" type="checkbox" />
     <label class="lblOn" for="switch"></label>
     <label class="lblOff" for="switch"></label>

@@ -1,4 +1,3 @@
-import "./acrylic.js";
 import Flyout, { FlyoutStyle } from "./flyout.js";
 
 const STYLES = /* css */`${FlyoutStyle}
@@ -43,7 +42,6 @@ const STYLES = /* css */`${FlyoutStyle}
 `;
 
 const HTML = /* html */`
-<jyo-acrylic></jyo-acrylic>
 <slot></slot>
 `;
 

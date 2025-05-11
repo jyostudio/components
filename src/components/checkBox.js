@@ -4,7 +4,10 @@ import Component from "./component.js";
 
 const STYLES = /* css */`
 :host {
+    --size: 18px;
     position: relative;
+    min-width: var(--size);
+    min-height: var(--size);
     vertical-align: middle;
     display: inline-flex;
     align-items: center;
@@ -24,7 +27,6 @@ const STYLES = /* css */`
 }
 
 span {
-    --size: 18px;
     display: inline-block;
     background-color: var(--mix-colorNeutralBackground1);
     border-radius: var(--borderRadiusSmall);
@@ -49,6 +51,10 @@ label {
     display: none;
     vertical-align: middle;
     margin-inline-start: var(--spacingHorizontalXS);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
 }
 
 :host([content]) label {

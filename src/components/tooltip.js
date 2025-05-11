@@ -1,7 +1,6 @@
 import Enum from "@jyostudio/enum";
 import overload from "@jyostudio/overload";
 import { genCSSNumberGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils.js";
-import "./acrylic.js";
 import Flyout, { FlyoutStyle } from "./flyout.js";
 
 /**
@@ -46,7 +45,6 @@ const STYLES = /* css */`${FlyoutStyle}
 `;
 
 const HTML = /* html */`
-<jyo-acrylic></jyo-acrylic>
 <div id="content">
     <slot></slot>
 </div>

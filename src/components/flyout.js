@@ -1,7 +1,6 @@
 import Enum from "@jyostudio/enum";
 import overload from "@jyostudio/overload";
 import { genEnumGetterAndSetter } from "../libs/utils.js";
-import "./acrylic.js";
 import Component from "./component.js";
 
 /**
@@ -62,7 +61,11 @@ const STYLES = /* css */`
     --position-try-options: flip-block;
     position: absolute;
     position-area: var(--position-area);
-    background-color: transparent;
+    max-height: 100vh;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+    background-color: var(--colorNeutralBackground2);
+    transition: background-color var(--durationFaster) var(--curveEasyEase);
     border-radius: var(--borderRadiusMedium);
     border: 1px solid var(--mix-colorTransparentStroke);
     color: var(--colorNeutralForeground1);
@@ -136,7 +139,6 @@ const STYLES = /* css */`
 `;
 
 const HTML = /* html */`
-<jyo-acrylic></jyo-acrylic>
 <slot></slot>
 `;
 
@@ -263,6 +265,9 @@ export default class Flyout extends Component {
                             if (value) {
                                 this.showPopover();
                                 this.setAttribute("is-open", "");
+                                requestAnimationFrame(() => {
+                                    this.shadowRoot.host.style.maxHeight = `calc(100vh - ${this.getBoundingClientRect().top}px)`;
+                                });
                             } else {
                                 this.hidePopover();
                                 this.removeAttribute("is-open");

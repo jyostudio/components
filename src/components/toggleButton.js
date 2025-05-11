@@ -31,6 +31,15 @@ const STYLES = /* css */`
     overflow: hidden;
 }
 
+.content {
+    display: inline-block;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
+}
+
 :host(:hover) {
     background-color: var(--mix-colorNeutralBackground1Hover);
     border-color: var(--mix-colorNeutralStroke1Hover);
@@ -81,7 +90,9 @@ const STYLES = /* css */`
 `;
 
 const HTML = /* html */`
-<slot>Button</slot>
+<div class="content">
+    <slot>Button</slot>
+</div>
 `;
 
 /**
