@@ -147,8 +147,8 @@ const STYLES = /* css */`
 
 .functionArea .close {
     position: relative;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     font-family: "FluentSystemIcons-Resizable";
     margin-inline-start: var(--spacingHorizontalXS);
     color: var(--colorNeutralForeground2);

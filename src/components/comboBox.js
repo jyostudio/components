@@ -1,18 +1,12 @@
 import overload from "@jyostudio/overload";
 import Component from "./component.js";
-
-/**
- * TODO:
- * 需要定义options的样式
- * 需要定义下拉框的样式
- * 需要定义下拉框的选中状态
- * 需要定义下拉框的禁用状态
- */
+import MenuFlyout from "./menuFlyout.js";
+import ComboBoxItem from "./comboBoxItem.js";
 
 const STYLES = /* css */`
 :host {
     position: relative;
-    display: inline-grid;
+    display: inline-flex;
     vertical-align: middle;
     align-items: center;
     justify-content: center;
@@ -38,6 +32,22 @@ const STYLES = /* css */`
     user-select: none;
 }
 
+.hiddenContent {
+    opacity: 0;
+}
+
+.content {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+}
+
+.hiddenContent, .content {
+    padding: 0 var(--spacingHorizontalM);
+    padding-inline-end: calc(var(--spacingHorizontalM) + 30px);
+}
+
 .dropdown {
     position: absolute;
     top: 50%;
@@ -53,30 +63,11 @@ const STYLES = /* css */`
     pointer-events: none;
 }
 
-select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    padding: 0 var(--spacingHorizontalM);
-    padding-inline-end: calc(var(--spacingHorizontalXL) + 18px);
-    height: 100%;
-    border: none;
-    background-color: transparent;
-    color: inherit;
-}
-
-option {
-    background-color: var(--mix-colorNeutralBackground1);
-}
-
-option::checkmark {
-    order: 1;
-    content: "e";
-}
-
-select:active,
-select:focus {
-    outline: none;
+.anchor {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
 :host(:hover) {
@@ -110,11 +101,14 @@ select:focus {
 `;
 
 const HTML = /* html */`
-<select>
-    <option value="1">选项1</option>
-    <option value="2">选项2</option>
-</select>
+<div class="hiddenContent"></div>
+<div class="content"></div>
 <span class="dropdown">\ue40c</span>
+<div class="anchor">
+    <jyo-menu-flyout positioning="belowStart">
+        <slot></slot>
+    </jyo-menu-flyout>
+</div>
 `;
 
 /**
@@ -128,31 +122,88 @@ export default class ComboBox extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "属性"];
+        return [...super.observedAttributes, "selected-index", "selected-item"];
     }
 
     /**
-     * 选择框元素
-     * @type {HTMLSelectElement}
+     * 隐藏内容元素
+     * @type {HTMLElement}
      */
-    #selectEl;
+    #hiddenContentEl;
+
+    /**
+     * 内容元素
+     * @type {HTMLElement}
+     */
+    #contentEl;
+
+    /**
+     * 锚点元素
+     * @type {HTMLElement}
+     */
+    #anchorEl;
+
+    /**
+     * 菜单飞出元素
+     * @type {MenuFlyout}
+     */
+    #menuFlyoutEl;
+
+    /**
+     * 选中的项
+     * @type {ComboBoxItem}
+     */
+    #selectedItem = null;
+
+    /**
+     * 选中的索引
+     * @type {Number}
+     */
+    #selectedIndex = -1;
 
     constructor() {
         super();
 
-        this.#selectEl = this.shadowRoot.querySelector("select");
+        this.#hiddenContentEl = this.shadowRoot.querySelector(".hiddenContent");
+        this.#contentEl = this.shadowRoot.querySelector(".content");
+        this.#anchorEl = this.shadowRoot.querySelector(".anchor");
+        this.#menuFlyoutEl = this.shadowRoot.querySelector("jyo-menu-flyout");
+        this.#menuFlyoutEl.anchor = this.shadowRoot.querySelector(".anchor");
 
         Object.defineProperties(this, {
-            属性: {
-                get: () => this.hasAttribute("属性"),
+            selectedItem: {
+                get: () => this.#selectedItem,
                 set: overload()
-                    .add([String], value => {
-                        this.lock("属性", () => {
-                            if (value) this.setAttribute("属性", "");
-                            else this.removeAttribute("属性");
+                    .add([[ComboBoxItem, null]], value => {
+                        if (value === this.#selectedItem) return;
+                        const oldItem = this.#selectedItem;
+                        this.#selectedItem?.removeAttribute("selected");
+                        this.#selectedItem = value;
+                        this.#selectedIndex = Array.from(this.children).indexOf(value);
+                        this.#contentEl.textContent = value?.textContent ?? "";
+                        this.dispatchCustomEvent("selectionchanged", {
+                            detail: {
+                                oldItem,
+                                newItem: value
+                            }
                         });
                     })
-                    .any(() => this.属性 = false)
+                    .any(() => this.#selectedItem = null)
+            },
+            selectedIndex: {
+                get: () => this.#selectedIndex,
+                set: overload()
+                    .add([Number], value => {
+                        if (value === this.#selectedIndex) return;
+                        this.#selectedIndex = value;
+                        const items = Array.from(this.children);
+                        if (value < 0 || value >= items.length) {
+                            this.selectedItem = null;
+                            return
+                        }
+                        this.selectedItem = items[value];
+                    })
+                    .any(() => this.selectedItem = null)
             }
         });
     }
@@ -163,8 +214,53 @@ export default class ComboBox extends Component {
     #initEvents() {
         const signal = this.abortController.signal;
 
+        let slotAbortController;
+        const slot = this.shadowRoot.querySelector("slot");
+        slot.addEventListener("slotchange", () => {
+            slotAbortController?.abort();
+            slotAbortController = new AbortController();
+            const els = slot.assignedElements().filter(el => el instanceof ComboBoxItem);
+
+            let hasNowSelected = false;
+            els.map(el => {
+                if (el === this.selectedItem) {
+                    hasNowSelected = true;
+                }
+                el.removeAttribute("selected");
+                el.addEventListener("click", () => {
+                    el.setAttribute("selected", "");
+                    this.selectedItem = el;
+                    this.#menuFlyoutEl.close();
+                }, { signal: slotAbortController.signal });
+            });
+
+            if (!els.length) return;
+            let maxLenStr = "";
+            els.forEach(el => {
+                const text = el.textContent;
+                if (text.length > maxLenStr.length) {
+                    maxLenStr = text;
+                }
+            });
+            this.#hiddenContentEl.textContent = maxLenStr;
+            if (!hasNowSelected) {
+                els[0].click();
+            }
+        }, { signal });
+
+        this.#menuFlyoutEl.addEventListener("toggle", e => {
+            if (e.newState === "open") {
+                this.#menuFlyoutEl.style.minWidth = `${this.#anchorEl.offsetWidth}px`;
+                this.setAttribute("flyout-visible", "");
+                this.dispatchCustomEvent("dropdownopened");
+            } else {
+                this.removeAttribute("flyout-visible");
+                this.dispatchCustomEvent("dropdownclosed");
+            }
+        }, { signal });
+
         this.addEventListener("click", () => {
-            this.#selectEl.click();
+            this.#menuFlyoutEl.toggle();
         }, { signal });
     }
 
@@ -173,8 +269,6 @@ export default class ComboBox extends Component {
      */
     connectedCallback() {
         super.connectedCallback?.();
-
-        // 在这里进行初始化和设置
 
         this.#initEvents();
     }

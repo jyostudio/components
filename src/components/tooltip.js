@@ -38,16 +38,10 @@ const STYLES = /* css */`${FlyoutStyle}
     width: auto;
     pointer-events: none;
 }
-
-.content {
-    position: relative;
-}
 `;
 
 const HTML = /* html */`
-<div id="content">
-    <slot></slot>
-</div>
+<slot></slot>
 `;
 
 /**
