@@ -21,5 +21,13 @@
   },
   "[html]": {
     "editor.defaultFormatter": "vscode.html-language-features"
-  }
+  },
+//   "emeraldwalk.runonsave": {
+//     "commands": [
+//         {
+//             "match": ".*", // 匹配所有文件
+//             "cmd": "npm run build" // 运行的命令
+//         }
+//     ]
+// }
 }

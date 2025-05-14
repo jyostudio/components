@@ -9,11 +9,13 @@ const STYLES = /* css */`
     display: inline-flex;
     vertical-align: middle;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
     contain: paint;
     overflow: hidden;
-    min-width: 32px;
+    min-width: 80px;
     min-height: 32px;
+    padding: 0 var(--spacingHorizontalM);
+    padding-inline-end: var(--spacingHorizontalXS);
     border: var(--strokeWidthThin) solid var(--mix-colorNeutralStroke1);
     border-bottom-color: var(--mix-colorNeutralStroke1Hover);
     border-radius: var(--borderRadiusMedium);
@@ -22,7 +24,6 @@ const STYLES = /* css */`
     font-size: var(--fontSizeBase200);
     font-weight: var(--fontWeightSemibold);
     line-height: var(--lineHeightBase200);
-    text-align: center;
     text-decoration-line: none;
     color: var(--colorNeutralForeground1);
     background-color: var(--mix-colorNeutralBackground1);
@@ -32,6 +33,13 @@ const STYLES = /* css */`
     user-select: none;
 }
 
+.hiddenContent, .content {
+    word-break: keep-all;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .hiddenContent {
     opacity: 0;
 }
@@ -39,27 +47,22 @@ const STYLES = /* css */`
 .content {
     position: absolute;
     top: 50%;
-    left: 0;
+    left: var(--spacingHorizontalM);
+    width: calc(100% - var(--spacingHorizontalM) - 42px);
     transform: translateY(-50%);
 }
 
-.hiddenContent, .content {
-    padding: 0 var(--spacingHorizontalM);
-    padding-inline-end: calc(var(--spacingHorizontalM) + 30px);
-}
-
 .dropdown {
-    position: absolute;
-    top: 50%;
-    right: var(--spacingHorizontalXS);
+    margin-inline-start: var(--spacingHorizontalS);
+    min-width: 30px;
     width: 30px;
     height: 24px;
     line-height: 24px;
     text-align: center;
-    transform: translateY(-50%);
     font-family: "FluentSystemIcons-Resizable";
     font-size: var(--fontSizeBase100);
     vertical-align: middle;
+    border-radius: var(--borderRadiusMedium);
     pointer-events: none;
 }
 
@@ -122,7 +125,7 @@ export default class ComboBox extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "selected-index", "selected-item"];
+        return [...super.observedAttributes, "selected-index", "selected-item", "is-editable"];
     }
 
     /**
@@ -179,6 +182,7 @@ export default class ComboBox extends Component {
                         const oldItem = this.#selectedItem;
                         this.#selectedItem?.removeAttribute("selected");
                         this.#selectedItem = value;
+                        this.#selectedItem?.setAttribute("selected", "");
                         this.#selectedIndex = Array.from(this.children).indexOf(value);
                         this.#contentEl.textContent = value?.textContent ?? "";
                         this.dispatchCustomEvent("selectionchanged", {
@@ -261,6 +265,21 @@ export default class ComboBox extends Component {
 
         this.addEventListener("click", () => {
             this.#menuFlyoutEl.toggle();
+        }, { signal });
+
+        this.addEventListener("keydown", e => {
+            const index = this.selectedIndex;
+            if (e.key === "ArrowDown") {
+                e.preventDefault();
+                this.selectedIndex = index + 1;
+            } else if (e.key === "ArrowUp") {
+                e.preventDefault();
+                this.selectedIndex = index - 1;
+            }
+
+            if (!this.selectedItem) {
+                this.selectedIndex = index;
+            }
         }, { signal });
     }
 
