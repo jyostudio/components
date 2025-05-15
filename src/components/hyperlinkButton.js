@@ -1,6 +1,6 @@
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
@@ -17,10 +17,10 @@ const STYLES = `
     border-color: transparent;
     padding: 0 var(--spacingHorizontalM);
     border-radius: var(--borderRadiusMedium);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -34,6 +34,15 @@ const STYLES = `
     position: absolute;
     inset: 0;
     cursor: pointer;
+}
+
+.content {
+    display: inline-block;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
 }
 
 :host(:hover) {
@@ -64,10 +73,17 @@ const STYLES = `
 }
 `;
 
-const HTML = `
-<slot>Button</slot>
+const HTML = /* html */`
+<div class="content">
+    <slot>Button</slot>
+</div>
 `;
 
+/**
+ * 超链接按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class HyperlinkButton extends Component {
     /**
      * 初始化事件
@@ -85,9 +101,9 @@ export default class HyperlinkButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        this.#initEvents();
-
         super.connectedCallback?.call(this, ...params);
+
+        this.#initEvents();
     }
 
     static {

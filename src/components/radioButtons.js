@@ -2,7 +2,7 @@ import overload from "@jyostudio/overload";
 import Component from "./component.js";
 import "./radioButton.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
@@ -11,10 +11,10 @@ const STYLES = `
     gap: var(--spacingHorizontalM);
     outline-style: none;
     color: var(--colorNeutralForeground1);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -33,11 +33,16 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <header></header>
 <slot></slot>
 `;
 
+/**
+ * 单选按钮组组件
+ * @class
+ * @extends {Component}
+ */
 export default class RadioButtons extends Component {
     /**
      * 是否支持 form 关联
@@ -187,13 +192,14 @@ export default class RadioButtons extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         if (!this.#observer) {
             this.#observer = new MutationObserver(this.#checkEls);
             this.#observer.observe(this, { childList: true });
         }
-        this.#checkEls();
 
-        super.connectedCallback?.call(this, ...params);
+        this.#checkEls();
     }
 
     /**

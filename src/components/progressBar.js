@@ -1,7 +1,7 @@
 import overload from "@jyostudio/overload";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 @keyframes indeterminate {
     0% {
         inset-inline-start: -33%;
@@ -110,19 +110,16 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="fill"></div>
 `;
 
+/**
+ * 进度条组件
+ * @class
+ * @extends {Component}
+ */
 export default class ProgressBar extends Component {
-    /**
-     * 是否支持 form 关联
-     * @returns {Boolean}
-     */
-    static get formAssociated() {
-        return true;
-    }
-
     /**
      * 观察属性
      * @returns {Array<String>}

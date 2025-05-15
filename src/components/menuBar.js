@@ -1,6 +1,6 @@
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     display: flex;
@@ -20,7 +20,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="start">
     <slot></slot>
 </div>
@@ -29,6 +29,11 @@ const HTML = `
 </div>
 `;
 
+/**
+ * 菜单栏组件
+ * @class
+ * @extends {Component}
+ */
 export default class MenuBar extends Component {
     static {
         this.registerComponent({

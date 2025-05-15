@@ -1,6 +1,6 @@
 import Enum from "@jyostudio/enum";
 import overload from "@jyostudio/overload";
-import { genEnumGetterAndSetter } from "../libs/utils.js";
+import { genEnumGetterAndSetter, waitDefine } from "../libs/utils.js";
 import Component from "./component.js";
 import "./tooltip.js";
 
@@ -50,7 +50,7 @@ class Orientation extends Enum {
  * 新增一个 Paint Worklet，用于绘制滑块的占位符
  */
 CSS?.paintWorklet?.addModule?.(function () {
-    const code = `registerPaint("jyo-slider-placeholder", class JyoSliderPlaceholder {
+    const code = /* js */`registerPaint("jyo-slider-placeholder", class JyoSliderPlaceholder {
     static get contextOptions() {
         return { alpha: true };
     }
@@ -239,7 +239,7 @@ CSS?.paintWorklet?.addModule?.(function () {
     return URL.createObjectURL(worklet);
 }());
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     --slider-thumb: 0%;
     --slider-progress: 0%;
@@ -429,12 +429,17 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="track"></div>
 <div class="thumb"></div>
 <jyo-tooltip horizontal-offset="-10px" vertical-offset="-10px" mode="manual">0</jyo-tooltip>
 `;
 
+/**
+ * 滑块组件
+ * @class
+ * @extends {Component}
+ */
 export default class Slider extends Component {
     /**
      * 刻度位置
@@ -550,7 +555,9 @@ export default class Slider extends Component {
         this.#trackEl = this.shadowRoot.querySelector(".track");
         this.#thumbEl = this.shadowRoot.querySelector(".thumb");
         this.#tooltipEl = this.shadowRoot.querySelector("jyo-tooltip");
-        this.#tooltipEl.anchor = this.#thumbEl;
+        waitDefine("jyo-tooltip").then(() => {
+            this.#tooltipEl.anchor = this.#thumbEl;
+        });
 
         Object.defineProperties(this, {
             minimum: {
@@ -869,9 +876,9 @@ export default class Slider extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        this.#initEvents();
-
         super.connectedCallback?.call(this, ...params);
+
+        this.#initEvents();
     }
 
     static {

@@ -1,7 +1,7 @@
 import overload from "@jyostudio/overload";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
@@ -9,10 +9,10 @@ const STYLES = `
     text-decoration-line: none;
     outline-style: none;
     color: var(--colorNeutralForeground1);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -104,11 +104,16 @@ label {
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
     <span></span>
     <label></label>
 `;
 
+/**
+ * 单选按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class RadioButton extends Component {
     /**
      * 是否支持 form 关联
@@ -198,9 +203,9 @@ export default class RadioButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        this.#initEvents();
-
         super.connectedCallback?.call(this, ...params);
+
+        this.#initEvents();
     }
 
     static {

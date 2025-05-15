@@ -3,18 +3,19 @@ import themeManager from "../libs/themeManager/themeManager.js";
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
     display: inline-block;
+    min-width: 40px;
     text-decoration-line: none;
     outline-style: none;
     color: var(--colorNeutralForeground1);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -25,6 +26,19 @@ const STYLES = `
 
 :host([header]) header {
     margin-bottom: var(--spacingVerticalXS);
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
+}
+
+.content {
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
+    overflow: hidden;
 }
 
 #switch {
@@ -141,11 +155,11 @@ const STYLES = `
     vertical-align: middle;
 }
 
-:host([on-content]) .lblOn {
+:host([content-on]) .lblOn {
     margin-inline-start: var(--spacingHorizontalXS);
 }
 
-:host([off-content]) .lblOff {
+:host([content-off]) .lblOff {
     margin-inline-start: var(--spacingHorizontalXS);
 }
 
@@ -177,15 +191,20 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <header></header>
-<div>
+<div class="content">
     <input id="switch" type="checkbox" />
     <label class="lblOn" for="switch"></label>
     <label class="lblOff" for="switch"></label>
 </div>
 `;
 
+/**
+ * 开关组件
+ * @class
+ * @extends {Component}
+ */
 export default class ToggleSwitch extends Component {
     /**
      * 是否支持 form 关联
@@ -200,7 +219,7 @@ export default class ToggleSwitch extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "header", "off-content", "on-content", "is-on"];
+        return [...super.observedAttributes, "header", "content-off", "content-on", "is-on"];
     }
 
     /**
@@ -245,23 +264,23 @@ export default class ToggleSwitch extends Component {
                     });
                 }).any(() => this.header = "")
             },
-            offContent: {
+            contentOff: {
                 get: () => this.#lblOffEl.textContent,
                 set: overload([String], value => {
-                    this.lock("offContent", () => {
+                    this.lock("contentOff", () => {
                         this.#lblOffEl.textContent = value;
-                        this.setAttribute("off-content", value);
+                        this.setAttribute("content-off", value);
                     });
-                }).any(() => this.offContent = "")
+                }).any(() => this.contentOff = "")
             },
-            onContent: {
+            contentOn: {
                 get: () => this.#lblOnEl.textContent,
                 set: overload([String], value => {
-                    this.lock("onContent", () => {
+                    this.lock("contentOn", () => {
                         this.#lblOnEl.textContent = value;
-                        this.setAttribute("on-content", value);
+                        this.setAttribute("content-on", value);
                     });
-                }).any(() => this.onContent = "")
+                }).any(() => this.contentOn = "")
             },
             isOn: genBooleanGetterAndSetter(this, {
                 attrName: "isOn",
@@ -296,11 +315,11 @@ export default class ToggleSwitch extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.#initEvents();
 
         this.#checkThemeConfig();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     static {

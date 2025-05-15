@@ -19,7 +19,7 @@ class InfoBarSeverity extends Enum {
     }
 }
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     display: flex;
     justify-content: space-between;
@@ -131,7 +131,7 @@ const STYLES = `
 
 .contentArea .message {
     display: block;
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     vertical-align: middle;
 }
 
@@ -142,13 +142,13 @@ const STYLES = `
 }
 
 .functionArea .actions {
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
 }
 
 .functionArea .close {
     position: relative;
-    width: 32px;
-    height: 32px;
+    width: 34px;
+    height: 34px;
     font-family: "FluentSystemIcons-Resizable";
     margin-inline-start: var(--spacingHorizontalXS);
     color: var(--colorNeutralForeground2);
@@ -159,7 +159,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="background"></div>
 <div class="contentArea">
     <div class="icon">
@@ -175,6 +175,11 @@ const HTML = `
 </div>
 `;
 
+/**
+ * 信息栏组件
+ * @class
+ * @extends {Component}
+ */
 export default class InfoBar extends Component {
     /**
      * 信息栏严重性
@@ -251,9 +256,9 @@ export default class InfoBar extends Component {
                     this.#iconInternalEl.textContent = icon;
                 }
             }),
-            isOpen: genBooleanGetterAndSetter(this, { attrName: "is-open", defaultValue: true, setValueDontRemove: true }),
-            isIconVisible: genBooleanGetterAndSetter(this, { attrName: "is-icon-visible", defaultValue: true, setValueDontRemove: true }),
-            isClosable: genBooleanGetterAndSetter(this, { attrName: "is-closable", defaultValue: true, setValueDontRemove: true })
+            isOpen: genBooleanGetterAndSetter(this, { attrName: "is-open", defaultValue: true, preserveFalseValue: true }),
+            isIconVisible: genBooleanGetterAndSetter(this, { attrName: "is-icon-visible", defaultValue: true, preserveFalseValue: true }),
+            isClosable: genBooleanGetterAndSetter(this, { attrName: "is-closable", defaultValue: true, preserveFalseValue: true })
         });
     }
 
@@ -284,11 +289,11 @@ export default class InfoBar extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.#initEvents();
 
         this.#checkThemeConfig();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     static {

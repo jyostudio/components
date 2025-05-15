@@ -1,5 +1,6 @@
 {
   "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
   },
@@ -11,6 +12,22 @@
     "vue",
     "html"
   ],
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "liveServer.settings.port": 5559
+  "liveServer.settings.port": 5559,
+  "[javascript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+  },
+//   "emeraldwalk.runonsave": {
+//     "commands": [
+//         {
+//             "match": ".*", // 匹配所有文件
+//             "cmd": "npm run build" // 运行的命令
+//         }
+//     ]
+// }
 }

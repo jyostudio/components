@@ -19,14 +19,14 @@ class PasswordRevealMode extends Enum {
     }
 }
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     display: inline-block;
     vertical-align: middle;
     min-width: 120px;
     font-family: var(--fontFamilyBase);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     color: var(--colorNeutralForeground1);
     contain: paint;
     outline: none;
@@ -122,15 +122,20 @@ input::placeholder {
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="input-wrapper">
-    <input type="password" autocomplete="off" autocapitalize="off" spellcheck="false" inputmode="none" autocomplete="off" />
+    <input type="password" autocomplete="new-password" autocapitalize="off" spellcheck="false" inputmode="none" />
     <div class="end">
         <jyo-hyperlink-button class="visible">\ue795</jyo-hyperlink-button>
     </div>
 </div>
 `;
 
+/**
+ * 密码输入框组件
+ * @class
+ * @extends {Component}
+ */
 export default class PasswordBox extends Component {
     /**
      * 是否支持 form 关联
@@ -317,11 +322,11 @@ export default class PasswordBox extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.#initEvents();
         this.#checkThemeConfig();
         this.#handleInput();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     static {

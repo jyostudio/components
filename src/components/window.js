@@ -4,7 +4,7 @@ import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import "./acrylic.js";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: absolute;
     display: block;
@@ -371,7 +371,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="window">
     <slot name="background" aria-hidden="true">
         <jyo-acrylic></jyo-acrylic>
@@ -417,6 +417,11 @@ class WindowState extends Enum {
     }
 }
 
+/**
+ * 窗口组件
+ * @class
+ * @extends {Component}
+ */
 export default class Window extends Component {
     /**
      * 观察属性
@@ -522,7 +527,7 @@ export default class Window extends Component {
     #dynamicStyle = new CSSStyleSheet();
 
     /**
-     * 父元素
+     * 获取父元素
      * @type {HTMLElement}
      */
     get #parent() {
@@ -530,7 +535,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否激活
+     * 获取当前是否为激活窗口
      * @type {Boolean}
      */
     get isActive() {
@@ -538,7 +543,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 窗口状态
+     * 获取当前窗口状态
      * @type {WindowState}
      */
     get windowState() {
@@ -550,7 +555,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否在 Native 环境中
+     * 获取当前是否在 Native 环境中
      * @type {Boolean}
      */
     get isNative() {
@@ -558,7 +563,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否显示返回按钮
+     * 获取是否显示返回按钮
      * @type {Boolean}
      */
     get showBtnBack() {
@@ -566,7 +571,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否可返回
+     * 获取是否可返回
      * @type {Boolean}
      */
     get canBack() {
@@ -574,7 +579,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否为自定义标题栏
+     * 获取是否为自定义标题栏
      * @type {Boolean}
      */
     get customTitle() {
@@ -582,7 +587,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否隐藏标题栏
+     * 获取是否隐藏标题栏
      * @type {Boolean}
      */
     get hideTitleBar() {
@@ -590,7 +595,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否可调整大小
+     * 获取是否可调整大小
      * @type {Boolean}
      */
     get canResizable() {
@@ -598,7 +603,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否可最大化
+     * 获取是否可最大化
      * @type {Boolean}
      */
     get canMaximize() {
@@ -606,7 +611,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否可最小化
+     * 获取是否可最小化
      * @type {Boolean}
      */
     get canMinimize() {
@@ -614,7 +619,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 是否可关闭
+     * 获取是否可关闭
      * @type {Boolean}
      */
     get canClose() {
@@ -862,11 +867,6 @@ export default class Window extends Component {
                 fn: (domAttrName, value) => this.#setTopmost(value)
             })
         });
-
-        this.size = { width: 640, height: 480 };
-        const index = (Window.#counter++ - 1) % 9;
-        this.left = 33 + index * 26;
-        this.top = 26 + index * 26;
     }
 
     /**
@@ -980,7 +980,7 @@ export default class Window extends Component {
 
     /**
      * 设置窗口置顶
-     * @param {Boolean} isTopmost 是否置顶
+     * @param {Boolean} isTopmost - 是否置顶
      */
     #setTopmost(isTopmost) {
         const normalIndex = Window.#normalWindows.indexOf(this);
@@ -1034,7 +1034,16 @@ export default class Window extends Component {
     /**
      * 元素被添加到 DOM 树中时调用
      */
-    connectedCallback(...params) {
+    connectedCallback() {
+        super.connectedCallback?.();
+
+        if (!this.hasInit) {
+            this.size = { width: 640, height: 480 };
+            const index = (Window.#counter++ - 1) % 9;
+            this.left = 33 + index * 26;
+            this.top = 26 + index * 26;
+        }
+
         this.setAttribute("role", "window");
 
         this.#initEvents();
@@ -1044,14 +1053,12 @@ export default class Window extends Component {
         else Window.#topmostWindows.push(this);
         Window.#resort();
         this.active();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     /**
      * 元素在 DOM 树中被删除时调用
      */
-    disconnectedCallback(...params) {
+    disconnectedCallback() {
         /**
          * 从打开窗口列表中移除
          */
@@ -1061,7 +1068,7 @@ export default class Window extends Component {
 
         this.close();
 
-        super.disconnectedCallback?.call(this, ...params);
+        super.disconnectedCallback?.();
     }
 
     /**
@@ -1167,7 +1174,7 @@ export default class Window extends Component {
     }
 
     /**
-     * 移动开始
+     * 开始移动窗口
      */
     moveBegin(...params) {
         Window.prototype.moveBegin = overload([PointerEvent], function (e) {

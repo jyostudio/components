@@ -1,7 +1,7 @@
 import Component from "./component.js";
 import Flyout from "./flyout.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
@@ -19,10 +19,10 @@ const STYLES = `
     border: var(--strokeWidthThin) solid var(--mix-colorNeutralStroke1);
     border-bottom-color: var(--mix-colorNeutralStroke1Hover);
     border-radius: var(--borderRadiusMedium);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
@@ -52,7 +52,7 @@ const STYLES = `
 .end {
     width: 32px;
     font-family: "FluentSystemIcons-Resizable";
-    font-size: var(--fontSizeBase200);
+    font-size: var(--fontSizeBase100);
     vertical-align: middle;
     text-align: center;
 }
@@ -97,7 +97,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="fnArea start" tabindex="0">
     <span>
         <slot></slot>
@@ -110,6 +110,11 @@ const HTML = `
 </div>
 `;
 
+/**
+ * 分割按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class SplitButton extends Component {
     /**
      * 开始元素
@@ -161,11 +166,11 @@ export default class SplitButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.#initEvents();
 
         Flyout.slotBinding(this, this.#endEl);
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     /**

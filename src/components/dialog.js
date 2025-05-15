@@ -3,7 +3,7 @@ import Component from "./component.js";
 import "./button.js";
 import "./divider.js";
 
-const STYLES = `
+const STYLES = /* css */`
 @keyframes fade-in {
     0% {
         opacity: 0;
@@ -44,11 +44,11 @@ const STYLES = `
     }
 }
 
-:host(:not([open])) {
+:host(:not([is-open])) {
     animation: fade-out var(--durationFaster) var(--curveEasyEase) forwards;
 }
 
-:host([open]) {
+:host([is-open]) {
     display: flex;
     animation: fade-in var(--durationFaster) var(--curveEasyEase) forwards;
 }
@@ -74,29 +74,29 @@ const STYLES = `
     border-radius: var(--borderRadiusXLarge);
     box-shadow: var(--shadow64);
     color: var(--colorNeutralForeground1);
-    font-family: var(----fontFamilyBase);
-    font-size: var(--fontSizeBase300);
-    line-height: var(--lineHeightBase300);
+    font-family: var(--fontFamilyBase);
+    font-size: var(--fontSizeBase200);
+    line-height: var(--lineHeightBase200);
     padding: var(--spacingHorizontalXL) 0;
     contain: paint;
     overflow: hidden;
     transition-duration: var(--durationFaster);
-    transition-property: scale, opacity;
+    transition-property: transform, scale, opacity;
     transition-timing-function: var(--curveEasyEase);
     touch-action: none;
 }
 
-:host(:not([open])) .dialog {
+:host(:not([is-open])) .dialog {
     animation: dialog-hide var(--durationFaster) var(--curveEasyEase) forwards;
 }
 
-:host([open]) .dialog {
+:host([is-open]) .dialog {
     animation: dialog-show var(--durationFaster) var(--curveEasyEase) forwards;
 }
 
 .title {
-    font-size: var(--fontSizeBase500);
-    line-height: var(--lineHeightBase500);
+    font-size: var(--fontSizeBase400);
+    line-height: var(--lineHeightBase400);
     font-weight: bold;
     margin-bottom: var(--spacingVerticalXS);
     padding: 0 var(--spacingHorizontalXL);
@@ -126,9 +126,11 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <div class="dialog">
-    <div class="title"></div>
+    <div class="title">
+        <slot name="title"></slot>
+    </div>
     <div class="content">
         <slot></slot>
     </div>
@@ -140,50 +142,43 @@ const HTML = `
 </div>
 `;
 
+/**
+ * 对话框组件
+ * @class
+ * @extends {Component}
+ */
 export default class Dialog extends Component {
     /**
      * 观察属性
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "title-text"];
-    }
-
-    /**
-     * 标题元素
-     * @type {HTMLElement}
-     */
-    #titleEl;
-
-    /**
-     * 是否可见
-     * @type {Boolean}
-     */
-    #isVisible = false;
-
-    /**
-     * 是否可见
-     * @type {Boolean}
-     */
-    get isVisible() {
-        return this.#isVisible;
+        return [...super.observedAttributes, "is-open"];
     }
 
     constructor() {
         super();
 
-        this.#titleEl = this.shadowRoot.querySelector(".title");
-
         Object.defineProperties(this, {
-            titleText: {
-                get: () => this.#titleEl.textContent,
-                set: overload([String], value => {
-                    this.lock("titleText", () => {
-                        this.#titleEl.textContent = value;
-                        this.setAttribute("title-text", value);
-                    });
-                }).any(() => this.titleText = "")
-            },
+            isOpen: {
+                get: () => Boolean(this.hasAttribute("is-open")) || false,
+                set: overload()
+                    .add([String], value => {
+                        this.isOpen = Boolean(value);
+                    })
+                    .add([Boolean], function (value) {
+                        this.lock("isOpen", () => {
+                            if (value) {
+                                this.open();
+                                this.setAttribute("is-open", "");
+                            } else {
+                                this.close();
+                                this.removeAttribute("is-open");
+                            }
+                        });
+                    })
+                    .any(() => this.isOpen = false)
+            }
         });
     }
 
@@ -202,24 +197,16 @@ export default class Dialog extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        this.#initEvents();
-
         super.connectedCallback?.call(this, ...params);
+
+        this.#initEvents();
     }
 
     /**
-     * DOM 元素从文档中断开时调用
-     */
-    disconnectedCallback(...params) {
-        super.disconnectedCallback?.call(this, ...params);
-    }
-
-    /**
-     * 显示
+     * 打开
      */
     open() {
-        this.setAttribute("open", "");
-        this.#isVisible = true;
+        this.isOpen = true;
         this.dispatchCustomEvent("open");
     }
 
@@ -227,21 +214,16 @@ export default class Dialog extends Component {
      * 关闭
      */
     close() {
-        this.removeAttribute("open");
-        this.#isVisible = false;
+        this.isOpen = false;
         this.dispatchCustomEvent("close");
     }
 
     /**
-     * 切换显示状态
+     * 切换打开状态
      */
     toggle() {
-        if (this.#isVisible) {
-            this.open();
-        } else {
-            this.close();
-        }
-        this.dispatchCustomEvent("toggle", { newState: this.#isVisible ? "open" : "close" });
+        this.isOpen = !this.isOpen;
+        this.dispatchCustomEvent("toggle", { newState: this.isOpen ? "open" : "close" });
     }
 
     static {
@@ -251,5 +233,3 @@ export default class Dialog extends Component {
         });
     }
 }
-
-export const FlyoutStyle = STYLES;

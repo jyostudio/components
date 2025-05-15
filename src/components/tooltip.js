@@ -1,7 +1,6 @@
 import Enum from "@jyostudio/enum";
 import overload from "@jyostudio/overload";
 import { genCSSNumberGetterAndSetter, genEnumGetterAndSetter } from "../libs/utils.js";
-import "./acrylic.js";
 import Flyout, { FlyoutStyle } from "./flyout.js";
 
 /**
@@ -17,7 +16,7 @@ class Mode extends Enum {
     }
 }
 
-const STYLES = `${FlyoutStyle}
+const STYLES = /* css */`${FlyoutStyle}
 :host {
     --block-offset: var(--spacingVerticalXS);
     --inline-offset: var(--spacingHorizontalXS);
@@ -39,19 +38,17 @@ const STYLES = `${FlyoutStyle}
     width: auto;
     pointer-events: none;
 }
-
-.content {
-    position: relative;
-}
 `;
 
-const HTML = `
-<jyo-acrylic></jyo-acrylic>
-<div id="content">
-    <slot></slot>
-</div>
+const HTML = /* html */`
+<slot></slot>
 `;
 
+/**
+ * 工具提示组件
+ * @class
+ * @extends {Flyout}
+ */
 export default class Tooltip extends Flyout {
     /**
      * 定位
@@ -158,12 +155,12 @@ export default class Tooltip extends Flyout {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         // 添加无障碍属性
         this.setAttribute("role", "tooltip");
 
         this.#initEvents();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     /**

@@ -1,7 +1,7 @@
 import { genBooleanGetterAndSetter } from "../libs/utils.js";
 import Component from "./component.js";
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     position: relative;
     vertical-align: middle;
@@ -19,15 +19,24 @@ const STYLES = `
     border-bottom-color: var(--mix-colorNeutralStroke1Hover);
     padding: 0 var(--spacingHorizontalM);
     border-radius: var(--borderRadiusMedium);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightSemibold);
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     transition-duration: var(--durationFaster);
     transition-property: background, border, color;
     transition-timing-function: var(--curveEasyEase);
     user-select: none;
     contain: paint;
+    overflow: hidden;
+}
+
+.content {
+    display: inline-block;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    word-break: keep-all;
     overflow: hidden;
 }
 
@@ -80,10 +89,17 @@ const STYLES = `
 }
 `;
 
-const HTML = `
-<slot>Button</slot>
+const HTML = /* html */`
+<div class="content">
+    <slot>Button</slot>
+</div>
 `;
 
+/**
+ * 开关按钮组件
+ * @class
+ * @extends {Component}
+ */
 export default class ToggleButton extends Component {
     /**
      * 是否支持 form 关联
@@ -124,9 +140,9 @@ export default class ToggleButton extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        this.#initEvents();
-
         super.connectedCallback?.call(this, ...params);
+
+        this.#initEvents();
     }
 
     static {

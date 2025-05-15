@@ -1,7 +1,6 @@
 import Enum from "@jyostudio/enum";
 import overload from "@jyostudio/overload";
 import { genEnumGetterAndSetter } from "../libs/utils.js";
-import "./acrylic.js";
 import Component from "./component.js";
 
 /**
@@ -31,14 +30,14 @@ class Positioning extends Enum {
  * 默认插槽元素
  * @type {Array<String>}
  */
-const DEFALUT_SLOT_ELEMENTS = [
+const DEFAULT_SLOT_ELEMENTS = [
     "JYO-MENU-FLYOUT-ITEM",
     "JYO-DROP-DOWN-BUTTON",
     "JYO-SPLIT-BUTTON",
     "JYO-TOGGLE-SPLIT-BUTTON"
 ];
 
-const STYLES = `
+const STYLES = /* css */`
 @keyframes fade-in {
     0% {
         display: initial;
@@ -62,7 +61,11 @@ const STYLES = `
     --position-try-options: flip-block;
     position: absolute;
     position-area: var(--position-area);
-    background-color: transparent;
+    max-height: 100vh;
+    overflow-x: visible !important;
+    overflow-y: auto !important;
+    background-color: var(--colorNeutralBackground2);
+    transition: background-color var(--durationFaster) var(--curveEasyEase);
     border-radius: var(--borderRadiusMedium);
     border: 1px solid var(--mix-colorTransparentStroke);
     color: var(--colorNeutralForeground1);
@@ -135,17 +138,21 @@ const STYLES = `
 }
 `;
 
-const HTML = `
-<jyo-acrylic></jyo-acrylic>
+const HTML = /* html */`
 <slot></slot>
 `;
 
+/**
+ * 飞出组件
+ * @class
+ * @extends {Component}
+ */
 export default class Flyout extends Component {
     /**
      * 计数器
      * @type {Number}
      */
-    static #counter = 0;
+    static #counter = 0n;
 
     /**
      * 定位
@@ -160,7 +167,7 @@ export default class Flyout extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "anchor", "positioning"];
+        return [...super.observedAttributes, "is-open", "anchor", "positioning"];
     }
 
     static slotBinding(...params) {
@@ -243,24 +250,32 @@ export default class Flyout extends Component {
      */
     #flyoutId = `jyo-flyout-${++Flyout.#counter}`;
 
-    /**
-     * 是否可见
-     * @type {Boolean}
-     */
-    #isVisible = false;
-
-    /**
-     * 是否可见
-     * @type {Boolean}
-     */
-    get isVisible() {
-        return this.#isVisible;
-    }
-
     constructor() {
         super();
 
         Object.defineProperties(this, {
+            isOpen: {
+                get: () => Boolean(this.hasAttribute("is-open")) || false,
+                set: overload()
+                    .add([String], value => {
+                        this.isOpen = Boolean(value);
+                    })
+                    .add([Boolean], function (value) {
+                        this.lock("isOpen", () => {
+                            if (value) {
+                                this.showPopover();
+                                this.setAttribute("is-open", "");
+                                requestAnimationFrame(() => {
+                                    this.shadowRoot.host.style.maxHeight = `calc(100vh - ${this.getBoundingClientRect().top}px)`;
+                                });
+                            } else {
+                                this.hidePopover();
+                                this.removeAttribute("is-open");
+                            }
+                        });
+                    })
+                    .any(() => this.isOpen = false)
+            },
             anchor: {
                 get: () => this.getAttribute("anchor") || "",
                 set: overload()
@@ -293,13 +308,13 @@ export default class Flyout extends Component {
         const signal = this.abortController.signal;
 
         this.addEventListener("toggle", e => {
-            this.#isVisible = e.newState === "open";
-            if (this.#isVisible) {
+            this.isOpen = e.newState === "open";
+            if (this.isOpen) {
                 this.#bindEl.setAttribute("flyout-visible", "");
             } else {
                 this.#bindEl.removeAttribute("flyout-visible");
             }
-            this.#bindEl?.dispatchCustomEvent?.("flyoutvisiblechange", { detail: { isVisible: this.#isVisible } });
+            this.#bindEl?.dispatchCustomEvent?.("flyoutvisiblechange", { detail: { isOpen: this.isOpen } });
         }, { signal });
     }
 
@@ -325,6 +340,8 @@ export default class Flyout extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.#initEvents();
 
         this.setAttribute("popover", "auto");
@@ -335,7 +352,7 @@ export default class Flyout extends Component {
         /**
          * 如果父级可以有子菜单，则设置插槽为 flyout
          */
-        if (DEFALUT_SLOT_ELEMENTS.includes(this.parentElement?.tagName)) {
+        if (DEFAULT_SLOT_ELEMENTS.includes(this.parentElement?.tagName)) {
             this.setAttribute("slot", "flyout");
         } else {
             this.removeAttribute("slot");
@@ -348,8 +365,6 @@ export default class Flyout extends Component {
                 this.positioning = parentEl.flyoutPositioning;
             }
         });
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     /**
@@ -363,14 +378,24 @@ export default class Flyout extends Component {
     }
 
     /**
-     * 切换显示/隐藏
+     * 打开
      */
-    togglePopover() {
-        if (this.#isVisible) {
-            this.hidePopover();
-        } else {
-            this.showPopover();
-        }
+    open() {
+        this.isOpen = true;
+    }
+
+    /**
+     * 关闭
+     */
+    close() {
+        this.isOpen = false;
+    }
+
+    /**
+     * 切换打开状态
+     */
+    toggle() {
+        this.isOpen = !this.isOpen;
     }
 
     static {

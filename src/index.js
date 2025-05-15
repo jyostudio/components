@@ -1,3 +1,4 @@
+/// <reference path="./index.d.ts" />
 import "./libs/globalFonts.js";
 export { default as themeManager } from "./libs/themeManager/themeManager.js";
 
@@ -21,9 +22,14 @@ export { default as HyperlinkButton } from "./components/hyperlinkButton.js";
 export { default as ToggleSwitch } from "./components/toggleSwitch.js";
 export { default as CheckBox } from "./components/checkBox.js";
 export { default as ProgressBar } from "./components/progressBar.js";
+export { default as ProgressRing } from "./components/progressRing.js";
 export { default as RadioButton } from "./components/radioButton.js";
 export { default as RadioButtons } from "./components/radioButtons.js";
 export { default as Divider } from "./components/divider.js";
 export { default as TextBox } from "./components/textBox.js";
 export { default as PasswordBox } from "./components/passwordBox.js";
+export { default as ComboBox } from "./components/comboBox.js";
+export { default as ComboBoxItem } from "./components/comboBoxItem.js";
 export { default as Dialog } from "./components/dialog.js";
+export { default as TreeView } from "./components/treeView.js";
+export { default as TreeViewItem } from "./components/treeViewItem.js";

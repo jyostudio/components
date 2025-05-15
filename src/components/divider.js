@@ -29,14 +29,14 @@ class Orientation extends Enum {
     }
 }
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     display: flex;
     contain: content;
-    font-size: var(--fontSizeBase200);
+    font-size: var(--fontSizeBase100);
     font-family: var(--fontFamilyBase);
     font-weight: var(--fontWeightRegular);
-    line-height: var(--lineHeightBase200);
+    line-height: var(--lineHeightBase100);
     color: var(--colorNeutralForeground2);
     pointer-events: none;
 }
@@ -91,10 +91,15 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <slot></slot>
 `;
 
+/**
+ * 分割线组件
+ * @class
+ * @extends {Component}
+ */
 export default class Divider extends Component {
     /**
      * 内容对其方式
@@ -123,8 +128,6 @@ export default class Divider extends Component {
     constructor() {
         super();
 
-        this.setAttribute("tabindex", "-1");
-
         Object.defineProperties(this, {
             alignContent: genEnumGetterAndSetter(this, {
                 attrName: "alignContent",
@@ -151,6 +154,15 @@ export default class Divider extends Component {
                 }
             })
         });
+    }
+
+    /**
+     * 元素被添加到 DOM 树中时调用
+     */
+    connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
+        this.setAttribute("tabindex", "-1");
     }
 
     static {

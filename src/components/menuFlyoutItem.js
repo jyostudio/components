@@ -18,7 +18,7 @@ class Type extends Enum {
     }
 }
 
-const STYLES = `
+const STYLES = /* css */`
 :host {
     --indent: 0;
     position: relative;
@@ -33,7 +33,7 @@ const STYLES = `
     color: var(--colorNeutralForeground2);
     contain: layout;
     overflow: visible;
-    font: var(--fontWeightRegular) var(--fontSizeBase300) / var(--lineHeightBase300) var(--fontFamilyBase);
+    font: var(--fontWeightRegular) var(--fontSizeBase200) / var(--lineHeightBase200) var(--fontFamilyBase);
     transition-duration: var(--durationFaster);
     transition-property: opacity;
     transition-timing-function: var(--curveEasyEase);
@@ -95,8 +95,8 @@ const STYLES = `
 
 ::slotted([slot="end"]) {
     color: var(--colorNeutralForeground3);
-    font: var(--fontWeightRegular) var(--fontSizeBase300) /
-        var(--lineHeightBase300) var(--fontFamilyBase);
+    font: var(--fontWeightRegular) var(--fontSizeBase200) /
+        var(--lineHeightBase200) var(--fontFamilyBase);
     white-space: nowrap;
 }
 
@@ -106,7 +106,7 @@ const STYLES = `
     font-family: "FluentSystemIcons-Resizable";
     width: 20px;
     height: 20px;
-    line-height: var(--lineHeightBase200);
+    line-height: var(--lineHeightBase100);
     text-align: center;
     margin-inline-start: calc(var(--indent) * -22px);
     margin-inline-end: calc((var(--indent) - 1) * 22px);
@@ -118,7 +118,7 @@ const STYLES = `
     font-family: "FluentSystemIcons-Resizable";
     display: inline-flex;
     width: 20px;
-    line-height: var(--lineHeightBase200);
+    line-height: var(--lineHeightBase100);
     text-align: center;
     margin-inline-start: -22px;
     vertical-align: middle;
@@ -170,7 +170,7 @@ const STYLES = `
 }
 `;
 
-const HTML = `
+const HTML = /* html */`
 <slot name="indicator">
     <span class="indicator">\ue3e8</span>
 </slot>
@@ -185,6 +185,11 @@ const HTML = `
 <slot name="flyout"></slot>
 `;
 
+/**
+ * 飞出菜单项组件
+ * @class
+ * @extends {Component}
+ */
 export default class MenuFlyoutItem extends Component {
     /**
      * 类型
@@ -343,11 +348,11 @@ export default class MenuFlyoutItem extends Component {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
+        super.connectedCallback?.call(this, ...params);
+
         this.#initEvents();
 
         this.#calcIndent();
-
-        super.connectedCallback?.call(this, ...params);
     }
 
     static {

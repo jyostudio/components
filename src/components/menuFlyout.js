@@ -1,7 +1,6 @@
-import "./acrylic.js";
 import Flyout, { FlyoutStyle } from "./flyout.js";
 
-const STYLES = `${FlyoutStyle}
+const STYLES = /* css */`${FlyoutStyle}
 :host(:popover-open) {
     pointer-events: auto;
 }
@@ -27,9 +26,9 @@ const STYLES = `${FlyoutStyle}
     flex-direction: column;
     filter: drop-shadow(0 0 2px var(--colorNeutralShadowAmbient)) drop-shadow(0 4px 8px var(--colorNeutralShadowKey));
     font-family: var(--fontFamilyBase);
-    font-size: var(--fontSizeBase300);
+    font-size: var(--fontSizeBase200);
     inset: unset;
-    line-height: var(--lineHeightBase300);
+    line-height: var(--lineHeightBase200);
     margin: unset;
     overflow: visible;
     padding: 2px;
@@ -42,11 +41,15 @@ const STYLES = `${FlyoutStyle}
 }
 `;
 
-const HTML = `
-<jyo-acrylic></jyo-acrylic>
+const HTML = /* html */`
 <slot></slot>
 `;
 
+/**
+ * 飞出菜单组件
+ * @class
+ * @extends {Flyout}
+ */
 export default class MenuFlyout extends Flyout {
     /**
      * 事件中止控制器
@@ -94,7 +97,7 @@ export default class MenuFlyout extends Flyout {
 
             newBindEl.addEventListener("click", e => {
                 e.stopPropagation();
-                if (this.isVisible && !e.target?.internals?.states?.has("flyout")) {
+                if (this.isOpen && !e.target?.internals?.states?.has("flyout")) {
                     this.hidePopover();
                 } else {
                     this.showPopover();
@@ -107,9 +110,9 @@ export default class MenuFlyout extends Flyout {
      * 元素被添加到 DOM 树中时调用
      */
     connectedCallback(...params) {
-        this.#initEvents();
-
         super.connectedCallback?.call(this, ...params);
+
+        this.#initEvents();
     }
 
     /**
