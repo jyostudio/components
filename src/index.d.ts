@@ -29,6 +29,5 @@ export { default as PasswordBox } from "./components/passwordBox.d.ts";
 export { default as ComboBox } from "./components/comboBox.d.ts";
 export { default as ComboBoxItem } from "./components/comboBoxItem.d.ts";
 export { default as Dialog } from "./components/dialog.d.ts";
-export { default as TreeView } from "./components/treeView.js";
-export { default as TreeViewItem } from "./components/treeViewItem.js";
-export { default as DockPanel } from "./components/dockPanel.js";
+export { default as TreeView } from "./components/treeView.d.ts";
+export { default as TreeViewItem } from "./components/treeViewItem.d.ts";
