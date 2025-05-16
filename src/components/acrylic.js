@@ -225,6 +225,7 @@ export default class Acrylic extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-acrylic",
             html: HTML,
             css: STYLES
         });

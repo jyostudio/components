@@ -108,6 +108,7 @@ export default class HyperlinkButton extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-hyperlink-button",
             html: HTML,
             css: STYLES
         });

@@ -167,6 +167,7 @@ export default class Divider extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-divider",
             html: HTML,
             css: STYLES
         });

@@ -329,6 +329,7 @@ export default class TextBox extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-text-box",
             html: HTML,
             css: STYLES
         });

@@ -172,6 +172,7 @@ export default class TreeView extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-tree-view",
             html: HTML,
             css: STYLES
         });

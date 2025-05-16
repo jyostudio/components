@@ -324,6 +324,7 @@ export default class ToggleSwitch extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-toggle-switch",
             html: HTML,
             css: STYLES
         });

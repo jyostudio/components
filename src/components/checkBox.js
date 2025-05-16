@@ -228,6 +228,7 @@ export default class CheckBox extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-check-box",
             html: HTML,
             css: STYLES
         });

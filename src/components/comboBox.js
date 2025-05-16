@@ -303,6 +303,7 @@ export default class ComboBox extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-combo-box",
             html: HTML,
             css: STYLES
         });

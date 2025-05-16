@@ -357,6 +357,7 @@ export default class MenuFlyoutItem extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-menu-flyout-item",
             html: HTML,
             css: STYLES
         });

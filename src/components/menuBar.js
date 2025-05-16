@@ -37,6 +37,7 @@ const HTML = /* html */`
 export default class MenuBar extends Component {
     static {
         this.registerComponent({
+            name: "jyo-menu-bar",
             html: HTML,
             css: STYLES
         });

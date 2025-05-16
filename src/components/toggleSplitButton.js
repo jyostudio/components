@@ -247,6 +247,7 @@ export default class ToggleSplitButton extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-toggle-split-button",
             html: HTML,
             css: STYLES
         });

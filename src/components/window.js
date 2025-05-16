@@ -1222,6 +1222,7 @@ export default class Window extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-window",
             html: HTML,
             css: STYLES
         });

@@ -147,6 +147,7 @@ export default class ToggleButton extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-toggle-button",
             html: HTML,
             css: STYLES
         });

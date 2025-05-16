@@ -298,6 +298,7 @@ export default class InfoBar extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-info-bar",
             html: HTML,
             css: STYLES
         });

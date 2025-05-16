@@ -331,6 +331,7 @@ export default class PasswordBox extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-password-box",
             html: HTML,
             css: STYLES
         });

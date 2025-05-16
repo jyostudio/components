@@ -219,6 +219,7 @@ export default class RadioButtons extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-radio-buttons",
             html: HTML,
             css: STYLES
         });

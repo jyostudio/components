@@ -184,6 +184,7 @@ export default class SplitButton extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-split-button",
             html: HTML,
             css: STYLES
         });

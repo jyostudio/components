@@ -8,7 +8,7 @@ const options = {
     format: "esm",
     keepNames: true,
     bundle: true,
-    // minify: true,
+    minify: true,
     sourcemap: true,
     metafile: true,
     target: "esnext",
