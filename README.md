@@ -10,7 +10,7 @@
 <script type="importmap">
   {
     "imports": {
-      "@jyostudio/components": "https://esm.sh/@jyostudio/components"
+      "@jyostudio/components": "https://unpkg.com/@jyostudio/components"
     }
   }
 </script>
