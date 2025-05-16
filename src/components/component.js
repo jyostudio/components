@@ -188,6 +188,7 @@ export default class Component extends HTMLElement {
             /**
              * 注册组件
              * @param {Object} options - 选项
+             * @param {String?} options.name - 组件名称
              * @param {String?} options.css - 样式表
              * @param {String?} options.html - HTML
              */
@@ -195,7 +196,7 @@ export default class Component extends HTMLElement {
                 Component.#checkObservedAttributes(this);
                 const registerName = this.name.replace(/([A-Z])/g, "-$1").toLowerCase();
                 this[OPTIONS_SYMBOL] = options;
-                customElements.define(`jyo${registerName}`, this);
+                customElements.define(options.name ?? `jyo${registerName}`, this);
             });
 
         return Component.registerComponent.apply(this, params);
@@ -378,13 +379,12 @@ export default class Component extends HTMLElement {
                  * @returns {Boolean} 是否成功触发
                  */
                 function (type, eventInitDict) {
-                    const event = new CustomEvent(type, {
+                    return this.dispatchEvent(new CustomEvent(type, {
                         bubbles: false,
                         composed: true,
                         cancelable: true,
                         ...eventInitDict
-                    });
-                    return this.dispatchEvent(event);
+                    }));
                 }
             );
 

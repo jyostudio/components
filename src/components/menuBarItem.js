@@ -139,6 +139,7 @@ export default class MenuBarItem extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-menu-bar-item",
             html: HTML,
             css: STYLES
         });

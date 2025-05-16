@@ -162,6 +162,7 @@ export default class Button extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-button",
             html: HTML,
             css: STYLES
         });

@@ -109,6 +109,7 @@ export default class DropDownButton extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-drop-down-button",
             html: HTML,
             css: STYLES
         });

@@ -228,6 +228,7 @@ export default class Dialog extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-dialog",
             html: HTML,
             css: STYLES
         });

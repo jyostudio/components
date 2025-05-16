@@ -400,6 +400,7 @@ export default class Flyout extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-flyout",
             html: HTML,
             css: STYLES
         });

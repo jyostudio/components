@@ -208,6 +208,7 @@ export default class ProgressBar extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-progress-bar",
             html: HTML,
             css: STYLES
         });

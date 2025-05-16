@@ -142,6 +142,7 @@ const HTML = /* html */`
 export default class ComboBoxItem extends Component {
     static {
         this.registerComponent({
+            name: "jyo-combo-box-item",
             html: HTML,
             css: STYLES
         });

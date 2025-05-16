@@ -153,6 +153,12 @@ export default class ComboBox extends Component {
     #menuFlyoutEl;
 
     /**
+     * 插槽的中止控制器
+     * @type {AbortController}
+     */
+    #slotAbortController;
+
+    /**
      * 选中的项
      * @type {ComboBoxItem}
      */
@@ -218,11 +224,10 @@ export default class ComboBox extends Component {
     #initEvents() {
         const signal = this.abortController.signal;
 
-        let slotAbortController;
         const slot = this.shadowRoot.querySelector("slot");
         slot.addEventListener("slotchange", () => {
-            slotAbortController?.abort();
-            slotAbortController = new AbortController();
+            this.#slotAbortController?.abort();
+            this.#slotAbortController = new AbortController();
             const els = slot.assignedElements().filter(el => el instanceof ComboBoxItem);
 
             let hasNowSelected = false;
@@ -235,7 +240,7 @@ export default class ComboBox extends Component {
                     el.setAttribute("selected", "");
                     this.selectedItem = el;
                     this.#menuFlyoutEl.close();
-                }, { signal: slotAbortController.signal });
+                }, { signal: this.#slotAbortController.signal });
             });
 
             if (!els.length) return;
@@ -296,13 +301,15 @@ export default class ComboBox extends Component {
      * 元素从 DOM 中移除时调用
      */
     disconnectedCallback() {
-        // 在这里清理事件监听器和其他资源
+        this.#slotAbortController?.abort();
+        this.#slotAbortController = null;
 
         super.disconnectedCallback?.();
     }
 
     static {
         this.registerComponent({
+            name: "jyo-combo-box",
             html: HTML,
             css: STYLES
         });

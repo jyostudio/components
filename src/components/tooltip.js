@@ -174,6 +174,7 @@ export default class Tooltip extends Flyout {
 
     static {
         this.registerComponent({
+            name: "jyo-tooltip",
             html: HTML,
             css: STYLES
         });

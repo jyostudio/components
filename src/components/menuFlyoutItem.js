@@ -273,7 +273,7 @@ export default class MenuFlyoutItem extends Component {
         // 子菜单变化时调用
         const flyoutSlot = this.shadowRoot.querySelector("slot[name='flyout']");
         flyoutSlot.addEventListener("slotchange", () => {
-            const flyout = flyoutSlot.assignedElements()?.[0];
+            using flyout = flyoutSlot.assignedElements()?.[0];
             if (flyout) {
                 flyout.setAttribute("positioning", "afterTop");
                 flyout.anchor = this;
@@ -357,6 +357,7 @@ export default class MenuFlyoutItem extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-menu-flyout-item",
             html: HTML,
             css: STYLES
         });

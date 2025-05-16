@@ -883,6 +883,7 @@ export default class Slider extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-slider",
             html: HTML,
             css: STYLES
         });

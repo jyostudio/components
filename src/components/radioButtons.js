@@ -96,18 +96,14 @@ export default class RadioButtons extends Component {
                 set: overload([String], value => this.#headerEl.textContent = value).any(() => this.header = "")
             },
             selectedIndex: {
-                get: () => {
-                    const els = Array.from(this.querySelectorAll("jyo-radio-button"));
-                    return els.findIndex(el => el.isChecked);
-                },
+                get: () => Array.from(this.querySelectorAll("jyo-radio-button")).findIndex(el => el.isChecked),
                 set: overload()
                     .add([String], value => {
                         this.selectedIndex = Number(value);
                     })
                     .add([Number], index => {
                         this.lock("selectedIndex", () => {
-                            const els = Array.from(this.querySelectorAll("jyo-radio-button"));
-                            const el = els[index];
+                            using el = Array.from(this.querySelectorAll("jyo-radio-button"))[index];
 
                             if (el) {
                                 el.isChecked = true;
@@ -119,27 +115,21 @@ export default class RadioButtons extends Component {
                         });
                     })
                     .any(() => {
-                        const els = Array.from(this.querySelectorAll("jyo-radio-button"));
-                        els.forEach(el => el.isChecked = false);
+                        Array.from(this.querySelectorAll("jyo-radio-button")).forEach(el => el.isChecked = false);
                         this.setAttribute("selected-index", "-1");
                     })
             },
             selectedItem: {
-                get: () => {
-                    const els = Array.from(this.querySelectorAll("jyo-radio-button"));
-                    return els.find(el => el.isChecked) ?? null;
-                },
+                get: () => Array.from(this.querySelectorAll("jyo-radio-button")).find(el => el.isChecked) ?? null,
                 set: overload([Object], value => {
-                    const els = Array.from(this.querySelectorAll("jyo-radio-button"));
-                    const el = els.find(el => el === value);
+                    using el = Array.from(this.querySelectorAll("jyo-radio-button")).find(el => el === value);
 
                     if (el) {
                         el.isChecked = true;
                     }
                     this.selectedIndex = this.selectedIndex;
                 }).any(() => {
-                    const els = Array.from(this.querySelectorAll("jyo-radio-button"));
-                    els.forEach(el => el.isChecked = false);
+                    Array.from(this.querySelectorAll("jyo-radio-button")).forEach(el => el.isChecked = false);
                     this.selectedIndex = this.selectedIndex;
                 })
             },
@@ -167,14 +157,14 @@ export default class RadioButtons extends Component {
 
         const els = Array.from(this.querySelectorAll("jyo-radio-button"));
 
-        for (const el of els) {
+        for (using el of els) {
             if (!this.#bindEls.includes(el)) {
                 this.#bindEls.push(el);
                 el.addEventListener("checked", this.#checkedBindFn);
             }
         }
 
-        for (const el of this.#bindEls) {
+        for (using el of this.#bindEls) {
             if (!els.includes(el)) {
                 el.removeEventListener("checked", this.#checkedBindFn);
                 this.#bindEls.splice(this.#bindEls.indexOf(el), 1);
@@ -219,6 +209,7 @@ export default class RadioButtons extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-radio-buttons",
             html: HTML,
             css: STYLES
         });

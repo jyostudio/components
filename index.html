@@ -42,18 +42,18 @@
 
     console.dir(module);
 
-    customElements.whenDefined("jyo-button").then(() => {
-      const btn = document.getElementById("btnOpenDialog");
-      btn.addEventListener("click", () => {
-        const dialog = document.querySelector("jyo-dialog");
-        dialog.isOpen = true;
-      });
-    });
+    // customElements.whenDefined("jyo-button").then(() => {
+    //   const btn = document.getElementById("btnOpenDialog");
+    //   btn.addEventListener("click", () => {
+    //     const dialog = document.querySelector("jyo-dialog");
+    //     dialog.isOpen = true;
+    //   });
+    // });
   </script>
 </head>
 
 <body>
-  <jyo-window location="center">
+  <jyo-window size="{width: 640, height: 480}" location="center">
     <div slot="title">测试窗口1</div>
     <jyo-menu-bar>
       <jyo-menu-bar-item>
@@ -209,7 +209,7 @@
     <div slot="title">置顶窗口2</div>
   </jyo-window> -->
 
-  <jyo-window size="{width: 640, height: 480}">
+  <jyo-window size="{width: 400, height: 480}">
     <div slot="title">测试窗口2</div>
     <jyo-text-box placeholder="请输入账号"></jyo-text-box><br /><br />
     <jyo-password-box placeholder="请输入密码"></jyo-password-box><br /><br />

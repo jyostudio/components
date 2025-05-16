@@ -193,6 +193,7 @@ export default class ProgressRing extends Component {
 
     static {
         this.registerComponent({
+            name: "jyo-progress-ring",
             html: HTML,
             css: STYLES
         });
