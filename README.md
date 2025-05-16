@@ -4,13 +4,16 @@
 
 ## 引用
 
-浏览器
+浏览器  
+
+请使用 Chrome 134 或 Edge 134 及以上版本。  
+不支持 Firefox 或 Safari，除非他们N年后（极有可能是3年后）支持了异步、同步显示资源释放标准。  
 
 ```HTML
 <script type="importmap">
   {
     "imports": {
-      "@jyostudio/components": "https://unpkg.com/@jyostudio/components"
+      "@jyostudio/components": "https://esm.sh/@jyostudio/components"
     }
   }
 </script>

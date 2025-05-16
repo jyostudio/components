@@ -379,13 +379,12 @@ export default class Component extends HTMLElement {
                  * @returns {Boolean} 是否成功触发
                  */
                 function (type, eventInitDict) {
-                    const event = new CustomEvent(type, {
+                    return this.dispatchEvent(new CustomEvent(type, {
                         bubbles: false,
                         composed: true,
                         cancelable: true,
                         ...eventInitDict
-                    });
-                    return this.dispatchEvent(event);
+                    }));
                 }
             );
 

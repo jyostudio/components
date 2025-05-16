@@ -1238,7 +1238,7 @@ export default class Window extends Component {
         document.addEventListener(
             "pointermove",
             e => {
-                const window = Window.#activeWindow;
+                using window = Window.#activeWindow;
                 if (!window) return;
 
                 const { clientWidth, clientHeight } = document.body;
