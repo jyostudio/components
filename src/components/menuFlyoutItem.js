@@ -65,11 +65,6 @@ const STYLES = /* css */`
     color: var(--colorNeutralForegroundDisabled);
 }
 
-:host(:focus-visible) {
-    border-radius: var(--borderRadiusMedium);
-    outline: 2px solid var(--mix-colorStrokeFocus2);
-}
-
 :host([data-indent="1"]) {
     --indent: 1;
     padding-inline-start: 24px;

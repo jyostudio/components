@@ -61,12 +61,6 @@ input[type="search"], input[type="text"] {
     border-radius: 0;
 }
 
-:host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 @media (prefers-reduced-motion: reduce) {
     * {
         transition-duration: 0s !important;
@@ -311,9 +305,7 @@ export default class Component extends HTMLElement {
 
         themeManager.link(this.shadowRoot);
 
-        if (!this.shadowRoot.host.getAttribute("tabindex")) {
-            this.shadowRoot.host.tabIndex = 0;
-        }
+        this.shadowRoot.host.tabIndex = -1;
 
         requestAnimationFrame(() => {
             this.#hasInit = true;

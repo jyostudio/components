@@ -67,12 +67,6 @@ const STYLES = /* css */`
     border-color: var(--colorCompoundBrandStroke);
 }
 
-:host(:focus-visible) .window {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
-}
-
 .window .titleBar {
     position: relative;
     width: 100%;
@@ -239,12 +233,6 @@ const STYLES = /* css */`
     color: var(--colorBrandBackgroundInverted);
 }
 
-.window .titleBar .titleActions .action:focus-visible {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 .window .titleBar .titleActions .action.actionRestore {
     display: none;
 }
@@ -390,10 +378,10 @@ const HTML = /* html */`
             </div>
         </div>
         <div class="titleActions">
-            <button tabindex="0" type="button" title="最小化" class="action actionMin">\uea01</button>
-            <button tabindex="0" type="button" title="最大化" class="action actionMax">\ueac1</button>
-            <button tabindex="0" type="button" title="还原" class="action actionRestore">\uef3f</button>
-            <button tabindex="0" type="button" title="关闭" class="action actionClose">\ue5fd</button>
+            <button type="button" title="最小化" class="action actionMin">\uea01</button>
+            <button type="button" title="最大化" class="action actionMax">\ueac1</button>
+            <button type="button" title="还原" class="action actionRestore">\uef3f</button>
+            <button type="button" title="关闭" class="action actionClose">\ue5fd</button>
         </div>
     </div>
     <div class="content">

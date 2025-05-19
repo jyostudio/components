@@ -42,13 +42,13 @@
 
     console.dir(module);
 
-    // customElements.whenDefined("jyo-button").then(() => {
-    //   const btn = document.getElementById("btnOpenDialog");
-    //   btn.addEventListener("click", () => {
-    //     const dialog = document.querySelector("jyo-dialog");
-    //     dialog.isOpen = true;
-    //   });
-    // });
+    customElements.whenDefined("jyo-button").then(() => {
+      const btn = document.getElementById("btnOpenDialog");
+      btn.addEventListener("click", () => {
+        const dialog = document.querySelector("jyo-dialog");
+        dialog.isOpen = true;
+      });
+    });
   </script>
 </head>
 

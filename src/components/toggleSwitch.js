@@ -145,12 +145,6 @@ const STYLES = /* css */`
     background: var(--colorNeutralForegroundDisabled) !important;
 }
 
-#switch:focus-visible {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 .lblOn, .lblOff {
     vertical-align: middle;
 }
@@ -177,12 +171,6 @@ const STYLES = /* css */`
 
 :host(:not([is-on])) .lblOff {
     display: inline-block;
-}
-
-:host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
 }
 
 :host(:disabled), :host([disabled]) {

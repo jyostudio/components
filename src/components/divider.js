@@ -161,8 +161,6 @@ export default class Divider extends Component {
      */
     connectedCallback(...params) {
         super.connectedCallback?.call(this, ...params);
-
-        this.setAttribute("tabindex", "-1");
     }
 
     static {
