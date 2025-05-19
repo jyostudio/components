@@ -224,7 +224,7 @@ export default class MenuFlyoutItem extends Component {
                                     const groupName = this.getAttribute("group-name");
                                     let query = "jyo-menu-flyout-item[type=\"radio\"]";
                                     query += groupName ? `[group-name="${groupName}"]` : ":not([group-name])";
-                                    this.parentElement.querySelectorAll(query).forEach(el => {
+                                    this.parentElement?.querySelectorAll(query).forEach(el => {
                                         el.checked = false;
                                     });
                                 }
@@ -297,7 +297,7 @@ export default class MenuFlyoutItem extends Component {
 
         // 鼠标进入时调用
         this.addEventListener("pointerenter", () => {
-            this.parentElement.querySelectorAll("jyo-menu-flyout-item").forEach(
+            this.parentElement?.querySelectorAll("jyo-menu-flyout-item").forEach(
                 /**
                  * @param {MenuFlyoutItem} item
                  */

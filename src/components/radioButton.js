@@ -167,9 +167,7 @@ export default class RadioButton extends Component {
                     .add([Boolean], value => {
                         if (value) {
                             if (!this.isChecked) {
-                                this.parentElement.querySelectorAll("jyo-radio-button").forEach(radioButton => {
-                                    radioButton.isChecked = false;
-                                });
+                                this.parentElement?.querySelectorAll("jyo-radio-button").forEach(radioButton => radioButton.isChecked = false);
                                 this.setAttribute("is-checked", "");
                                 this.dispatchCustomEvent("checked");
                             }

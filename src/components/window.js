@@ -1216,11 +1216,7 @@ export default class Window extends Component {
         });
 
         // 自动设置位置和尺寸
-        globalThis.addEventListener("resize", () => {
-            Window.#openWindows.forEach(window => {
-                window.#convergeLocation();
-            });
-        });
+        globalThis.addEventListener("resize", () => Window.#openWindows.forEach(window => window.#convergeLocation()));
 
         // 指针移动处理函数
         document.addEventListener(

@@ -137,9 +137,7 @@ export default class SplitButton extends Component {
     #initEvents() {
         const signal = this.abortController.signal;
 
-        this.#endEl.addEventListener("click", (e) => {
-            e.stopPropagation();
-        }, { signal });
+        this.#endEl.addEventListener("click", (e) => e.stopPropagation(), { signal });
 
         [this.#startEl, this.#endEl].forEach(el => {
             el.addEventListener("keydown", e => {

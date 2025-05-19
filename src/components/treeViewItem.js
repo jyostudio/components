@@ -193,9 +193,7 @@ export default class TreeViewItem extends Component {
         this.#childrenEl = this.shadowRoot.querySelector(".children");
         this.#childrenSlotEl = this.shadowRoot.querySelector("#children");
 
-        this.shadowRoot.querySelectorAll("*").forEach(el => {
-            el[TreeViewItem.#refSymbol] = this;
-        });
+        this.shadowRoot.querySelectorAll("*").forEach(el => el[TreeViewItem.#refSymbol] = this);
 
         Object.defineProperties(this, {
             text: {
@@ -246,9 +244,7 @@ export default class TreeViewItem extends Component {
         this.#checkboxEl.addEventListener("checked", () => {
             this.#updateParentCheckboxState();
             if (this.internals.states.has("has-children")) {
-                this.#allChildTreeViewItems.forEach(child => {
-                    child.#checkboxEl.isChecked = true;
-                });
+                this.#allChildTreeViewItems.forEach(child => child.#checkboxEl.isChecked = true);
             }
             this.dispatchCustomEvent("active", { bubbles: true });
         }, { signal });
@@ -262,9 +258,7 @@ export default class TreeViewItem extends Component {
         this.#checkboxEl.addEventListener("unchecked", () => {
             this.#updateParentCheckboxState();
             if (this.internals.states.has("has-children")) {
-                this.#allChildTreeViewItems.forEach(child => {
-                    child.#checkboxEl.isChecked = false;
-                });
+                this.#allChildTreeViewItems.forEach(child => child.#checkboxEl.isChecked = false);
             }
             this.dispatchCustomEvent("inactive", { bubbles: true });
         }, { signal });

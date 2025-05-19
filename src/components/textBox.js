@@ -63,7 +63,7 @@ const STYLES = /* css */`
 
 input {
     flex: 1;
-    max-width: 100%;
+    max-width: calc(100% - 40px);
     height: 100%;
     border: none;
     outline: none;
@@ -92,7 +92,7 @@ input::placeholder {
     display: none;
     width: 16px;
     height: 20px;
-    min-width: auto;
+    min-width: fit-content;
     min-height: auto;
     font-family: "FluentSystemIcons-Resizable";
     margin-inline-start: var(--spacingHorizontalXS);
@@ -266,7 +266,7 @@ export default class TextBox extends Component {
         // 输入事件处理
         this.#inputEl.addEventListener("input", () => {
             this.value = this.#inputEl.value;
-            if (this.#inputEl.offsetWidth < this.#inputEl.scrollWidth) {
+            if (this.#inputEl.value.length) {
                 this.#closeEl.style.display = "inline-flex";
             } else {
                 this.#closeEl.style.display = "none";
@@ -295,6 +295,7 @@ export default class TextBox extends Component {
         this.#closeEl.addEventListener("click", () => {
             this.value = "";
             this.#closeEl.style.display = "none";
+            this.#inputEl.style.maxWidth = "100%";
             this.dispatchCustomEvent("clear");
         }, { signal });
 
@@ -307,6 +308,7 @@ export default class TextBox extends Component {
      */
     #checkShowSearch() {
         this.#searchEl.style.display = this.mode === Mode.search && this.value.length ? "inline-flex" : "none";
+        this.#inputEl.style.maxWidth = this.mode === Mode.search ? "calc(100% - 80px)" : "calc(100% - 40px)";
     }
 
     /**

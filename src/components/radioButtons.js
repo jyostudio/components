@@ -97,7 +97,7 @@ export default class RadioButtons extends Component {
                     })
                     .add([Number], index => {
                         this.lock("selectedIndex", () => {
-                            using el = Array.from(this.querySelectorAll("jyo-radio-button"))[index];
+                            using el = this.querySelectorAll("jyo-radio-button")[index];
 
                             if (el) {
                                 el.isChecked = true;
@@ -109,7 +109,7 @@ export default class RadioButtons extends Component {
                         });
                     })
                     .any(() => {
-                        Array.from(this.querySelectorAll("jyo-radio-button")).forEach(el => el.isChecked = false);
+                        this.querySelectorAll("jyo-radio-button").forEach(el => el.isChecked = false);
                         this.setAttribute("selected-index", "-1");
                     })
             },

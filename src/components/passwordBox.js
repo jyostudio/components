@@ -61,7 +61,7 @@ const STYLES = /* css */`
 
 input {
     flex: 1;
-    max-width: 100%;
+    max-width: calc(100% - 40px);
     height: 100%;
     border: none;
     outline: none;
@@ -95,7 +95,7 @@ input::placeholder {
     display: none;
     width: 16px;
     height: 20px;
-    min-width: auto;
+    min-width: fit-content;
     min-height: auto;
     font-family: "FluentSystemIcons-Resizable";
     margin-inline-start: var(--spacingHorizontalXS);
