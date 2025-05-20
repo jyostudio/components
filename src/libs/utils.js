@@ -39,7 +39,7 @@ function withLock(self, attrName, callback) {
  * 生成枚举类型的 getter 和 setter
  * @param {HTMLElement} self - 元素
  * @param {Object} options - 选项
- * @param {String} options.attrName - 属性名称
+ * @param {String} options.attrName - 属性名称（驼峰）
  * @param {Object} options.enumClass - 枚举类
  * @param {String} options.defaultValue - 默认值
  * @param {Boolean} options.isSetCssVar - 是否设置 CSS 变量
@@ -58,12 +58,12 @@ export function genEnumGetterAndSetter(self, { attrName, enumClass, defaultValue
                     if (validValue) {
                         self.setAttribute(domAttrName, validValue);
                         isSetCssVar && setCssVar(self, domAttrName, validValue);
-                        fn && fn(domAttrName, validValue);
+                        fn?.(domAttrName, validValue);
                     } else {
                         requestAnimationFrame(() => {
                             self.removeAttribute(domAttrName);
                             isSetCssVar && setCssVar(self, domAttrName, null);
-                            fn && fn(null);
+                            fn?.(null);
                         });
                     }
                 });
@@ -78,7 +78,7 @@ export function genEnumGetterAndSetter(self, { attrName, enumClass, defaultValue
  * 生成 CSS 数值类型的 getter 和 setter
  * @param {HTMLElement} self - 元素
  * @param {Object} options - 选项
- * @param {String} options.attrName - 属性名称
+ * @param {String} options.attrName - 属性名称（驼峰）
  * @param {String} options.defaultValue - 默认值
  * @param {Boolean} options.isSetCssVar - 是否设置 CSS 变量
  * @param {Function} options.fn - 回调函数
@@ -97,7 +97,7 @@ export function genCSSNumberGetterAndSetter(self, { attrName, defaultValue = "0"
                     }
                     self.setAttribute(domAttrName, value);
                     isSetCssVar && setCssVar(self, domAttrName, value);
-                    fn && fn(domAttrName, value);
+                    fn?.(domAttrName, value);
                 });
             })
             .add([Number], value => self[attrName] = `${value}px`)
@@ -109,7 +109,7 @@ export function genCSSNumberGetterAndSetter(self, { attrName, defaultValue = "0"
  * 生成布尔类型的 getter 和 setter
  * @param {HTMLElement} self - 元素
  * @param {Object} options - 选项
- * @param {String} options.attrName - 属性名称
+ * @param {String} options.attrName - 属性名称（驼峰）
  * @param {Boolean} options.preserveFalseValue - 是否设置值但不移除属性
  * @param {Boolean} options.defaultValue - 默认值
  * @param {Function} options.fn - 回调函数
@@ -127,7 +127,7 @@ export function genBooleanGetterAndSetter(self, { attrName, preserveFalseValue =
                     } else {
                         preserveFalseValue ? self.setAttribute(domAttrName, "false") : self.removeAttribute(domAttrName);
                     }
-                    fn && fn(domAttrName, value);
+                    fn?.(domAttrName, value);
                 });
             })
             .add([[Number, String]], () => self[attrName] = true)

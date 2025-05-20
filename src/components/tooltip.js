@@ -121,17 +121,14 @@ export default class Tooltip extends Flyout {
             const signal = this.#eventAbortController.signal;
             let timer;
 
-            const showEvents = ["pointerenter", "touchstart"];
-            const hideEvents = ["pointerleave", "touchend", "pointerdown"];
-
-            showEvents.forEach(eventName => {
+            ["pointerenter", "touchstart"].forEach(eventName => {
                 el.addEventListener(eventName, () => {
                     clearTimeout(timer);
                     timer = setTimeout(() => this.showPopover(), this.delay);
                 }, { signal });
             });
 
-            hideEvents.forEach(eventName => {
+            ["pointerleave", "touchend", "pointerdown"].forEach(eventName => {
                 el.addEventListener(eventName, () => {
                     clearTimeout(timer);
                     this.hidePopover();

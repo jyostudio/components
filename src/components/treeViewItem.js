@@ -101,12 +101,6 @@ const STYLES = /* css */`
     transform: rotate(0);
 }
 
-:host(:focus-visible) .item {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 :host(:disabled) .item, :host([disabled]) .item {
     background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
     border-color: var(--mix-colorNeutralStrokeDisabled) !important;
@@ -199,9 +193,7 @@ export default class TreeViewItem extends Component {
         this.#childrenEl = this.shadowRoot.querySelector(".children");
         this.#childrenSlotEl = this.shadowRoot.querySelector("#children");
 
-        this.shadowRoot.querySelectorAll("*").forEach(el => {
-            el[TreeViewItem.#refSymbol] = this;
-        });
+        this.shadowRoot.querySelectorAll("*").forEach(el => el[TreeViewItem.#refSymbol] = this);
 
         Object.defineProperties(this, {
             text: {
@@ -214,7 +206,7 @@ export default class TreeViewItem extends Component {
                 }).any(() => this.text = "")
             },
             isExpanded: genBooleanGetterAndSetter(this, {
-                attrName: "is-expanded",
+                attrName: "isExpanded",
                 fn: (attrName, value) => {
                     if (value) {
                         this.#childrenEl.style.display = "block";
@@ -252,9 +244,7 @@ export default class TreeViewItem extends Component {
         this.#checkboxEl.addEventListener("checked", () => {
             this.#updateParentCheckboxState();
             if (this.internals.states.has("has-children")) {
-                this.#allChildTreeViewItems.forEach(child => {
-                    child.#checkboxEl.isChecked = true;
-                });
+                this.#allChildTreeViewItems.forEach(child => child.#checkboxEl.isChecked = true);
             }
             this.dispatchCustomEvent("active", { bubbles: true });
         }, { signal });
@@ -268,9 +258,7 @@ export default class TreeViewItem extends Component {
         this.#checkboxEl.addEventListener("unchecked", () => {
             this.#updateParentCheckboxState();
             if (this.internals.states.has("has-children")) {
-                this.#allChildTreeViewItems.forEach(child => {
-                    child.#checkboxEl.isChecked = false;
-                });
+                this.#allChildTreeViewItems.forEach(child => child.#checkboxEl.isChecked = false);
             }
             this.dispatchCustomEvent("inactive", { bubbles: true });
         }, { signal });

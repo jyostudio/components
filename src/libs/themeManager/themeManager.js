@@ -812,9 +812,7 @@ export default new class ThemeManager extends EventTarget {
                  * 断开所有链接
                  */
                 function () {
-                    this.#linkedRoots.forEach(root => {
-                        this.unlink(root);
-                    });
+                    this.#linkedRoots.forEach(root => this.unlink(root));
                     this.#linkedRoots.clear();
                 }
             );

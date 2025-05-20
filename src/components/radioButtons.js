@@ -21,12 +21,6 @@ const STYLES = /* css */`
     user-select: none;
 }
 
-:host(:focus-visible) {
-    border-color: var(--colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
-}
-
 :host(:disabled), :host([disabled]) {
     color: var(--colorNeutralForegroundDisabled) !important;
     pointer-events: none !important;
@@ -103,7 +97,7 @@ export default class RadioButtons extends Component {
                     })
                     .add([Number], index => {
                         this.lock("selectedIndex", () => {
-                            using el = Array.from(this.querySelectorAll("jyo-radio-button"))[index];
+                            using el = this.querySelectorAll("jyo-radio-button")[index];
 
                             if (el) {
                                 el.isChecked = true;
@@ -115,7 +109,7 @@ export default class RadioButtons extends Component {
                         });
                     })
                     .any(() => {
-                        Array.from(this.querySelectorAll("jyo-radio-button")).forEach(el => el.isChecked = false);
+                        this.querySelectorAll("jyo-radio-button").forEach(el => el.isChecked = false);
                         this.setAttribute("selected-index", "-1");
                     })
             },

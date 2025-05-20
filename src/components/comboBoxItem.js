@@ -58,11 +58,6 @@ const STYLES = /* css */`
     color: var(--colorNeutralForegroundDisabled);
 }
 
-:host(:focus-visible) {
-    border-radius: var(--borderRadiusMedium);
-    outline: 2px solid var(--mix-colorStrokeFocus2);
-}
-
 .content {
     white-space: nowrap;
     flex-grow: 1;

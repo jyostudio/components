@@ -95,4 +95,15 @@ export default class TextBox extends Component {
      * @param value - 输入框的模式
      */
     set mode(value: Mode);
+
+    /**
+     * 禁用功能区
+     */
+    get disableFunction(): boolean;
+
+    /**
+     * 设置禁用功能区
+     * @param value - 禁用功能区
+     */
+    set disableFunction(value: boolean);
 }

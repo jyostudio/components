@@ -77,12 +77,6 @@ label {
     margin-inline-start: var(--spacingHorizontalXS);
 }
 
-:host(:focus-visible) {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
-}
-
 :host(:disabled), :host([disabled]) {
     color: var(--mix-colorNeutralForegroundDisabled) !important;
     pointer-events: none !important;
@@ -173,9 +167,7 @@ export default class RadioButton extends Component {
                     .add([Boolean], value => {
                         if (value) {
                             if (!this.isChecked) {
-                                this.parentElement.querySelectorAll("jyo-radio-button").forEach(radioButton => {
-                                    radioButton.isChecked = false;
-                                });
+                                this.parentElement?.querySelectorAll("jyo-radio-button").forEach(radioButton => radioButton.isChecked = false);
                                 this.setAttribute("is-checked", "");
                                 this.dispatchCustomEvent("checked");
                             }

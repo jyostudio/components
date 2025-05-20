@@ -71,18 +71,6 @@ const STYLES = /* css */`
     outline-style: none;
 }
 
-.fnArea:focus-visible {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
-:host(:focus-visible) {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 :host(:disabled), :host([disabled]), :host(:disabled) .fnArea, :host([disabled]) .fnArea {
     background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
     border-color: var(--mix-colorNeutralStrokeDisabled) !important;
@@ -98,13 +86,13 @@ const STYLES = /* css */`
 `;
 
 const HTML = /* html */`
-<div class="fnArea start" tabindex="0">
+<div class="fnArea start">
     <span>
         <slot></slot>
     </span>
 </div>
 <div class="divider"></div>
-<div class="fnArea end" tabindex="0">
+<div class="fnArea end">
     <span>\ue40c</span>
     <slot name="flyout"></slot>
 </div>
@@ -149,9 +137,7 @@ export default class SplitButton extends Component {
     #initEvents() {
         const signal = this.abortController.signal;
 
-        this.#endEl.addEventListener("click", (e) => {
-            e.stopPropagation();
-        }, { signal });
+        this.#endEl.addEventListener("click", (e) => e.stopPropagation(), { signal });
 
         [this.#startEl, this.#endEl].forEach(el => {
             el.addEventListener("keydown", e => {

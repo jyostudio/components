@@ -40,12 +40,6 @@ const STYLES = /* css */`
     overflow-y: auto;
 }
 
-:host(:focus-visible) {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 :host(:disabled), :host([disabled]) {
     background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
     border-color: var(--mix-colorNeutralStrokeDisabled) !important;
@@ -88,14 +82,12 @@ export default class TreeView extends Component {
 
         Object.defineProperties(this, {
             treeViewSelectionMode: genEnumGetterAndSetter(this, {
-                attrName: "tree-view-selection-mode",
+                attrName: "treeViewSelectionMode",
                 enumClass: TreeViewSelectionMode,
                 defaultValue: TreeViewSelectionMode.single,
                 fn: (attrName, value) => {
                     this.#changeTreeViewItem(value, this.shadowRoot.querySelector("slot"));
-                    this.#activeList.forEach(item => {
-                        item.internals.states.delete("active");
-                    });
+                    this.#activeList.forEach(item => item.internals.states.delete("active"));
                     this.#activeList.clear();
                 }
             })
@@ -155,8 +147,9 @@ export default class TreeView extends Component {
                 }
             }
 
-            if (child.shadowRoot.querySelector("slot")) {
-                this.#changeTreeViewItem(value, child.shadowRoot.querySelector("slot"));
+            const slot = child.shadowRoot.querySelector("slot");
+            if (slot) {
+                this.#changeTreeViewItem(value, slot);
             }
         });
     }

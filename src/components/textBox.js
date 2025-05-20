@@ -63,7 +63,7 @@ const STYLES = /* css */`
 
 input {
     flex: 1;
-    max-width: 100%;
+    max-width: calc(100% - 40px);
     height: 100%;
     border: none;
     outline: none;
@@ -92,7 +92,7 @@ input::placeholder {
     display: none;
     width: 16px;
     height: 20px;
-    min-width: auto;
+    min-width: fit-content;
     min-height: auto;
     font-family: "FluentSystemIcons-Resizable";
     margin-inline-start: var(--spacingHorizontalXS);
@@ -156,7 +156,7 @@ export default class TextBox extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "value", "placeholder", "disabled", "readonly", "maxlength", "mode"];
+        return [...super.observedAttributes, "value", "placeholder", "disabled", "readonly", "maxlength", "mode", "disable-function"];
     }
 
     /**
@@ -249,8 +249,10 @@ export default class TextBox extends Component {
                     this.#inputEl.type = this.mode.valString;
                     this.#inputEl.inputMode = this.mode.valString;
                     this.#checkShowSearch();
+                    this.#handleInput();
                 }
-            })
+            }),
+            disableFunction: genBooleanGetterAndSetter(this, { attrName: "disableFunction", defaultValue: false, fn: () => this.#handleInput() }),
         });
     }
 
@@ -265,12 +267,7 @@ export default class TextBox extends Component {
 
         // 输入事件处理
         this.#inputEl.addEventListener("input", () => {
-            this.value = this.#inputEl.value;
-            if (this.#inputEl.offsetWidth < this.#inputEl.scrollWidth) {
-                this.#closeEl.style.display = "inline-flex";
-            } else {
-                this.#closeEl.style.display = "none";
-            }
+            this.#handleInput();
             this.dispatchCustomEvent("input");
         }, { signal });
 
@@ -295,6 +292,7 @@ export default class TextBox extends Component {
         this.#closeEl.addEventListener("click", () => {
             this.value = "";
             this.#closeEl.style.display = "none";
+            this.#inputEl.style.maxWidth = "100%";
             this.dispatchCustomEvent("clear");
         }, { signal });
 
@@ -303,10 +301,31 @@ export default class TextBox extends Component {
     }
 
     /**
+     * 处理输入事件
+     */
+    #handleInput() {
+        this.value = this.#inputEl.value;
+        if (this.#inputEl.value.length) {
+            this.#closeEl.style.display = "inline-flex";
+        } else {
+            this.#closeEl.style.display = "none";
+        }
+
+        if (this.disableFunction) {
+            this.#searchEl.style.display = "none";
+            this.#closeEl.style.display = "none";
+            this.#inputEl.style.maxWidth = "100%";
+        } else {
+            this.#checkShowSearch();
+        }
+    }
+
+    /**
      * 检查是否显示搜索按钮
      */
     #checkShowSearch() {
         this.#searchEl.style.display = this.mode === Mode.search && this.value.length ? "inline-flex" : "none";
+        this.#inputEl.style.maxWidth = this.mode === Mode.search ? "calc(100% - 80px)" : "calc(100% - 40px)";
     }
 
     /**

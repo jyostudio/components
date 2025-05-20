@@ -86,12 +86,6 @@ const STYLES = /* css */`
     color: var(--colorNeutralForeground1Pressed);
 }
 
-:host(:focus-visible) {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 :host(:disabled),
 :host([disabled]) {
     background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
@@ -230,27 +224,33 @@ export default class ComboBox extends Component {
             this.#slotAbortController = new AbortController();
             const els = slot.assignedElements().filter(el => el instanceof ComboBoxItem);
 
+            if (!els.length) {
+                this.selectedItem = null;
+                return;
+            }
+
             let hasNowSelected = false;
-            els.map(el => {
-                if (el === this.selectedItem) {
-                    hasNowSelected = true;
+            let maxLenStr = "";
+            els.forEach(el => {
+                const currentSelected = el === this.selectedItem;
+                hasNowSelected ||= currentSelected;
+                if (currentSelected) {
+                    el.setAttribute("selected", "");
+                } else {
+                    el.removeAttribute("selected");
                 }
-                el.removeAttribute("selected");
                 el.addEventListener("click", () => {
                     el.setAttribute("selected", "");
                     this.selectedItem = el;
                     this.#menuFlyoutEl.close();
                 }, { signal: this.#slotAbortController.signal });
-            });
 
-            if (!els.length) return;
-            let maxLenStr = "";
-            els.forEach(el => {
                 const text = el.textContent;
                 if (text.length > maxLenStr.length) {
                     maxLenStr = text;
                 }
             });
+
             this.#hiddenContentEl.textContent = maxLenStr;
             if (!hasNowSelected) {
                 els[0].click();

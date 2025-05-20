@@ -83,12 +83,6 @@ const STYLES = /* css */`
     outline-style: none;
 }
 
-.fnArea:focus-visible {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 :host([checked]) {
     border-color: var(--mix-colorCompoundBrandBackgroundPressed);
 }
@@ -116,12 +110,6 @@ const STYLES = /* css */`
     background-color: var(--mix-colorNeutralForegroundInvertedPressed);
 }
 
-:host(:focus-visible) {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2) inset;
-}
-
 :host(:disabled), :host([disabled]) {
     background-color: var(--mix-colorNeutralBackgroundDisabled) !important;
     border-color: var(--mix-colorNeutralStrokeDisabled) !important;
@@ -137,13 +125,13 @@ const STYLES = /* css */`
 `;
 
 const HTML = /* html */`
-<div class="fnArea start" tabindex="0">
+<div class="fnArea start">
     <span>
         <slot></slot>
     </span>
 </div>
 <div class="divider"></div>
-<div class="fnArea end" tabindex="0">
+<div class="fnArea end">
     <span>\ue40c</span>
     <slot name="flyout"></slot>
 </div>

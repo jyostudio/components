@@ -89,12 +89,6 @@ label {
     pointer-events: none !important;
 }
 
-:host(:focus-visible) {
-    border-color: var(--mix-colorTransparentStroke);
-    outline: var(--strokeWidthThick) solid var(--mix-colorTransparentStroke);
-    box-shadow: var(--shadow4), 0 0 0 2px var(--colorStrokeFocus2);
-}
-
 :host(:disabled) span, :host([disabled]) span {
     background-color: var(--mix-colorNeutralBackgroundDisabled);
     border-color: var(--mix-colorNeutralStrokeDisabled);
@@ -158,7 +152,7 @@ export default class CheckBox extends Component {
                 }).any(() => this.content = "")
             },
             isThreeState: genBooleanGetterAndSetter(this, {
-                attrName: "is-three-state",
+                attrName: "isThreeState",
                 fn: () => {
                     if (this.isChecked === null) this.isChecked = true;
                 }
