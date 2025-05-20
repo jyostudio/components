@@ -83,4 +83,15 @@ export default class PasswordBox extends Component {
      * @param value - 密码显示模式
      */
     set passwordRevealMode(value: PasswordRevealMode);
+
+    /**
+     * 禁用功能区
+     */
+    get disableFunction(): boolean;
+
+    /**
+     * 设置禁用功能区
+     * @param value - 禁用功能区
+     */
+    set disableFunction(value: boolean);
 }

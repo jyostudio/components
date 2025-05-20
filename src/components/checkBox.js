@@ -152,7 +152,7 @@ export default class CheckBox extends Component {
                 }).any(() => this.content = "")
             },
             isThreeState: genBooleanGetterAndSetter(this, {
-                attrName: "is-three-state",
+                attrName: "isThreeState",
                 fn: () => {
                     if (this.isChecked === null) this.isChecked = true;
                 }

@@ -150,7 +150,7 @@ export default class PasswordBox extends Component {
      * @returns {Array<String>}
      */
     static get observedAttributes() {
-        return [...super.observedAttributes, "value", "placeholder", "disabled", "readonly", "maxlength", "password-reveal-mode"];
+        return [...super.observedAttributes, "value", "placeholder", "disabled", "readonly", "maxlength", "password-reveal-mode", "disable-function"];
     }
 
     /**
@@ -234,11 +234,12 @@ export default class PasswordBox extends Component {
                     .any(() => this.maxlength = -1)
             },
             passwordRevealMode: genEnumGetterAndSetter(this, {
-                attrName: "password-reveal-mode",
+                attrName: "passwordRevealMode",
                 enumClass: PasswordRevealMode,
                 defaultValue: "peed",
                 fn: () => this.#handleInput()
-            })
+            }),
+            disableFunction: genBooleanGetterAndSetter(this, { attrName: "disableFunction", defaultValue: false, fn: () => this.#handleInput() }),
         });
     }
 
@@ -298,13 +299,22 @@ export default class PasswordBox extends Component {
     #handleInput() {
         const revealMode = this.passwordRevealMode;
         if (revealMode === PasswordRevealMode.peed) {
-            this.#visibleEl.style.display = this.#inputEl.value.length ? 'inline-flex' : 'none';
+            const needShow = this.#inputEl.value.length > 0;
+            this.#visibleEl.style.display = needShow ? 'inline-flex' : 'none';
+            this.#inputEl.style.maxWidth = needShow ? "calc(100% - 40px)" : "100%";
         } else if (revealMode === PasswordRevealMode.hidden) {
             this.#visibleEl.style.display = 'none';
+            this.#inputEl.style.maxWidth = "100%";
             this.#isVisiblePassword = false;
         } else if (revealMode === PasswordRevealMode.visible) {
             this.#visibleEl.style.display = 'none';
+            this.#inputEl.style.maxWidth = "100%";
             this.#isVisiblePassword = true;
+        }
+
+        if (this.disableFunction) {
+            this.#visibleEl.style.display = 'none';
+            this.#inputEl.style.maxWidth = "100%";
         }
 
         if (this.#isVisiblePassword) {

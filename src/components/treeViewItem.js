@@ -206,7 +206,7 @@ export default class TreeViewItem extends Component {
                 }).any(() => this.text = "")
             },
             isExpanded: genBooleanGetterAndSetter(this, {
-                attrName: "is-expanded",
+                attrName: "isExpanded",
                 fn: (attrName, value) => {
                     if (value) {
                         this.#childrenEl.style.display = "block";

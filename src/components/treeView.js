@@ -82,7 +82,7 @@ export default class TreeView extends Component {
 
         Object.defineProperties(this, {
             treeViewSelectionMode: genEnumGetterAndSetter(this, {
-                attrName: "tree-view-selection-mode",
+                attrName: "treeViewSelectionMode",
                 enumClass: TreeViewSelectionMode,
                 defaultValue: TreeViewSelectionMode.single,
                 fn: (attrName, value) => {
