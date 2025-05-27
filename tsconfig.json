@@ -19,6 +19,7 @@
     "allowImportingTsExtensions": true,
     "customConditions": ["module"],
     "allowArbitraryExtensions": true,
+    "experimentalDecorators": true,
     "noEmit": true,
     "allowJs": true,
     "checkJs": false,

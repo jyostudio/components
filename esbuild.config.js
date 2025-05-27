@@ -9,7 +9,7 @@ const options = {
     keepNames: true,
     bundle: true,
     minify: true,
-    sourcemap: true,
+    sourcemap: false,
     metafile: true,
     target: "esnext",
     treeShaking: true
