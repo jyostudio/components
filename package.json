@@ -45,5 +45,8 @@
     "eslint-plugin-prettier": "^5.2.6",
     "globals": "^16.0.0",
     "prettier": "^3.5.3"
+  },
+  "dependencies": {
+    "css-paint-polyfill": "^3.4.0"
   }
 }

@@ -97,7 +97,7 @@ export default class RadioButtons extends Component {
                     })
                     .add([Number], index => {
                         this.lock("selectedIndex", () => {
-                            using el = this.querySelectorAll("jyo-radio-button")[index];
+                            const el = this.querySelectorAll("jyo-radio-button")[index];
 
                             if (el) {
                                 el.isChecked = true;
@@ -116,7 +116,7 @@ export default class RadioButtons extends Component {
             selectedItem: {
                 get: () => Array.from(this.querySelectorAll("jyo-radio-button")).find(el => el.isChecked) ?? null,
                 set: overload([Object], value => {
-                    using el = Array.from(this.querySelectorAll("jyo-radio-button")).find(el => el === value);
+                    const el = Array.from(this.querySelectorAll("jyo-radio-button")).find(el => el === value);
 
                     if (el) {
                         el.isChecked = true;
@@ -151,14 +151,14 @@ export default class RadioButtons extends Component {
 
         const els = Array.from(this.querySelectorAll("jyo-radio-button"));
 
-        for (using el of els) {
+        for (const el of els) {
             if (!this.#bindEls.includes(el)) {
                 this.#bindEls.push(el);
                 el.addEventListener("checked", this.#checkedBindFn);
             }
         }
 
-        for (using el of this.#bindEls) {
+        for (const el of this.#bindEls) {
             if (!els.includes(el)) {
                 el.removeEventListener("checked", this.#checkedBindFn);
                 this.#bindEls.splice(this.#bindEls.indexOf(el), 1);
